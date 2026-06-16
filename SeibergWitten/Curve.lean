@@ -70,4 +70,19 @@ theorem genus_swCurve {N : ℕ} (P : Polynomial ℂ) (Λ : ℂ)
       swData_f_natDegree]
   omega
 
+/-! ## The original Seiberg–Witten case: SU(2), `P(x) = x² − u` -/
+
+/-- For the SU(2) characteristic polynomial `P = x² − u`, `natDegree P = 2`. -/
+theorem natDegree_su2P (u : ℂ) : ((X : Polynomial ℂ) ^ 2 - C u).natDegree = 2 := by
+  rw [natDegree_sub_C, natDegree_pow, natDegree_X]
+
+/-- **SU(2) (the original Seiberg–Witten curve).** `y² = (x² − u)² − Λ⁴` has
+genus `1` — consistent with rank `N − 1 = 1`. -/
+theorem genus_swCurve_su2 (u Λ : ℂ)
+    (hsf : Squarefree (((X : Polynomial ℂ) ^ 2 - C u) ^ 2 - C (Λ ^ (2 * 2)))) :
+    Jacobians.RiemannSurface.genus
+      (HyperellipticEvenProj
+        (swData ((X : Polynomial ℂ) ^ 2 - C u) Λ (natDegree_su2P u) (by norm_num) hsf)) = 1 := by
+  simpa using genus_swCurve ((X : Polynomial ℂ) ^ 2 - C u) Λ (natDegree_su2P u) (by norm_num) hsf
+
 end SeibergWitten

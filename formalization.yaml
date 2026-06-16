@@ -47,8 +47,10 @@ status:
     - propext
     - Classical.choice
     - Quot.sound
-    # No own project axioms. Deeper phases may transit jacobian-challenge's
-    # off-critical-path axioms; tracked per-result and verified by #print axioms.
+    # Inherited from jacobian-challenge (the project declares none of its own);
+    # off the Buzzard critical path; transited by Phase 1a (special geometry).
+    # Phase 0 and the SU(2) genus are standard-3 (no project axioms).
+    - Jacobians.Axioms.AX_PeriodCycleBasis
   main_results:
     - declaration: "SeibergWitten.genus_swCurve"
       file: "SeibergWitten/Curve.lean"
@@ -57,6 +59,30 @@ status:
       literature_dependencies:
         - statement: "The SU(N) SW curve y²=P_N²−Λ^{2N} is hyperelliptic of genus N−1."
           source: "KLYT, hep-th/9411048; Argyres–Faraggi, hep-th/9411057"
+    - declaration: "SeibergWitten.genus_swCurve_su2"
+      file: "SeibergWitten/Curve.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      literature_dependencies:
+        - statement: "The SU(2) SW curve y²=(x²−u)²−Λ⁴ has genus 1."
+          source: "Seiberg–Witten, hep-th/9407087"
+    - declaration: "SeibergWitten.sw_coupling_mem_siegel_rank"
+      file: "SeibergWitten/SpecialGeometry.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound, Jacobians.Axioms.AX_PeriodCycleBasis]
+      literature_dependencies:
+        - statement: >
+            The SW effective coupling τ is the period matrix of the SW curve and lies
+            in the Siegel upper half space: τ = τᵀ and Im τ ≻ 0 (Riemann bilinear
+            relations / special geometry).
+          source: "SW hep-th/9407087; Lerche hep-th/9611190 §2"
+    - declaration: "SeibergWitten.sw_metric_posDef"
+      file: "SeibergWitten/SpecialGeometry.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound, Jacobians.Axioms.AX_PeriodCycleBasis]
+      literature_dependencies:
+        - statement: "Im τ ≻ 0: the special-Kähler metric on the Coulomb branch is positive-definite."
+          source: "SW hep-th/9407087; Lerche hep-th/9611190 §2"
 
 automation:
   methods:
@@ -90,3 +116,13 @@ alignment:
       module: "SeibergWitten/Curve.lean"
       status: "proved"
       note: "genus(y²=P_N²−Λ^{2N}) = N−1; standard-3"
+    - source: "SW: SU(2) curve genus"
+      lean: "SeibergWitten.genus_swCurve_su2"
+      module: "SeibergWitten/Curve.lean"
+      status: "proved"
+      note: "genus(y²=(x²−u)²−Λ⁴) = 1; standard-3"
+    - source: "SW/Lerche §2: special geometry + metric positivity"
+      lean: "SeibergWitten.sw_coupling_mem_siegel_rank / sw_metric_posDef"
+      module: "SeibergWitten/SpecialGeometry.lean"
+      status: "proved"
+      note: "τ ∈ Siegel (τ=τᵀ, Im τ≻0); standard-3 + AX_PeriodCycleBasis (off critical path)"

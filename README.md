@@ -61,5 +61,9 @@ jacobian-challenge's, and Phase 0 is axiom-clean).
 
 ## Status
 
-v0.1 — Phase 0 landed (genus `N−1`). Build wires `jacobian-challenge` as a Lake path
-dependency; see `BUILD.md`.
+v0.1 — **Phases 0 + 1a landed**: genus `N−1` (axiom-clean); and the SW coupling
+`τ ∈ SiegelUpperHalfSpace (N−1)` ⇒ `τ = τᵀ` and `Im τ ≻ 0` (special-Kähler metric
+positivity), modulo the off-critical-path `AX_PeriodCycleBasis`. Plus the SU(2)
+(original SW) genus-1 specialization. Build wires `jacobian-challenge` as a Lake
+path dependency; see `BUILD.md`. Next: Phase 1b (axiom-free SU(2)) and Phase 2
+(special coordinates / prepotential).

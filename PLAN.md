@@ -34,7 +34,14 @@ curve type.
 
 ---
 
-## Phase 1 — special geometry: `τ ∈ Siegel`, metric positivity 🔶 (headline)
+## Phase 1 — special geometry: `τ ∈ Siegel`, metric positivity ✅ 1a / 🔶 1b (headline)
+
+> **Status (1a done).** `SeibergWitten.sw_coupling_mem_siegel` /
+> `sw_coupling_mem_siegel_rank` / `sw_metric_posDef` (`SpecialGeometry.lean`) prove
+> the SW period matrix `τ ∈ SiegelUpperHalfSpace (N−1)`, hence `τ = τᵀ` and
+> `Im τ ≻ 0` (special-Kähler metric positivity), by instantiating
+> `AX_RiemannBilinear` on the SW curve. `#print axioms` = standard-3 +
+> `AX_PeriodCycleBasis` (as predicted). **1b (axiom-free SU(2)) remains.**
 
 **Targets.**
 - `swTau` : the period matrix of the SW curve, `τ ∈ SiegelUpperHalfSpace (N−1)`
