@@ -17,6 +17,9 @@ curves, so it sits directly on top of that machinery:
 
 ## Plan (milestones)
 
+Full per-phase plan (target theorems, what each reduces to in jacobian-challenge,
+effort, risks) is in [`PLAN.md`](PLAN.md). Summary:
+
 - **Phase 0 — curve + genus.** ✅ The SU(N) curve `y²=P_N²−Λ^{2N}` as a hyperelliptic
   instance; **`genus = N−1`** proved (`SeibergWitten/Curve.lean`, axiom-clean, via
   jacobian-challenge's `genus_HyperellipticEven_eq`).
