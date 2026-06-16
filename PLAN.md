@@ -85,18 +85,25 @@ R1/R2). Numeric check: compute `τ(u)` for sample moduli, confirm `Im τ ≻ 0`.
 - `sw_special_geometry` : `a_{D,i} = ∂F/∂aᵢ` for a prepotential `F`, and
   `τ_{ij} = ∂a_{D,i}/∂a_j = ∂²F/∂aᵢ∂aⱼ` — tying Phase 1's `τ` to `F`.
 
-**Reduces to / new machinery.** jacobian's period map is for **holomorphic** forms;
-`λ_SW` is **meromorphic** (poles ↔ masses), so this needs a meromorphic-1-form
-period layer (periods + residues), building on `MeromorphicFunction` and the Kirov
-port's residue machinery. The `a_D = ∂F/∂a` relation is the special-geometry
-closedness (an integrability statement over the moduli space).
+**Reduces to / machinery (mostly present in the Kirov port).** jacobian's period
+map is for **holomorphic** forms; `λ_SW` is **meromorphic** (poles ↔ masses), so
+this needs a meromorphic-1-form period layer (periods + residues). The Kirov
+Dolbeault port (already a transitive dependency) supplies the core:
+`KirovDolbeault.{DegDivResidue,TraceResidue,ResidueChangeOfVariables}` (residues =
+masses), `KirovDolbeault.{MeromorphicLiouville,MeromorphicTrace}` (meromorphic
+forms), and `KirovDolbeault.{ContourDeformation,LineIntegral}` (periods + contour
+deformation across poles → residues). So Phase 2 = *assemble* the special
+coordinates `a, a_D` on these modules, then the `a_D = ∂F/∂a` closedness
+(special-geometry integrability over the moduli space). **Fidelity caveat:** vet
+the Kirov statements per `FIDELITY_REVIEW` before relying on them.
 
 *Effort: large (multi-week to month).* **Unlocks.** The full SW low-energy
 effective action; the BPS central charge `Z = n_e a + n_m a_D`.
-**Risks.** Meromorphic-period infrastructure is the main build; moduli-space
-differentiation (`∂/∂uₖ`) needs a family/variation-of-Hodge-structure setup.
-**Dependency:** add `picard-lefschetz` here (contour deformation across poles ⇒
-residues; and Phase-3 asymptotics).
+**Risks.** Assembling `a, a_D` and the closedness on the Kirov residue/meromorphic
+modules; moduli-space differentiation (`∂/∂uₖ`) needs a family/variation-of-Hodge-
+structure setup. **Dependency:** the period/residue machinery is in the **Kirov
+port** (already depended on) — `picard-lefschetz` is needed only later, for the
+Phase-3 *asymptotics* (its `ContourDeformation` analog is already in Kirov).
 
 ---
 
