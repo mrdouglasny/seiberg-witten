@@ -1,0 +1,20 @@
+name = "SeibergWitten"
+version = "0.1.0"
+defaultTargets = ["SeibergWitten"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+weak.linter.style.header = false
+maxSynthPendingDepth = 3
+
+# Riemann-surface / period / Jacobian machinery (path dependency).
+# Pulls Mathlib + the Kirov Dolbeault port transitively from jacobian-challenge.
+[[require]]
+name = "Jacobians"
+path = "../jacobian-challenge"
+
+[[lean_lib]]
+name = "SeibergWitten"

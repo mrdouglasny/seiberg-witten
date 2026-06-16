@@ -1,0 +1,92 @@
+# formalization.yaml (v0.3) — https://github.com/mathlib-initiative/formalization.yaml
+# seiberg-witten — forward-chaining formalization of the SW solution of N=2 SU(N) SYM
+
+version: "v0.3"
+
+project:
+  name: "Seiberg–Witten solution of N=2 SU(N) super Yang–Mills"
+  authors:
+    - "Michael R. Douglas"
+    # Code is AI-authored; see automation.
+  license: "Apache-2.0"
+
+sources:
+  - title: "Electric-magnetic duality, monopole condensation, … (SW)"
+    authors: ["N. Seiberg", "E. Witten"]
+    id: "Nucl. Phys. B426 (1994) 19; hep-th/9407087"
+    type: "paper"
+  - title: "Simple singularities and N=2 supersymmetric Yang-Mills theory (KLYT)"
+    authors: ["A. Klemm", "W. Lerche", "S. Yankielowicz", "S. Theisen"]
+    id: "Phys. Lett. B344 (1995) 169; hep-th/9411048"
+    type: "paper"
+  - title: "Vacuum structure and spectrum of N=2 SUSY gauge theory (Argyres–Faraggi)"
+    authors: ["P. C. Argyres", "A. E. Faraggi"]
+    id: "Phys. Rev. Lett. 74 (1995) 3931; hep-th/9411057"
+    type: "paper"
+  - title: "Introduction to Seiberg-Witten theory and its stringy origin (Lerche)"
+    authors: ["W. Lerche"]
+    id: "hep-th/9611190"
+    type: "review"
+  - title: "jacobian-challenge (Riemann-surface / period / Jacobian machinery)"
+    authors: ["Michael R. Douglas"]
+    id: "https://github.com/mrdouglasny/jacobian-challenge"
+    type: "formalization"
+    # Path dependency; supplies hyperelliptic curves, HolomorphicOneForm, period
+    # lattice, ComplexTorus/Jacobian, intersection form, Riemann bilinear relations.
+
+status:
+  scope: >
+    Formalize the Seiberg–Witten solution of pure N=2 SU(N) SYM as period geometry
+    of the SW curve y²=P_N²−Λ^{2N}: the curve and its genus (Phase 0, done); the
+    period matrix / special-Kähler positivity τ=τᵀ, Im τ≻0 (Phase 1); special
+    coordinates and the prepotential (Phase 2); singular locus / Argyres–Douglas
+    loci / Picard–Fuchs (Phase 3). Built on jacobian-challenge.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    # No own project axioms. Deeper phases may transit jacobian-challenge's
+    # off-critical-path axioms; tracked per-result and verified by #print axioms.
+  main_results:
+    - declaration: "SeibergWitten.genus_swCurve"
+      file: "SeibergWitten/Curve.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      literature_dependencies:
+        - statement: "The SU(N) SW curve y²=P_N²−Λ^{2N} is hyperelliptic of genus N−1."
+          source: "KLYT, hep-th/9411048; Argyres–Faraggi, hep-th/9411057"
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-4-8"]
+      framework: "Claude Code (Anthropic CLI)"
+      prompting_notes: >
+        Forward-chaining onto jacobian-challenge. Phase 0 instantiates the
+        hyperelliptic genus theorem on the SW family (genus N−1), axiom-clean.
+  notes: "No human-written Lean; all proofs AI-authored under human steering."
+
+fidelity:
+  divergences: >
+    Forward-chaining corpus project. The SW curve is realized as
+    jacobian-challenge's HyperellipticData with f = P_N² − Λ^{2N}; the squarefree
+    (smoothness) hypothesis selects the regular Coulomb-branch locus. Per-equation
+    source↔Lean correspondence + numerical cross-checks are tracked in
+    audit/CORRESPONDENCE_INDEX.md.
+
+review:
+  status: "agent-reviewed"
+  notes: >
+    Phase 0 #print axioms-verified standard-3. Numerical fidelity checks (periods,
+    τ) come online with Phase 1. No human-mathematician review yet.
+
+alignment:
+  namespace: "SeibergWitten"
+  statements:
+    - source: "KLYT/Argyres–Faraggi: SW curve genus"
+      lean: "SeibergWitten.genus_swCurve"
+      module: "SeibergWitten/Curve.lean"
+      status: "proved"
+      note: "genus(y²=P_N²−Λ^{2N}) = N−1; standard-3"
