@@ -69,6 +69,16 @@ fed by the curve's `PeriodCycleBasis` R1/R2 fields. So Phase 1 = supply a
   `j`-invariant) to transport `ellipticPeriodCycleBasis`. *Effort: ~1–2 weeks;*
   route (i) is likely shorter and also advances jacobian-challenge's hyperelliptic
   R1/R2.
+- **1b (rigidity) — SU(2) uniqueness as a theorem.** Separately from the `τ∈Siegel`
+  witness, `SeibergWitten/Physics/SU2Rigidity.lean` scopes *demoting* the headline
+  `sw_effective_theory_unique_up_to_duality` to a theorem for rank 1 (`sw_su2_unique`).
+  Split established: the analytic **propagation** (identity theorem, `holo_eqOn_of_germ`)
+  is **proved / standard-3**; the rigidity then rests on exactly **one** gap,
+  `AX_su2_modular_frame_alignment` — the modular-`λ` / `Γ(2)` uniformization of the
+  thrice-punctured base `ℂ∖{±Λ²}` (plus the `SameSWMonodromy` placeholder). Mathlib has
+  `UpperHalfPlane`, Schwarz, and the identity theorem but **no** `λ`/`j`, uniformization,
+  or `Sp(2,ℤ)`-action-on-`ℍ`. *Effort to close: build/port the `λ`-function + `Γ(2)`
+  uniformization (the wall); then `sw_su2_unique` is axiom-free.*
 
 **Unlocks.** The first physically meaningful theorem (metric positivity). Also the
 `τ`-as-coupling object that Phases 2–3 differentiate / continue.

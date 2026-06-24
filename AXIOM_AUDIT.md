@@ -48,6 +48,16 @@ that review.
 | `DualityEquiv` | Hypotheses.lean | Placeholder | GR | `Sp(2r,ℤ)` frame-change equivalence |
 | `sw_effective_theory_unique_up_to_duality` | Hypotheses.lean | Needs review | GR, LP | **Headline lore**: hypotheses fix solution up to `Sp(2r,ℤ)`. SW1 |
 | `sw_curve_admits_effective_theory` | Hypotheses.lean | Needs review | GR, LP | **Headline lore**: SW curve realizes such a theory. SW1 |
+| `SameSWMonodromy` | SU2Rigidity.lean | Placeholder | SA | Same `Sp(2,ℤ)` monodromy of two SU(2) period maps; until monodromy layer (Phase 3/4) |
+| `AX_su2_modular_frame_alignment` | SU2Rigidity.lean | Placeholder | SA, LP | **The one SU(2)-rigidity gap**: modular-`λ` uniformization of `ℂ∖{±Λ²}`; not in Mathlib. SW1 §3–4 |
+
+**Phase 1b (SU(2) rigidity).** `SeibergWitten/Physics/SU2Rigidity.lean` reduces the
+rank-1 case of `sw_effective_theory_unique_up_to_duality` to a *theorem*
+(`sw_su2_unique`) resting on exactly **one** mathematical input,
+`AX_su2_modular_frame_alignment` (the modular-`λ` uniformization), plus the monodromy
+placeholder `SameSWMonodromy`. The analytic propagation core `holo_eqOn_of_germ` (the
+identity theorem) is **proved, standard-3**. Building/porting the `λ`/`Γ(2)`
+uniformization discharges the gap and makes `sw_su2_unique` axiom-free.
 
 `SingularitiesAreBPS`, `diracPairing`, `ArgyresDouglasLocus`, and `IsSWEffectiveTheory`
 are *definitions/structures* (not axioms) — in particular Argyres–Douglas points are a
