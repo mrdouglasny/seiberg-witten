@@ -2,3 +2,4 @@ import SeibergWitten.Curve
 import SeibergWitten.SpecialGeometry
 import SeibergWitten.Physics.Hypotheses
 import SeibergWitten.Physics.SU2Rigidity
+import SeibergWitten.Physics.SU2Singularities

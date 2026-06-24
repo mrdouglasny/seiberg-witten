@@ -22,6 +22,7 @@ These are **not** debt to be discharged — they are the codified hypotheses the
 |---|---|---|
 | `genus_swCurve`, `genus_swCurve_su2` | 0 | **standard-3** |
 | `sw_coupling_mem_siegel*`, `sw_metric_posDef` | 1a | standard-3 + `Jacobians.Axioms.AX_PeriodCycleBasis` |
+| `su2_singular_locus` (curve singular ⟺ `u=±Λ²`), `su2_squarefree_of_ne`, `holo_eqOn_of_germ` | 1b | **standard-3** |
 
 Phase 0 (genus) is standard-3. Phase 1a (special geometry / metric positivity) transits
 the inherited `AX_PeriodCycleBasis` — jacobian-challenge's hyperelliptic cycle-basis
