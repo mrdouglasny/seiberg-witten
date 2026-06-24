@@ -27,6 +27,7 @@ These are **not** debt to be discharged — they are the codified hypotheses the
 | `symplecticMonoid` (Sp(2r,ℤ) as a submonoid), `SWVariation` spec + coherence lemmas | 3 | **standard-3** (no new axioms) |
 | `WeightOneVHS` (base-agnostic weight-1 VHS spec), `SWVariation.toVHS` (SW is an instance) | 3 | **standard-3** (no new axioms) |
 | `siegelOneEquiv` (`Siegel 1 ≃ ℍ`), `MulAction SL(2,ℤ) (Siegel 1)`, `siegelOneEquiv_smul` (g=1 Sp-action) | 3 | **standard-3** (no new axioms; built on Mathlib `ℍ` action) |
+| `su2BaseEquiv` (SU(2) base `ℂ∖{±Λ²} ≃ ℂ∖{0,1}`), `affineEquiv` | 1b | **standard-3** (no new axioms) |
 
 Phase 0 (genus) is standard-3. Phase 1a (special geometry / metric positivity) transits
 the inherited `AX_PeriodCycleBasis` — jacobian-challenge's hyperelliptic cycle-basis
@@ -56,6 +57,7 @@ that review.
 | `SameSWMonodromy` | SU2Rigidity.lean | Placeholder | SA | Same `Sp(2,ℤ)` monodromy of two SU(2) period maps; until monodromy layer (Phase 3/4) |
 | `AX_su2_modular_frame_alignment` | SU2Rigidity.lean | Placeholder | SA, LP | **The one SU(2)-rigidity gap**: modular-`λ` uniformization of `ℂ∖{±Λ²}`; not in Mathlib. SW1 §3–4 |
 | `localMonodromy`, `AX_picard_lefschetz_local` | Monodromy.lean | Placeholder | SA, LP | **Monodromy gap**: local monodromy of the family = Picard–Lefschetz transvection; needs family/local-system layer. SW1 §3 |
+| `AX_thrice_punctured_uniformization` | ModularLambda.lean | Placeholder | LP | **Classical analytic input**: modular `λ` realizes `ℍ` as universal cover of `ℂ∖{0,1}` (`Γ(2)` deck group); non-vacuous; Mathlib has `Gamma`/`jacobiTheta` raw materials |
 
 **Phase 1b (SU(2) rigidity).** `SeibergWitten/Physics/SU2Rigidity.lean` reduces the
 rank-1 case of `sw_effective_theory_unique_up_to_duality` to a *theorem*
