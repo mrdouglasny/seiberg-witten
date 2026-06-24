@@ -22,6 +22,9 @@ These are **not** debt to be discharged — they are the codified hypotheses the
 |---|---|---|
 | `genus_swCurve`, `genus_swCurve_su2` | 0 | **standard-3** |
 | `sw_coupling_mem_siegel*`, `sw_metric_posDef` | 1a | standard-3 + `Jacobians.Axioms.AX_PeriodCycleBasis` |
+| `su2_singular_locus` (curve singular ⟺ `u=±Λ²`), `su2_squarefree_of_ne`, `holo_eqOn_of_germ` | 1b | **standard-3** |
+| `transvection_isSymplectic` (Picard–Lefschetz monodromy ∈ Sp), `diracPairing_*` bilinearity | 3 | **standard-3** |
+| `symplecticMonoid` (Sp(2r,ℤ) as a submonoid), `SWVariation` spec + coherence lemmas | 3 | **standard-3** (no new axioms) |
 
 Phase 0 (genus) is standard-3. Phase 1a (special geometry / metric positivity) transits
 the inherited `AX_PeriodCycleBasis` — jacobian-challenge's hyperelliptic cycle-basis
@@ -48,6 +51,17 @@ that review.
 | `DualityEquiv` | Hypotheses.lean | Placeholder | GR | `Sp(2r,ℤ)` frame-change equivalence |
 | `sw_effective_theory_unique_up_to_duality` | Hypotheses.lean | Needs review | GR, LP | **Headline lore**: hypotheses fix solution up to `Sp(2r,ℤ)`. SW1 |
 | `sw_curve_admits_effective_theory` | Hypotheses.lean | Needs review | GR, LP | **Headline lore**: SW curve realizes such a theory. SW1 |
+| `SameSWMonodromy` | SU2Rigidity.lean | Placeholder | SA | Same `Sp(2,ℤ)` monodromy of two SU(2) period maps; until monodromy layer (Phase 3/4) |
+| `AX_su2_modular_frame_alignment` | SU2Rigidity.lean | Placeholder | SA, LP | **The one SU(2)-rigidity gap**: modular-`λ` uniformization of `ℂ∖{±Λ²}`; not in Mathlib. SW1 §3–4 |
+| `localMonodromy`, `AX_picard_lefschetz_local` | Monodromy.lean | Placeholder | SA, LP | **Monodromy gap**: local monodromy of the family = Picard–Lefschetz transvection; needs family/local-system layer. SW1 §3 |
+
+**Phase 1b (SU(2) rigidity).** `SeibergWitten/Physics/SU2Rigidity.lean` reduces the
+rank-1 case of `sw_effective_theory_unique_up_to_duality` to a *theorem*
+(`sw_su2_unique`) resting on exactly **one** mathematical input,
+`AX_su2_modular_frame_alignment` (the modular-`λ` uniformization), plus the monodromy
+placeholder `SameSWMonodromy`. The analytic propagation core `holo_eqOn_of_germ` (the
+identity theorem) is **proved, standard-3**. Building/porting the `λ`/`Γ(2)`
+uniformization discharges the gap and makes `sw_su2_unique` axiom-free.
 
 `SingularitiesAreBPS`, `diracPairing`, `ArgyresDouglasLocus`, and `IsSWEffectiveTheory`
 are *definitions/structures* (not axioms) — in particular Argyres–Douglas points are a
