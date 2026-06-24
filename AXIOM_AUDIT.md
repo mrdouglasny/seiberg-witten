@@ -26,6 +26,7 @@ These are **not** debt to be discharged — they are the codified hypotheses the
 | `transvection_isSymplectic` (Picard–Lefschetz monodromy ∈ Sp), `diracPairing_*` bilinearity | 3 | **standard-3** |
 | `symplecticMonoid` (Sp(2r,ℤ) as a submonoid), `SWVariation` spec + coherence lemmas | 3 | **standard-3** (no new axioms) |
 | `WeightOneVHS` (base-agnostic weight-1 VHS spec), `SWVariation.toVHS` (SW is an instance) | 3 | **standard-3** (no new axioms) |
+| `siegelOneEquiv` (`Siegel 1 ≃ ℍ`), `MulAction SL(2,ℤ) (Siegel 1)`, `siegelOneEquiv_smul` (g=1 Sp-action) | 3 | **standard-3** (no new axioms; built on Mathlib `ℍ` action) |
 
 Phase 0 (genus) is standard-3. Phase 1a (special geometry / metric positivity) transits
 the inherited `AX_PeriodCycleBasis` — jacobian-challenge's hyperelliptic cycle-basis

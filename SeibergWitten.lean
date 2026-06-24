@@ -6,3 +6,4 @@ import SeibergWitten.Physics.SU2Singularities
 import SeibergWitten.Physics.Monodromy
 import SeibergWitten.Physics.Family
 import SeibergWitten.Physics.VHS
+import SeibergWitten.Physics.SiegelSL2
