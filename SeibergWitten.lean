@@ -1,2 +1,3 @@
 import SeibergWitten.Curve
 import SeibergWitten.SpecialGeometry
+import SeibergWitten.Physics.Hypotheses
