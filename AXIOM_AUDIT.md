@@ -25,6 +25,7 @@ These are **not** debt to be discharged — they are the codified hypotheses the
 | `su2_singular_locus` (curve singular ⟺ `u=±Λ²`), `su2_squarefree_of_ne`, `holo_eqOn_of_germ` | 1b | **standard-3** |
 | `transvection_isSymplectic` (Picard–Lefschetz monodromy ∈ Sp), `diracPairing_*` bilinearity | 3 | **standard-3** |
 | `symplecticMonoid` (Sp(2r,ℤ) as a submonoid), `SWVariation` spec + coherence lemmas | 3 | **standard-3** (no new axioms) |
+| `WeightOneVHS` (base-agnostic weight-1 VHS spec), `SWVariation.toVHS` (SW is an instance) | 3 | **standard-3** (no new axioms) |
 
 Phase 0 (genus) is standard-3. Phase 1a (special geometry / metric positivity) transits
 the inherited `AX_PeriodCycleBasis` — jacobian-challenge's hyperelliptic cycle-basis
