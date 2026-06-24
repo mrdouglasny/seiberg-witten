@@ -40,11 +40,13 @@ Seiberg–Witten 1994; KLYT 1995; Argyres–Faraggi 1995:
    exact perturbation theory.
 2. **Exact singularity structure** (`SingularitiesAreBPS`) — `U` is singular *exactly*
    where some BPS state becomes massless, nowhere else.
-3. **Picard–Lefschetz monodromy class** (`PicardLefschetzAtSingularities`) — the
-   massless state at each component of `Δ` is an N=2 hypermultiplet, so the local
-   monodromy is the Picard–Lefschetz reflection `v ↦ v + ⟨v, nₐ⟩ nₐ` of its vanishing
-   charge `nₐ`. (Without this one can invent wild singularities with `Z = 0` that are
-   not local QFTs — flagged in review.)
+3. **Picard–Lefschetz monodromy class** (`PicardLefschetzAtGenericSingularities`) — at
+   the *generic* (smooth, simple-zero, codimension-1) stratum of `Δ` a single N=2
+   hypermultiplet goes massless, so the local monodromy is the Picard–Lefschetz
+   reflection `v ↦ v + ⟨v, nₐ⟩ nₐ` of its vanishing charge `nₐ`. (Without this one can
+   invent wild singularities with `Z = 0` that are not local QFTs — flagged in review.)
+   Restricted to the *generic* stratum because the deeper strata host Argyres–Douglas
+   points (below), where a single reflection fails.
 4. **Electric–magnetic duality** (`EMDualityConsistent`) — the monodromies lie in
    `Sp(2r, ℤ)` and compose to the weak-coupling (semiclassical) monodromy.
 5. **R-symmetry** (`RSymmetryConsistent`) — the anomalous `U(1)_R → ℤ_{2N}` acts on the
@@ -58,16 +60,33 @@ Together these are believed to fix the curve **uniquely up to `Sp(2r, ℤ)` dual
 (the periods are only defined up to a frame change). That is the headline statement,
 recorded as a physical axiom.
 
+## Argyres–Douglas points (a *derived* notion, not a new axiom)
+
+In reality `Δ` is stratified and its deeper strata carry more than one vanishing cycle.
+Argyres–Douglas (AD) points are where ≥2 vanishing cycles **coalesce** and are
+**mutually non-local** — their Dirac pairing `⟨nₐ, n_b⟩ ≠ 0` — so a monopole and a
+dyon become massless simultaneously and *no* duality frame makes all light states
+local (an interacting N=2 SCFT, no Lagrangian). Crucially this is **not** a new physical
+input: it is *defined* (`ArgyresDouglasLocus`) from the central charge plus the
+`diracPairing` on the charge lattice, both available now. AD points still satisfy H2
+(they are massless-BPS loci); what they evade is the *single-reflection* H3, which is
+why H3 is restricted to the generic stratum. Coalescence of *mutually local* cycles
+(`⟨nₐ,n_b⟩ = 0`) instead gives enhanced non-abelian gauge symmetry — still Lagrangian.
+Making `ArgyresDouglasLocus = {higher-order discriminant vanishing}` a *theorem* about
+the SW curve is Phase 3 (PLAN.md).
+
 This is a **skeleton**: the carrier cover and predicates (1), (3)–(6) and the duality
 equivalence are introduced as *named, uninterpreted* symbols — explicit holes whose
 precise content is built in later phases (Phase 2: prepotential / periods; Phase 3:
-Picard–Fuchs / monodromy; Phase 4: `Sp(2r,ℤ)` action). Every axiom here is
+Picard–Fuchs / monodromy / AD strata; Phase 4: `Sp(2r,ℤ)` action). Every axiom here is
 `(NOT VERIFIED)` and tracked in `AXIOM_AUDIT.md`. Reviewed by Gemini (GR) 2026-06-24;
-the cover/Liouville and Picard–Lefschetz/R-symmetry corrections are from that review.
+the cover/Liouville, Picard–Lefschetz, R-symmetry, and Argyres–Douglas refinements are
+from that review.
 
 References: Seiberg–Witten, *Nucl. Phys.* B426 (1994) [hep-th/9407087]; B431 (1994)
 [hep-th/9408099]; Klemm–Lerche–Yankielowicz–Theisen, *Phys. Lett.* B344 (1995);
-Argyres–Faraggi, *Phys. Rev. Lett.* 74 (1995); Lerche, hep-th/9611190 (review).
+Argyres–Faraggi, *Phys. Rev. Lett.* 74 (1995); Argyres–Douglas, *Nucl. Phys.* B448
+(1995); Lerche, hep-th/9611190 (review).
 -/
 import SeibergWitten.Curve
 import Jacobians.Axioms.RiemannBilinear
@@ -81,6 +100,13 @@ low-energy `U(1)^r` gauge theory (`r = N − 1` is the rank). Over `U = ℂ^r �
 the fibre of a local system; a fixed `ChargeLattice r` is a trivialization in one
 duality frame (one sheet of the cover). -/
 abbrev ChargeLattice (r : ℕ) : Type := (Fin r → ℤ) × (Fin r → ℤ)
+
+/-- **Dirac–Schwinger–Zwanziger pairing** on the charge lattice:
+`⟨(eₐ,mₐ), (e_b,m_b)⟩ = eₐ·m_b − mₐ·e_b`. Two charges are **mutually non-local** iff
+this is nonzero — they cannot be made simultaneously electric in any duality frame.
+This is the antisymmetric form preserved by `Sp(2r, ℤ)`. -/
+def diracPairing {r : ℕ} (n n' : ChargeLattice r) : ℤ :=
+  (∑ i, n.1 i * n'.2 i) - (∑ i, n.2 i * n'.1 i)
 
 /-- **Universal cover of the smooth Coulomb branch** `U = ℂ^r ∖ Δ`, abstract. The
 multivalued special coordinates `a, a_D` become single-valued on it; the projection
@@ -155,15 +181,29 @@ axiom BecomesMasslessAt : ∀ {r : ℕ} (Δ : Set (Fin r → ℂ)), LowEnergyDat
 def SingularitiesAreBPS (Δ : Set (Fin r → ℂ)) (d : LowEnergyData r Δ) : Prop :=
   ∀ u : Fin r → ℂ, u ∈ Δ ↔ ∃ n : ChargeLattice r, n ≠ 0 ∧ BecomesMasslessAt Δ d u n
 
-/-- **H3 — Picard–Lefschetz monodromy class.** The state becoming massless at each
-    component of `Δ` is an N=2 hypermultiplet, so the local monodromy on the charge
-    lattice is the Picard–Lefschetz reflection `v ↦ v + ⟨v, nₐ⟩ nₐ` of its vanishing
-    charge `nₐ`. This rules out wild singularities with `Z = 0` that are not local QFTs.
+/-- **Argyres–Douglas locus** (a *derived* notion). The moduli where two **mutually
+non-local** BPS states (`diracPairing ≠ 0`) become simultaneously massless — the
+coalescence of vanishing cycles that produces an interacting N=2 SCFT with no Lagrangian
+frame. A subset of `Δ` (by H2). On the SW curve this is expected to coincide with the
+higher-order vanishing locus of the discriminant; proving that is a Phase-3 target.
+*Definition, not an axiom* — it is built from `BecomesMasslessAt` and `diracPairing`. -/
+def ArgyresDouglasLocus (Δ : Set (Fin r → ℂ)) (d : LowEnergyData r Δ) :
+    Set (Fin r → ℂ) :=
+  { u | ∃ n n' : ChargeLattice r, n ≠ 0 ∧ n' ≠ 0 ∧ diracPairing n n' ≠ 0 ∧
+        BecomesMasslessAt Δ d u n ∧ BecomesMasslessAt Δ d u n' }
+
+/-- **H3 — Picard–Lefschetz monodromy class (generic stratum).** At the generic
+    (smooth, simple, codimension-1) stratum of `Δ` — i.e. away from `ArgyresDouglasLocus`
+    and other deeper strata — a single N=2 hypermultiplet goes massless, so the local
+    monodromy on the charge lattice is the Picard–Lefschetz reflection
+    `v ↦ v + ⟨v, nₐ⟩ nₐ` of its vanishing charge `nₐ`. This rules out wild singularities
+    with `Z = 0` that are not local QFTs.
 
     Reference: Seiberg–Witten, hep-th/9407087 §3 (monopole/dyon points); Lerche §3.
     Faithfulness (NOT VERIFIED): uninterpreted skeleton predicate; concrete once the
-    monodromy representation is built (Phase 3/4). -/
-axiom PicardLefschetzAtSingularities :
+    monodromy representation is built (Phase 3/4). The genericity restriction is what
+    makes room for the Argyres–Douglas strata, where a single reflection fails. -/
+axiom PicardLefschetzAtGenericSingularities :
     ∀ {r : ℕ} {Δ : Set (Fin r → ℂ)}, LowEnergyData r Δ → Prop
 
 /-- **H4 — Electric–magnetic duality.** The monodromy of `(a, a_D)` around each
@@ -212,8 +252,8 @@ structure IsSWEffectiveTheory (Δ : Set (Fin r → ℂ)) (d : LowEnergyData r Δ
   specialGeometry : SpecialGeometry d
   /-- H2 — singularities are exactly massless-BPS loci. -/
   singularities : SingularitiesAreBPS Δ d
-  /-- H3 — Picard–Lefschetz monodromy class at the singularities. -/
-  picardLefschetz : PicardLefschetzAtSingularities d
+  /-- H3 — Picard–Lefschetz monodromy class on the generic stratum. -/
+  picardLefschetz : PicardLefschetzAtGenericSingularities d
   /-- H4 — `Sp(2r,ℤ)` monodromy consistency. -/
   duality : EMDualityConsistent d
   /-- H5 — `ℤ_{2N}` R-symmetry distribution of `Δ`. -/
@@ -227,10 +267,11 @@ structure IsSWEffectiveTheory (Δ : Set (Fin r → ℂ)) (d : LowEnergyData r Δ
 
     Any two low-energy effective data with the *same* singular locus `Δ` that both
     satisfy the six physical hypotheses are electric–magnetic duals of one another. In
-    words: special geometry + the exact singularity structure + Picard–Lefschetz +
-    duality consistency + R-symmetry + asymptotic matching **fix the Coulomb-branch
-    solution uniquely up to `Sp(2r,ℤ)`** — this is why physicists believe the SW curve
-    is *the* answer.
+    words: special geometry + the exact singularity structure + Picard–Lefschetz on the
+    generic stratum + duality consistency + R-symmetry + asymptotic matching **fix the
+    Coulomb-branch solution uniquely up to `Sp(2r,ℤ)`** — this is why physicists believe
+    the SW curve is *the* answer. (The Argyres–Douglas strata are then *forced* as the
+    coalescence loci, `ArgyresDouglasLocus`, not independent inputs.)
 
     Reference: Seiberg–Witten, hep-th/9407087 (the original uniqueness argument);
     Argyres–Faraggi / KLYT for SU(N).

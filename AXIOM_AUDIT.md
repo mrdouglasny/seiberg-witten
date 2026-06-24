@@ -41,7 +41,7 @@ that review.
 | `SmoothCover`, `SmoothCover.proj` | Hypotheses.lean | Placeholder | GR | Carrier: univ. cover of `ℂ^r∖Δ` (fixes Liouville triviality of global `τ`) |
 | `SpecialGeometry` | Hypotheses.lean | Placeholder | GR, LP | H1 holomorphy: `a_D=∂F/∂a`, `τ=∂²F/∂a²`, 1-loop exact. SW1 §2 |
 | `BecomesMasslessAt` | Hypotheses.lean | Placeholder | GR | `Z→0` limit at `Δ` (H2 building block) |
-| `PicardLefschetzAtSingularities` | Hypotheses.lean | Placeholder | GR, LP | H3 monodromy class `v↦v+⟨v,nₐ⟩nₐ`. SW1 §3 |
+| `PicardLefschetzAtGenericSingularities` | Hypotheses.lean | Placeholder | GR, LP | H3 monodromy class `v↦v+⟨v,nₐ⟩nₐ` on the *generic* stratum of `Δ`. SW1 §3 |
 | `EMDualityConsistent` | Hypotheses.lean | Placeholder | GR, LP | H4 `Sp(2r,ℤ)` monodromy. SW1 §3–4 |
 | `RSymmetryConsistent` | Hypotheses.lean | Placeholder | GR, LP | H5 `U(1)_R→ℤ_{2N}` fixes `Δ` positions. SW1 §4 |
 | `AsymptoticMatch` | Hypotheses.lean | Placeholder | GR, LP | H6 1-loop+instanton ≍ periods. SW1 §2,4 |
@@ -49,6 +49,8 @@ that review.
 | `sw_effective_theory_unique_up_to_duality` | Hypotheses.lean | Needs review | GR, LP | **Headline lore**: hypotheses fix solution up to `Sp(2r,ℤ)`. SW1 |
 | `sw_curve_admits_effective_theory` | Hypotheses.lean | Needs review | GR, LP | **Headline lore**: SW curve realizes such a theory. SW1 |
 
-`SingularitiesAreBPS` and `IsSWEffectiveTheory` are *definitions/structures* (not
-axioms). Per-result axiom sets are tracked in `formalization.yaml › main_results` and
+`SingularitiesAreBPS`, `diracPairing`, `ArgyresDouglasLocus`, and `IsSWEffectiveTheory`
+are *definitions/structures* (not axioms) — in particular Argyres–Douglas points are a
+*derived* notion (coalescence of mutually-non-local vanishing cycles), not a physical
+input. Per-result axiom sets are tracked in `formalization.yaml › main_results` and
 verified by `#print axioms`.
