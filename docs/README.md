@@ -10,6 +10,10 @@ lives at the repo root). Added as the motivating context for the ICML 2026 talk
   this project is the canonical example of *foundations for physical reasoning*: codifying
   non-rigorous physics lore (holomorphy, singularity structure, duality, asymptotic
   matching) as vetted axioms above the proved period geometry.
+- [`reasoning-from-physics-axioms.md`](reasoning-from-physics-axioms.md) — the worked
+  example: the actual Lean axioms and definitions (`Physics/Hypotheses.lean`), the
+  proved-vs-assumed split, Argyres–Douglas points as a *derived* locus, and what
+  `#print axioms` reveals — a model for auditing AI-generated physics.
 - [`refs/`](refs/) — primary papers (SW1, SW2, PDFs checked in), `SU(N)` curve papers,
   and pedagogical reviews, with per-paper summaries.
 - [`talk/`](talk/) — the ICML 2026 talk (`validation.tex` + PDF), self-contained
