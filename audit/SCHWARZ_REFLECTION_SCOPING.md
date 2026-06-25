@@ -82,3 +82,8 @@ genuinely new, and high-leverage (it unblocks our covering route *and* much else
 better near-term investment than the full covering (which also needs `Γ(2)` geometry and
 covering-Galois theory on top) and is independent of the Jacobi triple product. If pursued,
 propose it to TauCetiRoadmap as above and implement against the Mathlib substrate listed.
+
+A **draft roadmap entry** (README + `Targets.lean`, conventions pinned, signatures
+elaborated against Mathlib) is in
+[`../docs/tauceti-schwarz-reflection/`](../docs/tauceti-schwarz-reflection/), ready to
+propose to `FormalFrontier/TauCetiRoadmap` as `TauCetiRoadmap/SchwarzReflection/`.
