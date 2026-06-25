@@ -232,6 +232,55 @@ those axioms by independent agreement. Proved and assumed as separate, machine-c
 vetted list; faithfulness enforced by types and by an independent oracle: this, we argue, is
 the right standard for validating AI-generated results in theoretical physics.
 
+## Appendix A. The physics axioms (irreducible inputs)
+
+The physical content is carried by named axioms in `SeibergWitten/Physics/`. They are
+currently *uninterpreted predicates* over the carrier `LowEnergyData` on the universal cover
+`SmoothCover` of `ℂ^r ∖ Δ` (the cover, not `ℂ^r` — the Liouville point of §4.3); they stand in
+for the full definitions and are the genuine physics, not provable but only justified.
+
+| Axiom | Physical hypothesis |
+|---|---|
+| `SpecialGeometry` | **H1** Holomorphy / special geometry: `a_D = ∂F/∂a`, `τ = ∂²F/∂a²`, one-loop-exact prepotential. |
+| `BecomesMasslessAt` | **H2** A BPS state becomes massless (`Z → 0`) on the singular locus `Δ` — the building block of "singular ⇔ massless". |
+| `PicardLefschetzAtGenericSingularities` | **H3** Monodromy around a generic point of `Δ` is the Picard–Lefschetz class `v ↦ v + ⟨v,nₐ⟩ nₐ`. |
+| `EMDualityConsistent` | **H4** Electric–magnetic duality: `Sp(2r,ℤ)` monodromy. |
+| `RSymmetryConsistent` | **H5** The `U(1)_R → ℤ_{2N}` R-symmetry fixes the positions of `Δ`. |
+| `AsymptoticMatch` | **H6** One-loop + instanton expansion matches the exact periods at weak coupling. |
+| `SameSWMonodromy` | (SU(2)) Two period maps carry the same `Sp(2,ℤ)` monodromy — the physics input to the rank-1 rigidity theorem. |
+
+Structural (carrier / interface, not assertions): `SmoothCover`, `SmoothCover.proj` (the
+universal-cover carrier) and `DualityEquiv` (the `Sp(2r,ℤ)` frame-change equivalence).
+
+## Appendix B. Mathematical axioms, used provisionally (debt)
+
+These are *mathematical* claims, distinct in kind from the physics of Appendix A. Each is true
+standard mathematics but not yet proved in our development; each is a debt, tracked natively by
+`#print axioms`.
+
+**B.1 — Headline implications, provisionally axiomatized pending proof.** Mathematical
+consequences of the physics axioms that *should be theorems* (§4.2):
+
+| Axiom | Claim |
+|---|---|
+| `sw_effective_theory_unique_up_to_duality` | The hypotheses fix the solution uniquely up to `Sp(2r,ℤ)` duality. **Proved for SU(2)** (`sw_su2_unique`); general rank still provisional. |
+| `sw_curve_admits_effective_theory` | The SW curve realizes a theory satisfying the hypotheses (existence). |
+
+**B.2 — Classical mathematics not yet in Mathlib, assumed pending upstream formalization:**
+
+| Axiom | Claim | Discharge route |
+|---|---|---|
+| `AX_thrice_punctured_uniformization` | `λ` realizes `ℍ` as the universal cover of `ℂ∖{0,1}` (`Γ(2)` deck group). | conformal-mapping programme (Schwarz reflection ⇒ RMT ⇒ the cover) |
+| `AX_developing_map_rigidity` | Two developing maps of that cover with the same monodromy agree up to a modular frame change (lift uniqueness). | classical; Forster, Ahlfors |
+| `AX_jacobi_quartic` | `θ₃⁴ = θ₂⁴ + θ₄⁴` (Jacobi quartic identity). | Jacobi triple product |
+| `AX_theta3_ne_zero` | `θ₃ ≠ 0` on `ℍ`. | Jacobi triple product |
+| `AX_picard_lefschetz_local` (with `localMonodromy`) | The family's local monodromy is the Picard–Lefschetz transvection. | Gauss–Manin / local-system layer over the moduli space |
+
+The SU(2) uniqueness theorem `sw_su2_unique` rests on exactly the two B.2 covering/lift axioms
+plus the physics `SameSWMonodromy` (and the three logical axioms) — the concrete instance of
+the §4.2 split. The three logical axioms (`propext`, `Classical.choice`, `Quot.sound`) underlie
+everything and are not counted among either list.
+
 ## Acknowledgments
 
 This formalization and paper were developed with heavy use of Claude (Anthropic), and with

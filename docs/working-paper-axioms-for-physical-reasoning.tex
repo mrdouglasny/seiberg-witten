@@ -262,7 +262,7 @@ physics right?'' becomes a precise, prioritized list of theorems to build.
 
 The assurance artifacts (correspondence index, fidelity review, numerical validation, axiom
 audit) follow the conventions of the author's own \emph{formalization-assurance} project
-(\code{math-commons/formalization-assurance}), separate from and predating this work; the
+(\code{math-commons/\discretionary{}{}{}formalization-assurance}), separate from and predating this work; the
 upstream mathematical contributions are framed for the Lean FRO's Tau Ceti library. The Riemann mapping theorem is formalized in
 Isabelle/HOL (Paulson); the Schwarz reflection principle and the SW solution appear
 unformalized before this work.
@@ -277,6 +277,83 @@ axioms by independent agreement. Proved and assumed as separate, machine-checked
 narrowed to a short vetted list; faithfulness enforced by types and by an independent oracle:
 this, we argue, is the right standard for validating AI-generated results in theoretical
 physics.
+
+\appendix
+
+\section{The physics axioms (irreducible inputs)}
+
+The physical content is carried by named axioms in \code{SeibergWitten/Physics/}. They are
+currently \emph{uninterpreted predicates} over the carrier \code{LowEnergyData} on the
+universal cover \code{SmoothCover} of $\C^r\setminus\Delta$ (the cover, not $\C^r$---the
+Liouville point of \S4.3); they stand in for the full definitions and are the genuine physics,
+not provable but only justified.
+
+\begin{center}\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{0.34\textwidth}p{0.60\textwidth}@{}}
+\hline
+\textbf{Axiom} & \textbf{Physical hypothesis} \\
+\hline
+\code{SpecialGeometry} & \textbf{H1} Holomorphy / special geometry: $a_D=\partial\mathcal{F}/\partial a$, $\tau=\partial^2\mathcal{F}/\partial a^2$, one-loop-exact prepotential. \\
+\code{BecomesMasslessAt} & \textbf{H2} A BPS state becomes massless ($Z\to0$) on the singular locus $\Delta$---the building block of ``singular $\Leftrightarrow$ massless''. \\
+\code{PicardLefschetzAt\-Generic\-Singularities} & \textbf{H3} Monodromy around a generic point of $\Delta$ is the Picard--Lefschetz class $v\mapsto v+\langle v,n_a\rangle\,n_a$. \\
+\code{EMDualityConsistent} & \textbf{H4} Electric--magnetic duality: $\Sp(2r,\Z)$ monodromy. \\
+\code{RSymmetryConsistent} & \textbf{H5} The $U(1)_R\to\Z_{2N}$ $R$-symmetry fixes the positions of $\Delta$. \\
+\code{AsymptoticMatch} & \textbf{H6} One-loop $+$ instanton expansion matches the exact periods at weak coupling. \\
+\code{SameSWMonodromy} & ($SU(2)$) Two period maps carry the same $\Sp(2,\Z)$ monodromy---the physics input to the rank-1 rigidity theorem. \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent Structural (carrier / interface, not assertions): \code{SmoothCover},
+\code{SmoothCover.proj} (the universal-cover carrier) and \code{DualityEquiv} (the
+$\Sp(2r,\Z)$ frame-change equivalence).
+
+\section{Mathematical axioms, used provisionally (debt)}
+
+These are \emph{mathematical} claims, distinct in kind from the physics of Appendix A. Each is
+true standard mathematics but not yet proved in our development; each is a debt, tracked
+natively by \code{\#print axioms}.
+
+\medskip
+\noindent\textbf{B.1 --- Headline implications, provisionally axiomatized pending proof.}
+Mathematical consequences of the physics axioms that \emph{should be theorems} (\S4.2):
+
+\begin{center}\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{0.40\textwidth}p{0.54\textwidth}@{}}
+\hline
+\textbf{Axiom} & \textbf{Claim} \\
+\hline
+\code{sw\_effective\_theory\_\-unique\_up\_to\_duality} & The hypotheses fix the solution uniquely up to $\Sp(2r,\Z)$ duality. \textbf{Proved for $SU(2)$} (\code{sw\_su2\_unique}); general rank still provisional. \\
+\code{sw\_curve\_admits\_\-effective\_theory} & The SW curve realizes a theory satisfying the hypotheses (existence). \\
+\hline
+\end{tabular}
+\end{center}
+
+\medskip
+\noindent\textbf{B.2 --- Classical mathematics not yet in Mathlib, assumed pending upstream
+formalization:}
+
+\begin{center}\small
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{0.27\textwidth}p{0.40\textwidth}p{0.27\textwidth}@{}}
+\hline
+\textbf{Axiom} & \textbf{Claim} & \textbf{Discharge route} \\
+\hline
+\code{AX\_thrice\_\-punctured\_\-uniformization} & $\lambda$ realizes $\HH$ as the universal cover of $\C\setminus\{0,1\}$ ($\Gamma(2)$ deck group). & conformal-mapping programme (Schwarz reflection $\Rightarrow$ RMT $\Rightarrow$ the cover) \\
+\code{AX\_developing\_\-map\_rigidity} & Two developing maps of that cover with the same monodromy agree up to a modular frame change (lift uniqueness). & classical; Forster, Ahlfors \\
+\code{AX\_jacobi\_quartic} & $\theta_3^4=\theta_2^4+\theta_4^4$ (Jacobi quartic identity). & Jacobi triple product \\
+\code{AX\_theta3\_ne\_zero} & $\theta_3\neq0$ on $\HH$. & Jacobi triple product \\
+\code{AX\_picard\_lefschetz\_\-local} (with \code{localMonodromy}) & The family's local monodromy is the Picard--Lefschetz transvection. & Gauss--Manin / local-system layer over the moduli space \\
+\hline
+\end{tabular}
+\end{center}
+
+\noindent The $SU(2)$ uniqueness theorem \code{sw\_su2\_unique} rests on exactly the two B.2
+covering/lift axioms plus the physics \code{SameSWMonodromy} (and the three logical axioms)---
+the concrete instance of the \S4.2 split. The three logical axioms (\code{propext},
+\code{Classical.choice}, \code{Quot.sound}) underlie everything and are counted in neither list.
 
 \section*{Acknowledgments}
 This formalization and paper were developed with heavy use of Claude (Anthropic), and with
@@ -297,7 +374,7 @@ Bilal, hep-th/9601007.
 Nekrasov, \emph{Adv.\ Theor.\ Math.\ Phys.}\ 7 (2003); Nekrasov, Okounkov (2006).
 Mathlib (Lean 4).
 Paulson, Isabelle/HOL \code{Riemann\_Mapping}.
-M.\ R.\ Douglas, \emph{formalization-assurance} (\code{math-commons/formalization-assurance}).
+M.\ R.\ Douglas, \emph{formalization-assurance} (\code{math-commons/\discretionary{}{}{}formalization-assurance}).
 Lean FRO, Tau Ceti.
 
 \end{document}
