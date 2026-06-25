@@ -46,9 +46,10 @@ Suggested home: `TauCeti/Analysis/Complex/Conformal/` (with
 ## Generality bar (decide up front; do not silently specialize)
 
 - **Scalar `ℂ`, the geometric (one-complex-variable) theory.** RMT and the boundary theory
-  are `ℂ`-specific; state them for `f : ℂ → ℂ`. The few layer-0 lemmas that are naturally
-  `E`-valued (reflection, parts of the maximum principle) may be stated over a complex Banach
-  `E`, flagged as such, but the spine is `ℂ`.
+  are `ℂ`-specific; state them for `f : ℂ → ℂ`. The layer-0 lemmas that are naturally
+  Banach-`E`-valued — Schwarz reflection and the maximum-principle pieces — are **stated at
+  that generality**, matching Mathlib's `E`-valued forms; everything from normal families
+  (L1) and the Riemann mapping theorem upward is scalar `ℂ`.
 - **Domains: open + connected, simple-connectivity via Mathlib.** Use `IsOpen`,
   `IsConnected`/`IsPreconnected`, and `SimplyConnectedSpace ↥Ω` (Mathlib's class) — never an
   ad hoc "no holes". RMT's hypotheses are: `Ω` open, simply connected, `Ω ≠ univ`, nonempty.
@@ -93,8 +94,8 @@ Suggested home: `TauCeti/Analysis/Complex/Conformal/` (with
 - **L5 — Carathéodory boundary correspondence.** The RMT map of a Jordan domain extends to a
   homeomorphism of closures; prime ends in general. Uses L4 (reflection) for analytic
   boundary arcs.
-- **L6 (stretch) — Schwarz–Christoffel.** Explicit conformal maps onto polygons, built on
-  L4 + L5.
+- **L6 — Schwarz–Christoffel.** Explicit conformal maps onto polygons, built on L4 + L5
+  (sequenced last, after the boundary theory it needs).
 
 ## Relation to sibling roadmaps (this entry is the connective layer)
 
