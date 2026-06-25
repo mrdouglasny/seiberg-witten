@@ -45,7 +45,7 @@ project is to *state* them, not remove them.
 | Gap (axiom) | Discharged by | What that needs |
 |---|---|---|
 | `AX_jacobi_quartic` (`θ₃⁴=θ₂⁴+θ₄⁴`), `AX_theta3_ne_zero` (`θ₃≠0`) | the **Jacobi triple product** for `jacobiTheta₂` | a product expansion `θ = ∏(1−q²ⁿ)(1+q^{2n−1}z)(1+q^{2n−1}/z)`; **absent from Mathlib**. Gives the quartic identity and non-vanishing as corollaries. |
-| `AX_thrice_punctured_uniformization` (surjectivity + fibres = `Γ(2)`-orbits) | the **modular `λ` covering** `ℍ/Γ(2) ≅ ℂ∖{0,1}` | open-mapping + properness of `λ`, or the classical uniformization; **absent from Mathlib**. *Invariance clause already proved* (`modularLambda_add_two` + `_ST2S`), so only surjectivity/fibres remain. |
+| `AX_thrice_punctured_uniformization` (surjectivity + fibres = `Γ(2)`-orbits) | the **modular `λ` covering** `ℍ/Γ(2) ≅ ℂ∖{0,1}` | Schwarz reflection (or Riemann mapping) + `Γ(2)` fundamental domain + generators + covering-Galois — a *cluster* of absent machinery; **the hardest of the three gaps**. Invariance clause already proved; full decomposition + Mathlib map in [`COVERING_SCOPING.md`](COVERING_SCOPING.md). |
 | `AX_picard_lefschetz_local`, `AX_su2_modular_frame_alignment`, `localMonodromy`, `SameSWMonodromy` | the **family / Gauss–Manin VHS layer** over `U = moduli ∖ Δ` | `R¹π_*ℤ` as a local system, the flat Gauss–Manin connection, monodromy representation; **absent from Mathlib and jacobian-challenge**. The spec is `WeightOneVHS` (`VHS.lean`). |
 
 ## Conclusion
