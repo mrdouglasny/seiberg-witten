@@ -24,7 +24,10 @@ change**. The argument has two pieces:
    (the modular `λ`-function / a `Γ(2)` Hauptmodul). This pins the developing map up to
    the deck group; matching the monodromy and one cusp fixes the `SL(2,ℤ)` frame. *Not
    in Mathlib* — no `λ`/`j`, no uniformization, no `Sp(2,ℤ)`-action-on-`ℍ` layer.
-   Isolated here as `AX_su2_modular_frame_alignment`.
+   Split into two named **classical-math** axioms: the `Γ(2)` covering
+   `AX_thrice_punctured_uniformization` (ModularLambda) and the lift-uniqueness step
+   `AX_developing_map_rigidity`; the bespoke `AX_su2_modular_frame_alignment` is retired,
+   `su2_frame_alignment` now deriving it from those two.
 2. **Propagation (reachable today).** Once two solutions are put in a common frame near
    the semiclassical cusp, the **identity theorem** for holomorphic functions forces
    them to agree on the whole connected base. This is `holo_eqOn_of_germ` below, proved
@@ -36,17 +39,20 @@ change**. The argument has two pieces:
 |---|---|
 | Analytic propagation (identity theorem) | **proved** (`holo_eqOn_of_germ`) |
 | Elliptic periods / `τ ∈ SiegelUpperHalfSpace 1` | in `jacobian-challenge` (axiom-free) |
-| Modular-`λ` uniformization of `ℂ∖{±Λ²}` | **GAP** — `AX_su2_modular_frame_alignment` |
-| `Sp(2,ℤ)`-action on `ℍ`, monodromy representation | **GAP** — placeholder `SameSWMonodromy` |
+| Modular-`λ` uniformization | **math axioms** — `Γ(2)` covering + lift-uniqueness |
+| `Sp(2,ℤ)`-action on `ℍ`, monodromy representation | **physics axiom** — `SameSWMonodromy` |
 
-So the only debt for SU(2) rigidity is the uniformization input; the analytic core is
-done. Building the `λ`/`Γ(2)` uniformization (or porting it) discharges
-`AX_su2_modular_frame_alignment` and turns `sw_su2_unique` axiom-free.
+So `sw_su2_unique` is a **theorem** modulo two clearly-separated tiers: the *classical-math*
+covering + lift-uniqueness axioms, and the *physics* monodromy input. The analytic core is
+proved. Discharging the covering upstream (Schwarz reflection ⇒ Riemann mapping ⇒ the `Γ(2)`
+cover — the conformal-mapping programme) and the lift-uniqueness step removes the math debt;
+the physics axiom is irreducible.
 
 References: Seiberg–Witten, hep-th/9407087 §3–4 (SU(2) monodromy, `u`-plane);
 Lerche, hep-th/9611190 §3; for uniformization: the modular `λ`-function / `Γ(2)`.
 -/
 import SeibergWitten.Physics.Hypotheses
+import SeibergWitten.Physics.ModularLambda
 import Mathlib.Analysis.Analytic.Uniqueness
 
 open Complex Filter Topology
@@ -73,22 +79,40 @@ the semiclassical monodromy at `∞`). Uninterpreted until the monodromy layer i
 (Phase 3/4); stated so the rigidity hypothesis below is faithful rather than vacuous. -/
 axiom SameSWMonodromy : ∀ (_Λ : ℂ), (ℂ → ℂ) → (ℂ → ℂ) → Prop
 
-/-- **GAP (Phase 1b) — modular-`λ` uniformization / frame alignment.**
+/-- **Classical math axiom — uniqueness of developing maps (lift rigidity).**
 
-    Given two holomorphic period maps `f, g` on a connected chart `D` of the punctured
-    `u`-plane that carry the *same* SW monodromy, the uniformization of the
-    thrice-punctured base by `ℍ` (the `Γ(2)` developing map) provides a single modular
-    frame change `m` (an `SL(2,ℤ)` Möbius transformation) aligning `m ∘ g` with `f` near
-    the semiclassical basepoint `u₀`.
+    *Given* the thrice-punctured uniformization `U : ThricePuncturedUniformization` (the
+    `ℍ → ℂ∖{0,1}` `Γ(2)`-cover), two holomorphic period maps `f, g` on a connected chart
+    `D` that carry the *same* `Sp(2,ℤ)` monodromy are two developing maps of the same
+    cover with the same monodromy, hence differ by a deck transformation; matching one cusp
+    fixes it to a single modular (`SL(2,ℤ)`) frame change `m` aligning `m ∘ g` with `f`
+    near `u₀`. This is the classical monodromy theorem / uniqueness-of-lifts step.
 
-    This is the one piece not reachable from Mathlib today (no `λ`/`j`, no
-    uniformization, no `Sp(2,ℤ)`-action-on-`ℍ`). Discharging it — by porting/building the
-    `λ`-function and the `Γ(2)` uniformization — makes `sw_su2_unique` axiom-free.
-    Reference: modular `λ`-function; SW hep-th/9407087 §3–4. (NOT VERIFIED.) -/
-axiom AX_su2_modular_frame_alignment
+    It is a *mathematical* axiom (true classical analysis), not a physical input, and it
+    explicitly **consumes the covering** `AX_thrice_punctured_uniformization`: discharging
+    that covering upstream (Schwarz reflection ⇒ Riemann mapping ⇒ the `Γ(2)` cover) leaves
+    only this lift-uniqueness step, itself standard. Together they are the math debt behind
+    the SU(2) headline; neither is physics.
+    References: Forster, *Lectures on Riemann Surfaces* (monodromy theorem, deck
+    transformations); Ahlfors, *Conformal Invariants*; SW hep-th/9407087 §3–4 for the
+    `u`-plane monodromy. (NOT VERIFIED.) -/
+axiom AX_developing_map_rigidity
     {Λ : ℂ} {D : Set ℂ} {u₀ : ℂ} {f g : ℂ → ℂ}
+    (U : ThricePuncturedUniformization)
     (hmono : SameSWMonodromy Λ f g) :
     ∃ m : ℂ → ℂ, AnalyticOnNhd ℂ (m ∘ g) D ∧ f =ᶠ[𝓝 u₀] (m ∘ g)
+
+/-- **SU(2) modular frame alignment — now derived.** The frame change `m` aligning two
+    same-monodromy period maps, obtained from the classical math axioms only: the
+    `Γ(2)` covering (`AX_thrice_punctured_uniformization`) supplies the uniformizing cover,
+    and `AX_developing_map_rigidity` is the uniqueness-of-lifts step on it. Formerly the
+    bespoke axiom `AX_su2_modular_frame_alignment`; it is now a theorem modulo those two
+    named classical-math axioms. -/
+theorem su2_frame_alignment
+    {Λ : ℂ} {D : Set ℂ} {u₀ : ℂ} {f g : ℂ → ℂ}
+    (hmono : SameSWMonodromy Λ f g) :
+    ∃ m : ℂ → ℂ, AnalyticOnNhd ℂ (m ∘ g) D ∧ f =ᶠ[𝓝 u₀] (m ∘ g) :=
+  AX_developing_map_rigidity AX_thrice_punctured_uniformization.some hmono
 
 /-- **SU(2) period-map rigidity (`sw_su2_unique`).**
 
@@ -98,14 +122,15 @@ axiom AX_su2_modular_frame_alignment
     `sw_effective_theory_unique_up_to_duality`, here *derived* (not assumed) from the
     uniformization input + the analytic identity theorem.
 
-    Currently rests on `AX_su2_modular_frame_alignment` (the uniformization gap) only;
-    the propagation is the proved `holo_eqOn_of_germ`. -/
+    Rests only on **classical-math axioms** — the `Γ(2)` covering plus lift-uniqueness, via
+    `su2_frame_alignment` — and the **physics** monodromy input `SameSWMonodromy`; the
+    propagation is the proved `holo_eqOn_of_germ`. No bespoke placeholder remains. -/
 theorem sw_su2_unique
     {Λ : ℂ} {D : Set ℂ} (hD : IsPreconnected D) {u₀ : ℂ} (hu₀ : u₀ ∈ D)
     {f g : ℂ → ℂ} (hf : AnalyticOnNhd ℂ f D)
     (hmono : SameSWMonodromy Λ f g) :
     ∃ m : ℂ → ℂ, Set.EqOn f (m ∘ g) D := by
-  obtain ⟨m, hmg, hfg⟩ := AX_su2_modular_frame_alignment (D := D) (u₀ := u₀) hmono
+  obtain ⟨m, hmg, hfg⟩ := su2_frame_alignment (D := D) (u₀ := u₀) hmono
   exact ⟨m, holo_eqOn_of_germ hD hu₀ hf hmg hfg⟩
 
 end SeibergWitten.Physics.SU2
