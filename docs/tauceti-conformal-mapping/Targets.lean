@@ -13,8 +13,11 @@ rectangle-integral vanishing lemmas, `Complex.UnitDisc`, `conjCLE`/`starRingEnd 
 
 A representative milestone from each layer is stated below with `sorry` (allowed in this
 human-owned roadmap library); what lands in `TauCeti/` must be proved with only the three
-kernel axioms. The contour-integral counting milestones (argument principle, Rouché) are
-described in `README.md` and added here once the zero/pole-counting API is set up.
+kernel axioms. The residue/winding/global-Cauchy and argument-principle layer is the sibling
+`ContourIntegration` roadmap (PR #35, `TauCeti/Analysis/Contour/`) — **consumed**, not
+re-derived here; L0 below adds only the conformal-geometric consequences (Rouché, Hurwitz,
+Morera-as-named). The modular/elliptic uniformization that L4/L5 feed lives in the
+`ModularForms` roadmap (PR #36), not here.
 
 Conventions (pinned in `README.md`): scalar `ℂ`; domains open + `SimplyConnectedSpace`;
 disc `Metric.ball (0:ℂ) 1`; convergence `TendstoLocallyUniformlyOn`; conjugation
@@ -30,8 +33,9 @@ namespace TauCetiRoadmap.ConformalMapping
 open Complex Filter Topology
 
 /-- **L0 — Hurwitz.** A locally-uniform limit of nowhere-zero holomorphic functions on a
-connected open set is either nowhere zero or identically zero. (Consumes the argument
-principle / Rouché of L0; the perturbation backbone for RMT injectivity in the limit.) -/
+connected open set is either nowhere zero or identically zero. (Built on the argument
+principle / residue theory from the sibling `ContourIntegration` roadmap, PR #35; the
+perturbation backbone for RMT injectivity in the limit.) -/
 example {Ω : Set ℂ} (hΩ : IsOpen Ω) (hconn : IsConnected Ω) {f : ℕ → ℂ → ℂ} {g : ℂ → ℂ}
     (hf : ∀ n, DifferentiableOn ℂ (f n) Ω) (hg : DifferentiableOn ℂ g Ω)
     (hconv : TendstoLocallyUniformlyOn f g atTop Ω)
