@@ -232,6 +232,13 @@ those axioms by independent agreement. Proved and assumed as separate, machine-c
 vetted list; faithfulness enforced by types and by an independent oracle: this, we argue, is
 the right standard for validating AI-generated results in theoretical physics.
 
+## Acknowledgments
+
+This formalization and paper were developed with heavy use of Claude (Anthropic), and with
+Gemini (Google) and Codex (OpenAI) for cross-checking, second opinions, and review. I thank
+David Kosower and Jesse Thaler for discussions on the validation of amplitude computations for
+collider physics, which informed the broader perspective on validation taken here.
+
 ## References
 
 Seiberg–Witten, *Nucl. Phys.* B426 (1994) [hep-th/9407087]; B431 (1994) [hep-th/9408099].
