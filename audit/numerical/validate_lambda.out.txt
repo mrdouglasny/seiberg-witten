@@ -1,0 +1,63 @@
+=== θ-null identities and λ transformation laws (mpmath, dps=40) ===
+
+τ = 1j
+  [PASS] AX_jacobi_quartic  θ₃⁴=θ₂⁴+θ₄⁴  |resid|=2.3e-41
+  [PASS] AX_theta3_ne_zero  θ₃≠0  |θ₃|=1.0864
+  [PASS] oneMinusLambda  1−λ=θ₄⁴/θ₃⁴
+  [PASS] modularLambda_add_two  λ(τ+2)=λ(τ)
+  [PASS] modularLambda_S  λ(-1/τ)=1−λ(τ)
+  [PASS] modularLambda_ST2S  λ(-1/(-1/τ+2))=λ(τ)
+
+τ = 2j
+  [PASS] AX_jacobi_quartic  θ₃⁴=θ₂⁴+θ₄⁴  |resid|=6.89e-41
+  [PASS] AX_theta3_ne_zero  θ₃≠0  |θ₃|=1.0037
+  [PASS] oneMinusLambda  1−λ=θ₄⁴/θ₃⁴
+  [PASS] modularLambda_add_two  λ(τ+2)=λ(τ)
+  [PASS] modularLambda_S  λ(-1/τ)=1−λ(τ)
+  [PASS] modularLambda_ST2S  λ(-1/(-1/τ+2))=λ(τ)
+
+τ = (0.5+1j)
+  [PASS] AX_jacobi_quartic  θ₃⁴=θ₂⁴+θ₄⁴  |resid|=2.57e-41
+  [PASS] AX_theta3_ne_zero  θ₃≠0  |θ₃|=1.0037
+  [PASS] oneMinusLambda  1−λ=θ₄⁴/θ₃⁴
+  [PASS] modularLambda_add_two  λ(τ+2)=λ(τ)
+  [PASS] modularLambda_S  λ(-1/τ)=1−λ(τ)
+  [PASS] modularLambda_ST2S  λ(-1/(-1/τ+2))=λ(τ)
+
+τ = (-0.3+0.8j)
+  [PASS] AX_jacobi_quartic  θ₃⁴=θ₂⁴+θ₄⁴  |resid|=2.3e-41
+  [PASS] AX_theta3_ne_zero  θ₃≠0  |θ₃|=1.103
+  [PASS] oneMinusLambda  1−λ=θ₄⁴/θ₃⁴
+  [PASS] modularLambda_add_two  λ(τ+2)=λ(τ)
+  [PASS] modularLambda_S  λ(-1/τ)=1−λ(τ)
+  [PASS] modularLambda_ST2S  λ(-1/(-1/τ+2))=λ(τ)
+
+τ = (0.25+0.6j)
+  [PASS] AX_jacobi_quartic  θ₃⁴=θ₂⁴+θ₄⁴  |resid|=9.74e-41
+  [PASS] AX_theta3_ne_zero  θ₃≠0  |θ₃|=1.2325
+  [PASS] oneMinusLambda  1−λ=θ₄⁴/θ₃⁴
+  [PASS] modularLambda_add_two  λ(τ+2)=λ(τ)
+  [PASS] modularLambda_S  λ(-1/τ)=1−λ(τ)
+  [PASS] modularLambda_ST2S  λ(-1/(-1/τ+2))=λ(τ)
+
+τ = (1.3+1.7j)
+  [PASS] AX_jacobi_quartic  θ₃⁴=θ₂⁴+θ₄⁴  |resid|=2.3e-41
+  [PASS] AX_theta3_ne_zero  θ₃≠0  |θ₃|=0.9944
+  [PASS] oneMinusLambda  1−λ=θ₄⁴/θ₃⁴
+  [PASS] modularLambda_add_two  λ(τ+2)=λ(τ)
+  [PASS] modularLambda_S  λ(-1/τ)=1−λ(τ)
+  [PASS] modularLambda_ST2S  λ(-1/(-1/τ+2))=λ(τ)
+
+=== convention anchor: λ(i) = 1/2 ===
+  [PASS] λ(i)=1/2 (θ-null normalization)  λ(i)=(0.5 + 0.0j)
+
+=== su2_singular_locus: (x²−u)²−Λ⁴ repeated root ⟺ u=±Λ² ===
+  [PASS] u=+1.0000: singular=True (expect True)  min root gap=0.00e+00
+  [PASS] u=-1.0000: singular=True (expect True)  min root gap=0.00e+00
+  [PASS] u=+1.0001: singular=False (expect False)  min root gap=2.00e-02
+  [PASS] u=+0.5000: singular=False (expect False)  min root gap=1.41e+00
+  [PASS] u=+0.0000: singular=False (expect False)  min root gap=1.41e+00
+  [PASS] u=+2.0000: singular=False (expect False)  min root gap=7.32e-01
+  [PASS] u=-1.5000: singular=False (expect False)  min root gap=8.74e-01
+
+=== ALL PASS : 44/44 checks ===
