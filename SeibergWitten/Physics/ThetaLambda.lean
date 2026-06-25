@@ -114,4 +114,44 @@ theorem modularLambda_add_two (τ : ℂ) : modularLambdaFn (τ + 2) = modularLam
   unfold modularLambdaFn
   rw [theta2_add_two_pow_four, theta3_add_two]
 
+/-! ## S-transformation of `λ`: `λ(-1/τ) = 1 − λ(τ)` -/
+
+/-- **`θ₃` S-transformation** `θ₃(-1/τ) = (-iτ)^{1/2}·θ₃(τ)`, proved from Mathlib's
+`jacobiTheta₂_functional_equation` at `z = 0`. -/
+theorem theta3_neg_inv (τ : UpperHalfPlane) :
+    theta3 (-1 / (τ : ℂ)) = (-I * (τ : ℂ)) ^ (1 / 2 : ℂ) * theta3 (τ : ℂ) := by
+  have hτ0 : (τ : ℂ) ≠ 0 := ne_of_apply_ne Complex.im (Complex.zero_im.symm ▸ ne_of_gt τ.2)
+  have hA : (-I * (τ : ℂ)) ^ (1 / 2 : ℂ) ≠ 0 := by
+    rw [Ne, Complex.cpow_eq_zero_iff, not_and_or]
+    exact Or.inl (mul_ne_zero (neg_ne_zero.mpr Complex.I_ne_zero) hτ0)
+  unfold theta3
+  have FE := jacobiTheta₂_functional_equation 0 (τ : ℂ)
+  simp only [zero_div, ne_eq, OfNat.ofNat_ne_zero, not_false_eq_true, zero_pow, mul_zero,
+    Complex.exp_zero, mul_one] at FE
+  rw [FE, ← mul_assoc, mul_one_div, div_self hA, one_mul]
+
+/-- **`θ₂` S-transformation** `θ₂(-1/τ) = (-iτ)^{1/2}·θ₄(τ)` — classical. Follows from
+`jacobiTheta₂_functional_equation` at `z = -1/2` (using `jacobiTheta₂_neg_left` and the
+`exp(±πi/4τ)` prefactor cancellation), exactly as `theta3_neg_inv` does at `z = 0`; the
+`θ₂↔θ₄` swap is the geometric content. The remaining bookkeeping is a formalization
+follow-up. (NOT VERIFIED.) -/
+axiom AX_theta2_neg_inv (τ : UpperHalfPlane) :
+    theta2 (-1 / (τ : ℂ)) = (-I * (τ : ℂ)) ^ (1 / 2 : ℂ) * theta4 (τ : ℂ)
+
+/-- **S-transformation of the modular `λ`**: `λ(-1/τ) = 1 − λ(τ)`. The automorphy factor
+`(-iτ)^{1/2}` cancels in the ratio `θ₂⁴/θ₃⁴`, and `θ₂↔θ₄` under `S` turns `λ` into
+`θ₄⁴/θ₃⁴ = 1 − λ` (`oneMinusLambda`). Combined with `T²`-invariance
+(`modularLambda_add_two`) this gives the full `Γ(2)`-invariance the uniformization axiom
+postulates: `Γ(2) = ⟨T², ST²S⁻¹⟩`, and `S` sends `λ ↦ 1−λ`. -/
+theorem modularLambda_S (τ : UpperHalfPlane) :
+    modularLambdaFn (-1 / (τ : ℂ)) = 1 - modularLambdaFn (τ : ℂ) := by
+  have hτ0 : (τ : ℂ) ≠ 0 := ne_of_apply_ne Complex.im (Complex.zero_im.symm ▸ ne_of_gt τ.2)
+  have hA : (-I * (τ : ℂ)) ^ (1 / 2 : ℂ) ≠ 0 := by
+    rw [Ne, Complex.cpow_eq_zero_iff, not_and_or]
+    exact Or.inl (mul_ne_zero (neg_ne_zero.mpr Complex.I_ne_zero) hτ0)
+  rw [oneMinusLambda]
+  unfold modularLambdaFn
+  rw [AX_theta2_neg_inv, theta3_neg_inv, mul_pow, mul_pow,
+    mul_div_mul_left _ _ (pow_ne_zero 4 hA)]
+
 end SeibergWitten.Physics
