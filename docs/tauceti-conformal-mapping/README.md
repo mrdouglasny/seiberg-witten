@@ -66,10 +66,13 @@ Suggested home: `TauCeti/Analysis/Complex/Conformal/` (with
 
 ## Layers (each a discharge-gated milestone; `sorry` in `Targets.lean` is the goal)
 
-- **L0 — the local-mapping engine.** *Argument principle* (zero/pole count `= (2πi)⁻¹ ∮ f'/f`)
-  → *Rouché* → *Hurwitz* (locally-uniform limits of zero-free maps are zero-free or `≡ 0`).
-  *Morera* as a named theorem and the maximum-modulus corollaries packaged. The open mapping
-  theorem and `AbsMax` are **consumed**; this layer is the counting/perturbation API on top.
+- **L0 — the local-mapping engine** (consumes the sibling **ContourIntegration** roadmap,
+  PR #35). The *argument principle*, residues, winding numbers, and the *global/homological
+  Cauchy theorem* are #35's deliverables (`TauCeti/Analysis/Contour/`) — **consume them, do
+  not re-derive**. This layer adds the *conformal-geometric* consequences on top: *Rouché*,
+  *Hurwitz* (locally-uniform limits of zero-free maps are zero-free or `≡ 0`), the
+  open-mapping degree, and *Morera* as a named theorem. The open mapping theorem and `AbsMax`
+  are consumed from Mathlib.
 - **L1 — normal families / Montel.** Locally bounded ⇒ precompact for
   `TendstoLocallyUniformlyOn` (every sequence has a locally-uniformly-convergent subsequence
   with holomorphic limit); Vitali. The compactness engine RMT runs on.
@@ -93,15 +96,31 @@ Suggested home: `TauCeti/Analysis/Complex/Conformal/` (with
 - **L6 (stretch) — Schwarz–Christoffel.** Explicit conformal maps onto polygons, built on
   L4 + L5.
 
-## Downstream / applications
+## Relation to sibling roadmaps (this entry is the connective layer)
 
-- **Modular & elliptic uniformization** — the `ℍ/Γ(2) ≅ ℂ∖{0,1}` covering (`λ`-function) is
-  L4 (reflection) + L5 + the existing
-  [`TauCetiRoadmap/UniversalCovers`](https://github.com/FormalFrontier/TauCetiRoadmap) deck-group
-  milestone; this is the SW project's `audit/COVERING_SCOPING.md` target. The `j`-invariant and
-  Picard's theorem follow.
-- **Several complex variables, PDE (conformal/quasiconformal), special functions** all consume
-  the conformal-mapping and boundary layers.
+This area sits **between two of Chris Birkbeck's roadmaps** and feeds two more, so it is
+deliberately scoped to the conformal-mapping spine that none of them build:
+
+- **Below — `ContourIntegration` (PR #35).** Provides residues, winding numbers, the
+  argument principle, and the global Cauchy theorem (Dixon). **L0 consumes it.**
+- **Above — `ModularForms` (PR #36).** A 13-layer entry targeting modular curves as moduli
+  with `Y(Γ)(ℂ) ≅ Γ\ℍ`. The **modular & elliptic uniformization** — including the
+  `ℍ/Γ(2) ≅ ℂ∖{0,1}` `λ`-covering (the SW project's `audit/COVERING_SCOPING.md` target), the
+  `j`-invariant, and Picard's theorem — belongs there; it **consumes our L4 (reflection) +
+  L5 (boundary correspondence)** together with `UniversalCovers` (deck group). We do **not**
+  claim the modular layer here; we supply the conformal inputs it needs.
+- **Consumers — `HeegaardFloer` (merged)** uses **L4 Schwarz reflection** for its
+  Cauchy–Riemann boundary conditions; **`UniversalCovers` (merged)** supplies the deck-group
+  Galois correspondence the `λ`-covering pairs with L4/L5.
+
+So the unique content of this entry — **Montel/normal families, the Riemann mapping theorem,
+Schwarz–Pick, reflection, Carathéodory** — is exactly the conformal spine missing between the
+residue engine (#35) and the modular/geometric consumers (#36, HeegaardFloer, UniversalCovers).
+
+## Other downstream
+
+Several complex variables, PDE (conformal/quasiconformal mappings), and special-function
+theory all consume the conformal-mapping and boundary layers.
 
 ## References
 
