@@ -79,7 +79,10 @@ upstream Mathlib work, not SW-specific.
 If the priority is axiom-free `sw_su2_unique`, the covering is a **multi-month, multi-piece**
 effort dominated by missing upstream machinery — the largest single investment of the three
 gaps. The **Schwarz reflection principle** is the keystone and the right first upstream
-target (it also unlocks much else). Within this repo, only (O)/(H) are buildable now and
-worth doing as the proved foothold; the rest should wait on (or drive) the Mathlib additions.
+target (it also unlocks much else) — scoped in detail in
+[`SCHWARZ_REFLECTION_SCOPING.md`](SCHWARZ_REFLECTION_SCOPING.md) (a ~1–2 week,
+axiom-clean, Mathlib/Tau-Ceti-shaped contribution; the Morera substrate is already in
+Mathlib). Within this repo, only (O)/(H) are buildable now and worth doing as the proved
+foothold; the rest should wait on (or drive) the Mathlib additions.
 Compared with the triple product (self-contained, days–weeks), the covering is the more
 fundamental but far larger commitment.
