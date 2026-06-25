@@ -8,3 +8,4 @@ import SeibergWitten.Physics.Family
 import SeibergWitten.Physics.VHS
 import SeibergWitten.Physics.SiegelSL2
 import SeibergWitten.Physics.ModularLambda
+import SeibergWitten.Physics.ThetaLambda
