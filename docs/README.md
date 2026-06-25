@@ -14,6 +14,11 @@ lives at the repo root). Added as the motivating context for the ICML 2026 talk
   example: the actual Lean axioms and definitions (`Physics/Hypotheses.lean`), the
   proved-vs-assumed split, Argyres–Douglas points as a *derived* locus, and what
   `#print axioms` reveals — a model for auditing AI-generated physics.
+- [`working-paper-axioms-for-physical-reasoning.md`](working-paper-axioms-for-physical-reasoning.md)
+  — the **working paper**: the full argument (problem → two columns → the SW formalization →
+  vetting by independent agreement → the AI-validation standard → the Mathlib-scale frontier),
+  grounded in the actual declarations, axiom footprints, and the 44/44 numeric run. Draft;
+  markdown working medium (LaTeX/PDF on request).
 - [`refs/`](refs/) — primary papers (SW1, SW2, PDFs checked in), `SU(N)` curve papers,
   and pedagogical reviews, with per-paper summaries.
 - [`talk/`](talk/) — the ICML 2026 talk (`validation.tex` + PDF), self-contained
