@@ -164,4 +164,20 @@ theorem modularLambda_S (τ : UpperHalfPlane) :
   rw [theta2_neg_inv, theta3_neg_inv, mul_pow, mul_pow,
     mul_div_mul_left _ _ (pow_ne_zero 4 hA)]
 
+/-- **Invariance of `λ` under the second `Γ(2)` generator** `ST²S⁻¹ = [[1,0],[-2,1]]`,
+which sends `τ ↦ -1/(-1/τ + 2)`. Proved purely by chaining the two transformation laws:
+`λ(-1/(-1/τ+2)) = 1 − λ(-1/τ+2)` (`S`) `= 1 − λ(-1/τ)` (`T²`) `= 1 − (1−λτ) = λτ` (`S`).
+Together with `modularLambda_add_two` (`T²`-invariance) this establishes invariance under
+both generators of `Γ(2) = ⟨T², ST²S⁻¹⟩` — i.e. `λ` is a genuine `Γ(2)`-Hauptmodul, the
+invariance clause of `AX_thrice_punctured_uniformization` now proved (only surjectivity /
+fibres remain). -/
+theorem modularLambda_ST2S (τ : UpperHalfPlane) :
+    modularLambdaFn (-1 / (-1 / (τ : ℂ) + 2)) = modularLambdaFn (τ : ℂ) := by
+  have hρim : 0 < (-1 / (τ : ℂ) + 2).im := by
+    rw [show (-1 / (τ : ℂ) + 2) = (-(τ : ℂ))⁻¹ + 2 from by ring, Complex.add_im]
+    simpa using τ.im_inv_neg_coe_pos
+  have e1 := modularLambda_S ⟨-1 / (τ : ℂ) + 2, hρim⟩
+  rw [e1, modularLambda_add_two, modularLambda_S τ]
+  ring
+
 end SeibergWitten.Physics

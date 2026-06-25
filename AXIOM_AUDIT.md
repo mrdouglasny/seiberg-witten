@@ -32,6 +32,7 @@ These are **not** debt to be discharged — they are the codified hypotheses the
 | `modularLambda_add_two` (`λ(τ+2)=λ(τ)`, i.e. `T²∈Γ(2)`-invariance), `theta2_pow_four`, `theta2_add_two_pow_four` | 1b | **standard-3** (proved dent in `AX_thrice_punctured_uniformization`'s Γ(2)-invariance) |
 | `theta3_neg_inv`, `theta2_neg_inv` (θ₃, θ₂ modular S-laws `θ(-1/τ)=(-iτ)^½·θ`) | 1b | **standard-3** (both proved from Mathlib's `jacobiTheta₂_functional_equation`) |
 | `modularLambda_S` (`λ(-1/τ)=1-λ(τ)`, the S-transformation) | 1b | standard-3 + `AX_jacobi_quartic`, `AX_theta3_ne_zero` |
+| `modularLambda_ST2S` (invariance under 2nd `Γ(2)` generator `ST²S⁻¹`) | 1b | standard-3 + `AX_jacobi_quartic`, `AX_theta3_ne_zero` (no new axioms; with `_add_two` → full `Γ(2)`-invariance) |
 
 Phase 0 (genus) is standard-3. Phase 1a (special geometry / metric positivity) transits
 the inherited `AX_PeriodCycleBasis` — jacobian-challenge's hyperelliptic cycle-basis
