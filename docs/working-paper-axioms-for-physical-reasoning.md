@@ -216,8 +216,9 @@ formalized in Isabelle/HOL), which we have scoped as upstream contributions. The
 ## 8. Related work
 
 The assurance artifacts (correspondence index, fidelity review, numerical validation, axiom
-audit) follow the `math-commons/formalization-assurance` conventions; the upstream framing
-targets the Lean FRO's Tau Ceti library. The Riemann mapping theorem is formalized in
+audit) follow the conventions of the author's own `formalization-assurance` project
+(`math-commons/formalization-assurance`), separate from and predating this work; the upstream
+mathematical contributions are framed for the Lean FRO's Tau Ceti library. The Riemann mapping theorem is formalized in
 Isabelle/HOL (Paulson); the Schwarz reflection principle and the SW solution appear
 unformalized before this work.
 
@@ -237,5 +238,5 @@ Seiberg–Witten, *Nucl. Phys.* B426 (1994) [hep-th/9407087]; B431 (1994) [hep-t
 Klemm–Lerche–Yankielowicz–Theisen, *Phys. Lett.* B344 (1995). Argyres–Faraggi, *PRL* 74
 (1995). Argyres–Douglas, *Nucl. Phys.* B448 (1995). Lerche, hep-th/9611190. Bilal,
 hep-th/9601007. Nekrasov, *Adv. Theor. Math. Phys.* 7 (2003); Nekrasov–Okounkov (2006).
-Mathlib (Lean 4). Paulson, Isabelle/HOL `Riemann_Mapping`. `math-commons/formalization-assurance`.
-Lean FRO, Tau Ceti.
+Mathlib (Lean 4). Paulson, Isabelle/HOL `Riemann_Mapping`. M. R. Douglas,
+*formalization-assurance* (`math-commons/formalization-assurance`). Lean FRO, Tau Ceti.
