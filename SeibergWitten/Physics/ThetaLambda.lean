@@ -85,4 +85,33 @@ theorem oneMinusLambda (τ : UpperHalfPlane) :
   rw [modularLambdaFn, eq_div_iff h3, sub_mul, div_mul_cancel₀ _ h3, one_mul]
   linear_combination hq
 
+/-! ## `T²`-invariance of `λ` (a proved piece of the `Γ(2)`-Hauptmodul property) -/
+
+/-- Normal form for `θ₂⁴`: `θ₂(τ)⁴ = exp(πiτ)·jacobiTheta₂(τ/2,τ)⁴` (the `exp(πiτ/4)`
+prefactor becomes `exp(πiτ)` on the fourth power). -/
+theorem theta2_pow_four (τ : ℂ) :
+    theta2 τ ^ 4 = Complex.exp ((Real.pi : ℂ) * I * τ) * jacobiTheta₂ (τ / 2) τ ^ 4 := by
+  unfold theta2
+  rw [mul_pow, ← Complex.exp_nat_mul]
+  have h : ((4 : ℕ) : ℂ) * ((Real.pi : ℂ) * I * τ / 4) = (Real.pi : ℂ) * I * τ := by
+    push_cast; ring
+  rw [h]
+
+/-- `θ₂⁴` is invariant under `τ ↦ τ + 2`: the `i = exp(πi/2)` factor from the prefactor is
+killed by the fourth power (`i⁴ = 1`), and `jacobiTheta₂` is `2`-periodic in `τ` and
+`1`-periodic in `z`. -/
+theorem theta2_add_two_pow_four (τ : ℂ) : theta2 (τ + 2) ^ 4 = theta2 τ ^ 4 := by
+  have harg : (τ + 2) / 2 = τ / 2 + 1 := by ring
+  rw [theta2_pow_four (τ + 2), theta2_pow_four τ, harg, jacobiTheta₂_add_right,
+    jacobiTheta₂_add_left]
+  rw [show (Real.pi : ℂ) * I * (τ + 2) = (Real.pi : ℂ) * I * τ + 2 * (Real.pi : ℂ) * I from by
+    ring, Complex.exp_add, Complex.exp_two_pi_mul_I, mul_one]
+
+/-- **`T²`-invariance of the modular `λ`**: `λ(τ + 2) = λ(τ)`. Since `T² = [[1,2],[0,1]] ∈
+Γ(2)`, this is a *proved* instance of the `Γ(2)`-invariance that the uniformization axiom
+`AX_thrice_punctured_uniformization` postulates — a genuine dent in that gap. -/
+theorem modularLambda_add_two (τ : ℂ) : modularLambdaFn (τ + 2) = modularLambdaFn τ := by
+  unfold modularLambdaFn
+  rw [theta2_add_two_pow_four, theta3_add_two]
+
 end SeibergWitten.Physics
