@@ -85,5 +85,7 @@ propose it to TauCetiRoadmap as above and implement against the Mathlib substrat
 
 A **draft roadmap entry** (README + `Targets.lean`, conventions pinned, signatures
 elaborated against Mathlib) is in
-[`../docs/tauceti-schwarz-reflection/`](../docs/tauceti-schwarz-reflection/), ready to
-propose to `FormalFrontier/TauCetiRoadmap` as `TauCetiRoadmap/SchwarzReflection/`.
+[`../docs/tauceti-conformal-mapping/`](../docs/tauceti-conformal-mapping/) — Schwarz
+reflection is its **L4** layer within the broader *conformal-mapping & geometric function
+theory* area (summit: the Riemann mapping theorem), ready to propose to
+`FormalFrontier/TauCetiRoadmap` as `TauCetiRoadmap/ConformalMapping/`.

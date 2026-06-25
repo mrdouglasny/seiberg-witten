@@ -1,76 +1,111 @@
-# Roadmap (draft): the Schwarz reflection principle
+# Roadmap (draft): conformal mapping and the geometric theory of holomorphic functions
 
 *A **draft Tau Ceti roadmap entry** we would propose to
 [`FormalFrontier/TauCetiRoadmap`](https://github.com/FormalFrontier/TauCetiRoadmap) as
-`TauCetiRoadmap/SchwarzReflection/` (this `README.md` + `Targets.lean`). It lives in the
-seiberg-witten repo as a working sketch — Schwarz reflection is the analytic keystone our
-modular-`λ` covering needs (see `../../audit/SCHWARZ_REFLECTION_SCOPING.md`), but it is
-**not** SW-specific: it is basic complex analysis that belongs upstream. Written to the
-roadmap repo's conventions: build the library not the theorem, ground everything in
-Mathlib, pin conventions up front, write Lean signatures.*
+`TauCetiRoadmap/ConformalMapping/` (this `README.md` + `Targets.lean`). It lives in the
+seiberg-witten repo as a working sketch (mirroring how `graphons/` keeps its roadmap
+sketch): the modular-`λ` covering our SW project needs (`../../audit/COVERING_SCOPING.md`)
+is one downstream application, but the area is general complex analysis that belongs
+upstream. Written to the roadmap repo's conventions: build the library not the theorem,
+ground everything in Mathlib, use Mathlib's vocabulary, pin conventions up front, write
+Lean signatures.*
 
-Mathlib has the **Cauchy-theory substrate** — contour integrals, the rectangle-integral
-vanishing lemma `Complex.integral_boundary_rect_eq_zero_of_continuousOn_of_differentiableOn`,
-`Analysis/Complex/HasPrimitives`, the Riemann removable-singularity theorem (point version),
-`conjCLE`/`starRingEnd ℂ`, the open mapping theorem — but **not the Schwarz reflection
-principle**. (`Mathlib/Analysis/Complex/Schwarz.lean` is the *Schwarz lemma*, `‖f z‖ ≤ ‖z‖`
-for disk self-maps — a different theorem.) A web search (2026-06) surfaced no formalization
-of the reflection principle in Lean, Isabelle, or Coq: this is genuinely new.
+Mathlib has the **Cauchy foundations** of complex analysis — contour integration and the
+Cauchy integral formula, power series / analyticity, the **open mapping theorem**
+(`Complex.AnalyticOnNhd.is_constant_or_isOpenMap`), the **maximum modulus principle**
+(`Analysis/Complex/AbsMax`), the **Schwarz lemma** (`Analysis/Complex/Schwarz`), the
+**Riemann removable-singularity** theorem, the rectangle-integral vanishing lemmas, the unit
+disc `Complex.UnitDisc`, `conjCLE`/`starRingEnd ℂ` — but **almost none of the geometric /
+boundary superstructure built on them**: no argument principle, no Rouché or Hurwitz, no
+Morera as a named theorem, no normal families / Montel, **no Riemann mapping theorem**, no
+Schwarz reflection, no Carathéodory boundary correspondence, no Schwarz–Christoffel, no
+Schwarz–Pick / hyperbolic metric, no analytic continuation / monodromy theorem.
 
-The goal is to **build the reflection principle as reusable theory**, not to race to the
-real-axis statement. "Done" means a researcher reaching for reflection — for boundary
-regularity of the Riemann map, Schwarz–Christoffel, the modular/elliptic uniformization, or
-plain analytic continuation across a real-analytic boundary — finds it at its natural
-generality with the basic API (the reflected function, its agreement and symmetry, the
-across-an-arc and across-a-circle forms).
+The goal is to **build that geometric theory as a reusable library**, with the **Riemann
+mapping theorem** (RMT) as the summit. "Done" means a researcher in conformal geometry,
+several-complex-variables, modular forms, or PDE finds the objects — conformal
+isomorphisms, normal families, the reflected continuation, the boundary correspondence — at
+their natural generality with full basic API, so RMT and its boundary regularity are
+*consequences of a developed theory*, not isolated endpoints.
 
-Suggested home: `TauCeti/Analysis/Complex/SchwarzReflection.lean`.
+Suggested home: `TauCeti/Analysis/Complex/Conformal/` (with
+`…/Conformal/ArgumentPrinciple.lean`, `…/NormalFamilies.lean`, `…/RiemannMapping.lean`,
+`…/Reflection.lean`, `…/BoundaryCorrespondence.lean`).
+
+## Prior art
+
+- **Mathlib:** none of the layer summits below (RMT, reflection, Rouché, Montel, …) are
+  present; only the foundations listed above. (`Analysis/Complex/Schwarz.lean` is the
+  Schwarz *lemma*, not the reflection *principle*.)
+- **Isabelle/HOL:** the **Riemann mapping theorem is formalized** (Paulson, `Riemann_Mapping`
+  in `HOL-Complex_Analysis`), so RMT is *achievable* — Lean simply lacks it. The reflection
+  principle and Schwarz–Christoffel appear unformalized in Lean and were not found in a
+  search of other provers. So this area ports/re-proves RMT into Lean and adds genuinely new
+  material on top.
 
 ## Generality bar (decide up front; do not silently specialize)
 
-- **Real-axis, scalar-valued first; conjugation-symmetric domain.** Layer 1 is reflection
-  across (a segment of) `ℝ` for `f : ℂ → ℂ` on a conjugation-symmetric open `Ω`
-  (`z ∈ Ω ↔ (starRingEnd ℂ) z ∈ Ω`). This is the load-bearing case and the one the covering
-  needs. Conjugation is **`starRingEnd ℂ`** throughout (Mathlib's vocabulary), never an ad hoc
-  `fun z => ⟨z.re, -z.im⟩`.
-- **The boundary hypothesis is "`f` is real on `L`".** Stated `∀ z ∈ Ω, z.im = 0 → (f z).im = 0`.
-  The reflected extension is the **explicit witness**
-  `F z = if 0 ≤ z.im then f z else (starRingEnd ℂ) (f ((starRingEnd ℂ) z))` — pin this form
-  (existence is proved *with* this witness, so downstream users get the formula, not just `∃`).
-- **Continuity only up to the line.** `f` is `ContinuousOn (Ω ∩ {im ≥ 0})` and
-  `DifferentiableOn ℂ` on `Ω ∩ {im > 0}`; do **not** assume differentiability on `L`.
-- **`E`-valued is a later generalization, not the default.** State Layer 1 for `ℂ → ℂ`. A
-  Banach-`E`-valued form (`f : ℂ → E`, with `conj` replaced by an antilinear involution /
-  real structure on `E`) is a stretch; flag it, don't silently bake it in.
-- **Across an arc / circle = Layer 2, by reduction.** The reflection across a real-analytic
-  arc or a circle reduces to the line case by a biholomorphic (Möbius) change of coordinates;
-  state it as its own milestone built *on* Layer 1, not from scratch.
+- **Scalar `ℂ`, the geometric (one-complex-variable) theory.** RMT and the boundary theory
+  are `ℂ`-specific; state them for `f : ℂ → ℂ`. The few layer-0 lemmas that are naturally
+  `E`-valued (reflection, parts of the maximum principle) may be stated over a complex Banach
+  `E`, flagged as such, but the spine is `ℂ`.
+- **Domains: open + connected, simple-connectivity via Mathlib.** Use `IsOpen`,
+  `IsConnected`/`IsPreconnected`, and `SimplyConnectedSpace ↥Ω` (Mathlib's class) — never an
+  ad hoc "no holes". RMT's hypotheses are: `Ω` open, simply connected, `Ω ≠ univ`, nonempty.
+- **Conformal isomorphism = holomorphic bijection.** A biholomorphism `Ω ≃ Ω'` is a
+  `DifferentiableOn ℂ` bijection with `DifferentiableOn ℂ` inverse; since holomorphic +
+  injective ⇒ open with holomorphic inverse (open mapping), state RMT's conclusion as
+  `∃ f, DifferentiableOn ℂ f Ω ∧ Set.InjOn f Ω ∧ f '' Ω = Metric.ball 0 1` and derive the
+  packaged `≃` / `ConformalAt` API as companions. Relate to Mathlib's `ConformalAt`.
+- **Target disc: `Complex.UnitDisc` / `Metric.ball (0:ℂ) 1`.** Reuse the existing disc and
+  its automorphism/`Schwarz` API; do not re-encode the disc.
+- **Convergence of holomorphic families: `TendstoLocallyUniformlyOn`** (compact-open), the
+  topology under which "holomorphic" is closed and Montel lives. Local boundedness =
+  "bounded on each compact `K ⊆ Ω`".
+- **Reflection: real-axis first; conjugation is `starRingEnd ℂ`; explicit witness.** See L4.
 
 ## Layers (each a discharge-gated milestone; `sorry` in `Targets.lean` is the goal)
 
-- **Layer 0 — antiholomorphic composition.** `z ↦ (starRingEnd ℂ) (f ((starRingEnd ℂ) z))`
-  is `DifferentiableOn ℂ` on the reflected set when `f` is. The one genuinely missing
-  micro-lemma (a few lines from `conjCLE` + chain rule); the foundation for the witness.
-- **Layer 1 — the reflection principle (summit of this entry).** The real-axis statement
-  above: `f` extends holomorphically across `L` via the witness, with agreement on the closed
-  upper half and the symmetry `F (conj z) = conj (F z)`. Proof route: Morera — `F` is
-  continuous on `Ω` and holomorphic off `L`, so its boundary integral over every rectangle
-  vanishes (split at `L`; each half is a limit of rectangles inside `Ω±` where the
-  rectangle-vanishing lemma applies; continuity passes to the limit), hence `F` has local
-  primitives, hence is holomorphic.
-- **Layer 2 — arc/circle reflection** (built on Layer 1 by Möbius reduction) and the
-  **`E`-valued** form. Optional for the covering, expected by general users.
+- **L0 — the local-mapping engine.** *Argument principle* (zero/pole count `= (2πi)⁻¹ ∮ f'/f`)
+  → *Rouché* → *Hurwitz* (locally-uniform limits of zero-free maps are zero-free or `≡ 0`).
+  *Morera* as a named theorem and the maximum-modulus corollaries packaged. The open mapping
+  theorem and `AbsMax` are **consumed**; this layer is the counting/perturbation API on top.
+- **L1 — normal families / Montel.** Locally bounded ⇒ precompact for
+  `TendstoLocallyUniformlyOn` (every sequence has a locally-uniformly-convergent subsequence
+  with holomorphic limit); Vitali. The compactness engine RMT runs on.
+- **L2 — Schwarz lemma extensions.** *Schwarz–Pick* (holomorphic disc self-maps contract the
+  pseudo-hyperbolic metric), the **hyperbolic / Poincaré metric** on `𝔻`, and the disc
+  automorphism group `Aut(𝔻) = {e^{iθ}(z−a)/(1−āz)}`. Built on Mathlib's Schwarz lemma.
+- **L3 — the Riemann mapping theorem (summit).** Every simply connected proper open
+  `Ω ⊊ ℂ` (nonempty) is biholomorphic to `𝔻`. Standard route: the family of injective
+  holomorphic `Ω → 𝔻` fixing a point is nonempty (square-root trick on simple-connectivity)
+  and normal (L1); maximize `|f′(z₀)|`; the maximizer is onto (else compose with a disc
+  automorphism + square root to beat it — L2). Uniqueness up to `Aut(𝔻)`.
+- **L4 — analytic continuation & the reflection principle.** Morera-based **Schwarz
+  reflection** across `ℝ` (witness `F z = if 0 ≤ z.im then f z else conj (f (conj z))`),
+  then across an analytic arc / circle by Möbius reduction; **Painlevé removability** across
+  an arc; the **monodromy theorem** (continuations along homotopic paths agree). Reflection's
+  reflected branch needs the antiholomorphic-composition lemma (L4.0). *This is the layer the
+  SW modular-`λ` covering consumes.*
+- **L5 — Carathéodory boundary correspondence.** The RMT map of a Jordan domain extends to a
+  homeomorphism of closures; prime ends in general. Uses L4 (reflection) for analytic
+  boundary arcs.
+- **L6 (stretch) — Schwarz–Christoffel.** Explicit conformal maps onto polygons, built on
+  L4 + L5.
 
-## Why it matters / downstream
+## Downstream / applications
 
-Reflection is a prerequisite for: boundary regularity of the **Riemann mapping**,
-**Schwarz–Christoffel**, the **modular `λ` / elliptic uniformization** (the
-`ℍ/Γ(2) ≅ ℂ∖{0,1}` covering — see the SW project's `audit/COVERING_SCOPING.md`, where it
-combines with the existing `TauCetiRoadmap/UniversalCovers` deck-group milestone), and
-analytic continuation across real-analytic boundaries generally.
+- **Modular & elliptic uniformization** — the `ℍ/Γ(2) ≅ ℂ∖{0,1}` covering (`λ`-function) is
+  L4 (reflection) + L5 + the existing
+  [`TauCetiRoadmap/UniversalCovers`](https://github.com/FormalFrontier/TauCetiRoadmap) deck-group
+  milestone; this is the SW project's `audit/COVERING_SCOPING.md` target. The `j`-invariant and
+  Picard's theorem follow.
+- **Several complex variables, PDE (conformal/quasiconformal), special functions** all consume
+  the conformal-mapping and boundary layers.
 
 ## References
 
-Ahlfors, *Complex Analysis* §6.5 (and *Conformal Invariants*); Conway, *Functions of One
-Complex Variable I* §IX.1; Stein–Shakarchi, *Complex Analysis* §2.5. New formalization (no
-known prior art); credit none — original.
+Ahlfors, *Complex Analysis* (Ch. 4–6) and *Conformal Invariants*; Conway, *Functions of One
+Complex Variable I* (VII–IX); Rudin, *Real and Complex Analysis* (Ch. 14); Stein–Shakarchi,
+*Complex Analysis* (Ch. 2, 8); Remmert, *Classical Topics in Complex Function Theory*. RMT:
+cf. Paulson's Isabelle/HOL `Riemann_Mapping`. New Lean formalization; credit none — original.

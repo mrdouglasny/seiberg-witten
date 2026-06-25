@@ -1,50 +1,83 @@
 import Mathlib
 
 /-!
-# Schwarz reflection principle: target signatures
+# Conformal mapping and geometric function theory: target signatures
 
-The narrative roadmap (proof route, generality bar, references, downstream uses) is in
-`README.md`. Mathlib has the Cauchy-theory substrate — the rectangle-integral vanishing
-lemma `Complex.integral_boundary_rect_eq_zero_of_continuousOn_of_differentiableOn`,
-`Analysis/Complex/HasPrimitives`, the point Riemann removable-singularity theorem,
-`conjCLE`/`starRingEnd ℂ`, the open mapping theorem — but **not** the reflection principle
-(`Analysis/Complex/Schwarz.lean` is the Schwarz *lemma*). We build it in
-`TauCeti/Analysis/Complex/SchwarzReflection.lean`.
+The narrative roadmap (layers, proof routes, generality bar, references, downstream uses)
+is in `README.md`. Mathlib has the Cauchy foundations — open mapping
+(`Complex.AnalyticOnNhd.is_constant_or_isOpenMap`), maximum modulus (`Analysis/Complex/AbsMax`),
+the Schwarz lemma (`Analysis/Complex/Schwarz`), Riemann removable singularities, the
+rectangle-integral vanishing lemmas, `Complex.UnitDisc`, `conjCLE`/`starRingEnd ℂ`,
+`TendstoLocallyUniformlyOn` — but not the geometric superstructure. We build it in
+`TauCeti/Analysis/Complex/Conformal/`, with the Riemann mapping theorem as the summit.
 
-These are stated with `sorry` (allowed in this human-owned roadmap library); what lands in
-`TauCeti/` must be fully proved with only the three kernel axioms. Conventions are pinned in
-`README.md`: real-axis scalar case first; conjugation is `starRingEnd ℂ`; the extension is
-the explicit witness `F z = if 0 ≤ z.im then f z else conj (f (conj z))`.
+A representative milestone from each layer is stated below with `sorry` (allowed in this
+human-owned roadmap library); what lands in `TauCeti/` must be proved with only the three
+kernel axioms. The contour-integral counting milestones (argument principle, Rouché) are
+described in `README.md` and added here once the zero/pole-counting API is set up.
 
-NOTE: drafted against Mathlib as of the seiberg-witten toolchain; re-elaborate against
-`TauCetiRoadmap`'s pinned Mathlib (lean4 v4.31) when filing.
+Conventions (pinned in `README.md`): scalar `ℂ`; domains open + `SimplyConnectedSpace`;
+disc `Metric.ball (0:ℂ) 1`; convergence `TendstoLocallyUniformlyOn`; conjugation
+`starRingEnd ℂ`; the reflection extension is the explicit witness
+`F z = if 0 ≤ z.im then f z else conj (f (conj z))`.
+
+NOTE: drafted/elaborated against the seiberg-witten toolchain's Mathlib; re-elaborate
+against `TauCetiRoadmap`'s pinned Mathlib (lean4 v4.31) when filing.
 -/
 
-namespace TauCetiRoadmap.SchwarzReflection
+namespace TauCetiRoadmap.ConformalMapping
 
-open Complex
+open Complex Filter Topology
 
-/-- **Layer 0 — antiholomorphic composition.** If `f` is `ℂ`-differentiable on a set `S`,
-then `z ↦ conj (f (conj z))` is `ℂ`-differentiable on the conjugate set `conj '' S`
-(antiholomorphic ∘ holomorphic ∘ antiholomorphic = holomorphic). The micro-lemma underlying
-the reflected branch of the witness; a few lines from `conjCLE` and the chain rule. -/
+/-- **L0 — Hurwitz.** A locally-uniform limit of nowhere-zero holomorphic functions on a
+connected open set is either nowhere zero or identically zero. (Consumes the argument
+principle / Rouché of L0; the perturbation backbone for RMT injectivity in the limit.) -/
+example {Ω : Set ℂ} (hΩ : IsOpen Ω) (hconn : IsConnected Ω) {f : ℕ → ℂ → ℂ} {g : ℂ → ℂ}
+    (hf : ∀ n, DifferentiableOn ℂ (f n) Ω) (hg : DifferentiableOn ℂ g Ω)
+    (hconv : TendstoLocallyUniformlyOn f g atTop Ω)
+    (hne : ∀ n, ∀ z ∈ Ω, f n z ≠ 0) :
+    (∀ z ∈ Ω, g z ≠ 0) ∨ (∀ z ∈ Ω, g z = 0) :=
+  sorry
+
+/-- **L1 — Montel / normal families.** A sequence of holomorphic functions, uniformly
+bounded on every compact subset of an open set, has a subsequence converging locally
+uniformly to a holomorphic limit. The compactness engine of RMT. -/
+example {Ω : Set ℂ} (hΩ : IsOpen Ω) {f : ℕ → ℂ → ℂ}
+    (hf : ∀ n, DifferentiableOn ℂ (f n) Ω)
+    (hb : ∀ K ⊆ Ω, IsCompact K → ∃ C, ∀ n, ∀ z ∈ K, ‖f n z‖ ≤ C) :
+    ∃ (φ : ℕ → ℕ) (g : ℂ → ℂ), StrictMono φ ∧ DifferentiableOn ℂ g Ω ∧
+      TendstoLocallyUniformlyOn (fun n => f (φ n)) g atTop Ω :=
+  sorry
+
+/-- **L2 — Schwarz–Pick.** A holomorphic self-map of the unit disc does not increase the
+pseudo-hyperbolic distance `|(z−w)/(1−w̄z)|`. (Mathlib's Schwarz lemma is the `w = 0` case.) -/
+example {f : ℂ → ℂ} (hf : DifferentiableOn ℂ f (Metric.ball 0 1))
+    (hmaps : Set.MapsTo f (Metric.ball 0 1) (Metric.ball 0 1))
+    {z w : ℂ} (hz : z ∈ Metric.ball (0 : ℂ) 1) (hw : w ∈ Metric.ball (0 : ℂ) 1) :
+    ‖(f z - f w) / (1 - (starRingEnd ℂ) (f w) * f z)‖
+      ≤ ‖(z - w) / (1 - (starRingEnd ℂ) w * z)‖ :=
+  sorry
+
+/-- **L3 — the Riemann mapping theorem (summit).** Every nonempty, simply connected, open
+proper subset of `ℂ` is biholomorphic to the unit disc: there is a holomorphic injection
+onto `Metric.ball 0 1` (its inverse is then holomorphic by the open mapping theorem). -/
+example {Ω : Set ℂ} (hopen : IsOpen Ω) (hconn : IsConnected Ω)
+    (hsc : SimplyConnectedSpace Ω) (hne_univ : Ω ≠ Set.univ) :
+    ∃ f : ℂ → ℂ, DifferentiableOn ℂ f Ω ∧ Set.InjOn f Ω ∧ f '' Ω = Metric.ball 0 1 :=
+  sorry
+
+/-- **L4.0 — antiholomorphic composition** (reflection prerequisite). If `f` is
+`ℂ`-differentiable on `S`, then `z ↦ conj (f (conj z))` is `ℂ`-differentiable on `conj '' S`. -/
 example {f : ℂ → ℂ} {S : Set ℂ} (hf : DifferentiableOn ℂ f S) :
     DifferentiableOn ℂ (fun z => (starRingEnd ℂ) (f ((starRingEnd ℂ) z)))
       ((starRingEnd ℂ) '' S) :=
   sorry
 
-/-- **Layer 1 — the Schwarz reflection principle (real axis).** Let `Ω` be open and
-conjugation-symmetric. If `f` is continuous on the closed upper part `Ω ∩ {im ≥ 0}`,
-holomorphic on the open upper part `Ω ∩ {im > 0}`, and real on `L = Ω ∩ ℝ`, then `f` extends
-to a function holomorphic on all of `Ω` that agrees with `f` on the closed upper part and
-satisfies the reflection symmetry `F (conj z) = conj (F z)`.
-
-The extension is the explicit witness
-`F z = if 0 ≤ z.im then f z else conj (f (conj z))`. Proof route (Morera): `F` is continuous
-on `Ω` (the branches agree on `L` since `f` is real there) and holomorphic off `L`; its
-boundary integral over every rectangle vanishes (split at `L`, each half a limit of
-sub-rectangles where `integral_boundary_rect_eq_zero_of_continuousOn_of_differentiableOn`
-applies), so `F` has local primitives (`HasPrimitives`) and is holomorphic. -/
+/-- **L4 — the Schwarz reflection principle (real axis).** On a conjugation-symmetric open
+`Ω`, a function continuous on the closed upper part, holomorphic on the open upper part, and
+real on `Ω ∩ ℝ`, extends holomorphically to all of `Ω` (via the witness
+`F z = if 0 ≤ z.im then f z else conj (f (conj z))`) with the reflection symmetry. The layer
+the SW modular-`λ` covering consumes. -/
 example {Ω : Set ℂ} (hΩ : IsOpen Ω) (hsymm : ∀ z, z ∈ Ω ↔ (starRingEnd ℂ) z ∈ Ω)
     {f : ℂ → ℂ}
     (hcont : ContinuousOn f (Ω ∩ {z | 0 ≤ z.im}))
@@ -56,16 +89,4 @@ example {Ω : Set ℂ} (hΩ : IsOpen Ω) (hsymm : ∀ z, z ∈ Ω ↔ (starRingE
       ∀ z ∈ Ω, F ((starRingEnd ℂ) z) = (starRingEnd ℂ) (F z) :=
   sorry
 
-/-- **Layer 1, witness form.** The same conclusion, pinning the extension to the explicit
-witness so downstream users get the formula, not just existence. (Equivalent to the above;
-stated separately because the witness is the convention to standardize on.) -/
-example {Ω : Set ℂ} (hΩ : IsOpen Ω) (hsymm : ∀ z, z ∈ Ω ↔ (starRingEnd ℂ) z ∈ Ω)
-    {f : ℂ → ℂ}
-    (hcont : ContinuousOn f (Ω ∩ {z | 0 ≤ z.im}))
-    (hholo : DifferentiableOn ℂ f (Ω ∩ {z | 0 < z.im}))
-    (hreal : ∀ z ∈ Ω, z.im = 0 → (f z).im = 0) :
-    DifferentiableOn ℂ
-      (fun z => if 0 ≤ z.im then f z else (starRingEnd ℂ) (f ((starRingEnd ℂ) z))) Ω :=
-  sorry
-
-end TauCetiRoadmap.SchwarzReflection
+end TauCetiRoadmap.ConformalMapping
