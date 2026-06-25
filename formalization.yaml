@@ -83,6 +83,38 @@ status:
       literature_dependencies:
         - statement: "Im τ ≻ 0: the special-Kähler metric on the Coulomb branch is positive-definite."
           source: "SW hep-th/9407087; Lerche hep-th/9611190 §2"
+    - declaration: "SeibergWitten.SU2.su2_singular_locus"
+      file: "SeibergWitten/Physics/SU2Singularities.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      numeric: "pass@numpy (audit/numerical/validate_lambda.py)"
+      literature_dependencies:
+        - statement: "The SU(2) curve is singular exactly at u = ±Λ² (monopole/dyon, no others)."
+          source: "SW hep-th/9407087 §3–4; Bilal hep-th/9601007"
+    - declaration: "SeibergWitten.Physics.transvection_isSymplectic"
+      file: "SeibergWitten/Physics/Monodromy.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      literature_dependencies:
+        - statement: "Picard–Lefschetz transvections preserve the intersection form (∈ Sp(2r,ℤ))."
+          source: "SW hep-th/9407087 §3; Picard–Lefschetz theory"
+    - declaration: "SeibergWitten.Physics.modularLambda_S / modularLambda_ST2S / modularLambda_add_two"
+      file: "SeibergWitten/Physics/ThetaLambda.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound, AX_jacobi_quartic, AX_theta3_ne_zero]
+      numeric: "pass@mpmath (audit/numerical/validate_lambda.py, 44/44, dps=40)"
+      literature_dependencies:
+        - statement: >
+            The modular λ = θ₂⁴/θ₃⁴ is a Γ(2)-Hauptmodul: λ(τ+2)=λ(τ), λ(-1/τ)=1−λ(τ),
+            and invariance under ST²S⁻¹ — the two generators of Γ(2).
+          source: "Diamond–Shurman §1; classical modular/theta theory"
+
+# Physics-foundations layer (Physics/Hypotheses.lean) deliberately introduces named
+# axioms codifying the non-rigorous physical lore (holomorphy, singularity structure,
+# EM duality, R-symmetry, asymptotic matching). These are the project's point, NOT debt;
+# see AXIOM_AUDIT.md and docs/foundations-for-physical-reasoning.md. The classical theta
+# axioms (AX_jacobi_quartic, AX_theta3_ne_zero) are numerically vetted (pass@mpmath) and
+# would be discharged by the Jacobi triple product (see audit/PROOF_STATUS.md).
 
 automation:
   methods:
@@ -99,14 +131,22 @@ fidelity:
     Forward-chaining corpus project. The SW curve is realized as
     jacobian-challenge's HyperellipticData with f = P_N² − Λ^{2N}; the squarefree
     (smoothness) hypothesis selects the regular Coulomb-branch locus. Per-equation
-    source↔Lean correspondence + numerical cross-checks are tracked in
-    audit/CORRESPONDENCE_INDEX.md.
+    source↔Lean correspondence is in audit/CORRESPONDENCE_INDEX.md; per-entry
+    faithfulness verdicts + the numeric tier are in audit/FIDELITY_REVIEW.md.
+  numeric_validation: >
+    Independent mpmath/numpy oracle audit/numerical/validate_lambda.py (output
+    validate_lambda.out.txt): 44/44 pass at dps=40, residuals ≲1e-40. Vets
+    AX_jacobi_quartic (θ₃⁴=θ₂⁴+θ₄⁴), AX_theta3_ne_zero, the λ transformation laws
+    (T², S, ST²S⁻¹), the λ(i)=½ normalization anchor, and su2_singular_locus. Caught
+    (and fixed) a branch bug in the oracle itself — the method demonstrating its value.
 
 review:
   status: "agent-reviewed"
   notes: >
-    Phase 0 #print axioms-verified standard-3. Numerical fidelity checks (periods,
-    τ) come online with Phase 1. No human-mathematician review yet.
+    All declarations #print axioms-verified. Numerical fidelity oracle online and
+    passing (λ layer + singularity locus, 44/44); period/τ numeric checks await Phase 2.
+    Physics-foundations axioms reviewed by Gemini (gemini-3.1-pro-preview, 2026-06-24)
+    for typing/non-vacuity. No human-mathematician review yet.
 
 alignment:
   namespace: "SeibergWitten"
@@ -126,3 +166,23 @@ alignment:
       module: "SeibergWitten/SpecialGeometry.lean"
       status: "proved"
       note: "τ ∈ Siegel (τ=τᵀ, Im τ≻0); standard-3 + AX_PeriodCycleBasis (off critical path)"
+    - source: "SW §3–4: singularity count (no extra singularities)"
+      lean: "SeibergWitten.SU2.su2_singular_locus"
+      module: "SeibergWitten/Physics/SU2Singularities.lean"
+      status: "proved"
+      note: "curve singular ⟺ u=±Λ²; standard-3; numeric pass@numpy"
+    - source: "SW §3: Picard–Lefschetz monodromy ∈ Sp(2r,ℤ)"
+      lean: "SeibergWitten.Physics.transvection_isSymplectic"
+      module: "SeibergWitten/Physics/Monodromy.lean"
+      status: "proved"
+      note: "transvection v↦v+⟨v,γ⟩γ preserves the intersection form; standard-3"
+    - source: "classical: modular λ is a Γ(2)-Hauptmodul (rigidity uniformization)"
+      lean: "SeibergWitten.Physics.modularLambda_{S,ST2S,add_two}"
+      module: "SeibergWitten/Physics/ThetaLambda.lean"
+      status: "proved"
+      note: "λ=θ₂⁴/θ₃⁴; T²- and S-laws; +AX_jacobi_quartic,AX_theta3_ne_zero (numerically vetted)"
+    - source: "g=1 Sp-action on Siegel ≅ ℍ"
+      lean: "SeibergWitten.Physics.siegelOneEquiv + MulAction SL(2,ℤ) (Siegel 1)"
+      module: "SeibergWitten/Physics/SiegelSL2.lean"
+      status: "proved"
+      note: "Sp(2,ℤ)=SL(2,ℤ) action transported from Mathlib's ℍ action; standard-3"
