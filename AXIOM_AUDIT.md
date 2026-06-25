@@ -30,6 +30,8 @@ These are **not** debt to be discharged — they are the codified hypotheses the
 | `su2BaseEquiv` (SU(2) base `ℂ∖{±Λ²} ≃ ℂ∖{0,1}`), `affineEquiv` | 1b | **standard-3** (no new axioms) |
 | `theta3_eq_jacobiTheta`, `theta3_add_two`, `theta4_add_two`, `modularLambdaFn` def, `oneMinusLambda` | 1b | **standard-3** + `AX_jacobi_quartic`, `AX_theta3_ne_zero` (`oneMinusLambda` only) |
 | `modularLambda_add_two` (`λ(τ+2)=λ(τ)`, i.e. `T²∈Γ(2)`-invariance), `theta2_pow_four`, `theta2_add_two_pow_four` | 1b | **standard-3** (proved dent in `AX_thrice_punctured_uniformization`'s Γ(2)-invariance) |
+| `theta3_neg_inv` (`θ₃(-1/τ)=(-iτ)^½θ₃(τ)`, the θ₃ modular S-law) | 1b | **standard-3** (proved from Mathlib's `jacobiTheta₂_functional_equation`) |
+| `modularLambda_S` (`λ(-1/τ)=1-λ(τ)`, the S-transformation) | 1b | standard-3 + `AX_theta2_neg_inv`, `AX_jacobi_quartic`, `AX_theta3_ne_zero` |
 
 Phase 0 (genus) is standard-3. Phase 1a (special geometry / metric positivity) transits
 the inherited `AX_PeriodCycleBasis` — jacobian-challenge's hyperelliptic cycle-basis
@@ -62,6 +64,7 @@ that review.
 | `AX_thrice_punctured_uniformization` | ModularLambda.lean | Placeholder | LP | **Classical analytic input**: modular `λ` realizes `ℍ` as universal cover of `ℂ∖{0,1}` (`Γ(2)` deck group); now realized by the concrete `modularLambdaFn` |
 | `AX_jacobi_quartic` (`θ₃⁴=θ₂⁴+θ₄⁴`) | ThetaLambda.lean | Placeholder | LP | Jacobi's quartic identity — concrete theta-series computation; bounded target |
 | `AX_theta3_ne_zero` (`θ₃≠0` on `ℍ`) | ThetaLambda.lean | Placeholder | LP | standard theta non-vanishing |
+| `AX_theta2_neg_inv` (`θ₂(-1/τ)=(-iτ)^½θ₄(τ)`) | ThetaLambda.lean | Placeholder | LP | θ₂ S-transform (θ₂↔θ₄ swap); FE-derivable like `theta3_neg_inv`, `exp(±πi/4τ)` bookkeeping |
 
 **Phase 1b (SU(2) rigidity).** `SeibergWitten/Physics/SU2Rigidity.lean` reduces the
 rank-1 case of `sw_effective_theory_unique_up_to_duality` to a *theorem*
