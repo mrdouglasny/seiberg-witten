@@ -60,19 +60,21 @@ that review.
 | `sw_effective_theory_unique_up_to_duality` | Hypotheses.lean | Needs review | GR, LP | **Headline lore**: hypotheses fix solution up to `Sp(2r,ℤ)`. SW1 |
 | `sw_curve_admits_effective_theory` | Hypotheses.lean | Needs review | GR, LP | **Headline lore**: SW curve realizes such a theory. SW1 |
 | `SameSWMonodromy` | SU2Rigidity.lean | Placeholder | SA | Same `Sp(2,ℤ)` monodromy of two SU(2) period maps; until monodromy layer (Phase 3/4) |
-| `AX_su2_modular_frame_alignment` | SU2Rigidity.lean | Placeholder | SA, LP | **The one SU(2)-rigidity gap**: modular-`λ` uniformization of `ℂ∖{±Λ²}`; not in Mathlib. SW1 §3–4 |
+| `AX_developing_map_rigidity` | SU2Rigidity.lean | Placeholder | SA, LP | **Classical-math axiom (lift uniqueness)**: given the `Γ(2)` covering, two same-monodromy developing maps agree up to a modular frame change. Consumes `AX_thrice_punctured_uniformization`; replaces the retired bespoke `AX_su2_modular_frame_alignment`. Forster (monodromy thm); SW1 §3–4 |
 | `localMonodromy`, `AX_picard_lefschetz_local` | Monodromy.lean | Placeholder | SA, LP | **Monodromy gap**: local monodromy of the family = Picard–Lefschetz transvection; needs family/local-system layer. SW1 §3 |
-| `AX_thrice_punctured_uniformization` | ModularLambda.lean | Placeholder | LP | **Classical analytic input**: modular `λ` realizes `ℍ` as universal cover of `ℂ∖{0,1}` (`Γ(2)` deck group); now realized by the concrete `modularLambdaFn` |
+| `AX_thrice_punctured_uniformization` | ModularLambda.lean | Placeholder | LP | **Classical analytic input**: modular `λ` realizes `ℍ` as universal cover of `ℂ∖{0,1}` (`Γ(2)` deck group); now realized by the concrete `modularLambdaFn`, and consumed by `sw_su2_unique` via `su2_frame_alignment` |
 | `AX_jacobi_quartic` (`θ₃⁴=θ₂⁴+θ₄⁴`) | ThetaLambda.lean | Placeholder | LP | Jacobi's quartic identity — concrete theta-series computation; bounded target |
 | `AX_theta3_ne_zero` (`θ₃≠0` on `ℍ`) | ThetaLambda.lean | Placeholder | LP | standard theta non-vanishing |
 
-**Phase 1b (SU(2) rigidity).** `SeibergWitten/Physics/SU2Rigidity.lean` reduces the
-rank-1 case of `sw_effective_theory_unique_up_to_duality` to a *theorem*
-(`sw_su2_unique`) resting on exactly **one** mathematical input,
-`AX_su2_modular_frame_alignment` (the modular-`λ` uniformization), plus the monodromy
-placeholder `SameSWMonodromy`. The analytic propagation core `holo_eqOn_of_germ` (the
-identity theorem) is **proved, standard-3**. Building/porting the `λ`/`Γ(2)`
-uniformization discharges the gap and makes `sw_su2_unique` axiom-free.
+**Phase 1b (SU(2) rigidity).** `SeibergWitten/Physics/SU2Rigidity.lean` proves the rank-1
+case of `sw_effective_theory_unique_up_to_duality` as a *theorem* (`sw_su2_unique`) modulo
+two clearly-separated tiers: two **classical-math** axioms — the `Γ(2)` covering
+`AX_thrice_punctured_uniformization` and the lift-uniqueness `AX_developing_map_rigidity`
+(combined in the derived `su2_frame_alignment`) — and the **physics** input
+`SameSWMonodromy`. The analytic propagation core `holo_eqOn_of_germ` (the identity theorem)
+is **proved, standard-3**, and no bespoke placeholder remains. Discharging the covering
+upstream (Schwarz reflection ⇒ Riemann mapping ⇒ the `Γ(2)` cover) and the lift-uniqueness
+step removes the math debt; the physics axiom `SameSWMonodromy` is irreducible.
 
 `SingularitiesAreBPS`, `diracPairing`, `ArgyresDouglasLocus`, and `IsSWEffectiveTheory`
 are *definitions/structures* (not axioms) — in particular Argyres–Douglas points are a
