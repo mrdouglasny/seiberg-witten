@@ -130,13 +130,23 @@ theorem theta3_neg_inv (τ : UpperHalfPlane) :
     Complex.exp_zero, mul_one] at FE
   rw [FE, ← mul_assoc, mul_one_div, div_self hA, one_mul]
 
-/-- **`θ₂` S-transformation** `θ₂(-1/τ) = (-iτ)^{1/2}·θ₄(τ)` — classical. Follows from
-`jacobiTheta₂_functional_equation` at `z = -1/2` (using `jacobiTheta₂_neg_left` and the
-`exp(±πi/4τ)` prefactor cancellation), exactly as `theta3_neg_inv` does at `z = 0`; the
-`θ₂↔θ₄` swap is the geometric content. The remaining bookkeeping is a formalization
-follow-up. (NOT VERIFIED.) -/
-axiom AX_theta2_neg_inv (τ : UpperHalfPlane) :
-    theta2 (-1 / (τ : ℂ)) = (-I * (τ : ℂ)) ^ (1 / 2 : ℂ) * theta4 (τ : ℂ)
+/-- **`θ₂` S-transformation** `θ₂(-1/τ) = (-iτ)^{1/2}·θ₄(τ)`, proved from Mathlib's
+`jacobiTheta₂_functional_equation` at `z = -1/2` (with `jacobiTheta₂_neg_left`). The
+`exp(πiτ/4)` prefactor of `θ₂(-1/τ)` is *exactly* the `exp(-πi z²/τ)` factor the functional
+equation produces at `z = -1/2`, so they coincide and the `θ₂↔θ₄` swap drops out. -/
+theorem theta2_neg_inv (τ : UpperHalfPlane) :
+    theta2 (-1 / (τ : ℂ)) = (-I * (τ : ℂ)) ^ (1 / 2 : ℂ) * theta4 (τ : ℂ) := by
+  have hτ0 : (τ : ℂ) ≠ 0 := ne_of_apply_ne Complex.im (Complex.zero_im.symm ▸ ne_of_gt τ.2)
+  have hA : (-I * (τ : ℂ)) ^ (1 / 2 : ℂ) ≠ 0 := by
+    rw [Ne, Complex.cpow_eq_zero_iff, not_and_or]
+    exact Or.inl (mul_ne_zero (neg_ne_zero.mpr Complex.I_ne_zero) hτ0)
+  have FE := jacobiTheta₂_functional_equation (-(1 / 2)) (τ : ℂ)
+  rw [jacobiTheta₂_neg_left] at FE
+  unfold theta2 theta4
+  rw [show (-1 / (τ : ℂ)) / 2 = -(1 / 2 : ℂ) / (τ : ℂ) from by ring, FE,
+    show (Real.pi : ℂ) * I * (-1 / (τ : ℂ)) / 4
+        = -(Real.pi : ℂ) * I * (-(1 / 2 : ℂ)) ^ 2 / (τ : ℂ) from by ring,
+    ← mul_assoc, ← mul_assoc, mul_one_div, div_self hA, one_mul]
 
 /-- **S-transformation of the modular `λ`**: `λ(-1/τ) = 1 − λ(τ)`. The automorphy factor
 `(-iτ)^{1/2}` cancels in the ratio `θ₂⁴/θ₃⁴`, and `θ₂↔θ₄` under `S` turns `λ` into
@@ -151,7 +161,7 @@ theorem modularLambda_S (τ : UpperHalfPlane) :
     exact Or.inl (mul_ne_zero (neg_ne_zero.mpr Complex.I_ne_zero) hτ0)
   rw [oneMinusLambda]
   unfold modularLambdaFn
-  rw [AX_theta2_neg_inv, theta3_neg_inv, mul_pow, mul_pow,
+  rw [theta2_neg_inv, theta3_neg_inv, mul_pow, mul_pow,
     mul_div_mul_left _ _ (pow_ne_zero 4 hA)]
 
 end SeibergWitten.Physics
