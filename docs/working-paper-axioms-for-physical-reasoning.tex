@@ -300,7 +300,7 @@ an \code{axiom}.
 -- H0  carrier = the data of an N=2 U(1)^{N-1} EFT
 structure CoulombBase (r : ℕ) where
   Δ : Set (Fin r → ℂ); U : Set (Fin r → ℂ)
-  hUopen : IsOpen U; hUsmooth : U ⊆ Δᶜ
+  hUopen : IsOpen U; hUsmooth : U = Δᶜ
 structure Sheet (B : CoulombBase r) where
   V : Set (Fin r → ℂ); hVopen : IsOpen V; hVsub : V ⊆ B.U
   hVsc : SimplyConnectedSpace V
@@ -309,7 +309,7 @@ structure Sheet (B : CoulombBase r) where
 
 -- H1  special geometry: a prepotential F with aD = ∂F/∂a, τ = ∂²F/∂a²
 def Sheet.SpecialGeometry (s : Sheet B) : Prop :=
-  ∃ F, DifferentiableOn ℂ F (s.a '' s.V) ∧
+  ∃ F, ContDiffOn ℂ 2 F (s.a '' s.V) ∧
     (∀ u ∈ s.V, ∀ i, s.aD u i = partialDeriv F i (s.a u)) ∧
     (∀ u ∈ s.V, ∀ i j, (s.tau u).val i j = partialDeriv2 F i j (s.a u))
 
@@ -355,7 +355,10 @@ structure IsSWEffectiveTheory (s : Sheet B) (Λ : ℂ) (N : ℕ) : Prop where
 \end{Verbatim}
 
 \noindent \code{Deck} (H4) relates sheets and is proved to make the BPS mass descend to the
-base (\code{Deck.bpsMass\_eq}). The one rank-1 \emph{monodromy} input that remains a placeholder
+base (\code{Deck.bpsMass\_eq}). Sheets are organized into an \code{SWAtlas} (covering \code{B.U},
+overlaps \code{Deck}-glued), so the duality gluing H4 is \emph{part of the theory} and uniqueness
+is stated at the atlas level (\code{sw\_unique\_up\_to\_duality}). The one rank-1
+\emph{monodromy} input that remains a placeholder
 axiom is \code{SameSWMonodromy} (Appendix B): two candidate couplings $f,g$ carry the same
 $\Sp(2,\Z)$ monodromy around the punctures---physically fixed by which BPS state (monopole at
 $+\Lambda^2$, dyon at $-\Lambda^2$) goes massless where---the input to the rank-1 rigidity
@@ -388,7 +391,7 @@ theorem sw_curve_admits_effective_theory (P : Polynomial ℂ) (Λ : ℂ)
       B.Δ = {u | ¬ Squarefree (swCurvePoly N Λ u)} ∧ swModulus N P ∈ s.V := by sorry
 
 -- PROVED (3): the classical Coulomb branch has dimension N − 1 (the rank), from the gauge group
-theorem coulombBranch_classical (N : ℕ) : Module.finrank ℂ (Fin (N - 1) → ℂ) = N - 1
+theorem coulombBranchDim (N : ℕ) : Module.finrank ℂ (Fin (N - 1) → ℂ) = N - 1
 \end{Verbatim}
 
 \medskip
