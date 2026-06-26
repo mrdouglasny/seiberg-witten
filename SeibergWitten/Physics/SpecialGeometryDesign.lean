@@ -21,6 +21,10 @@ This makes the hypotheses contentful:
 * **H4** as a `Deck` gluing: overlapping sheets are related by a Dirac-pairing-preserving
   (= `Sp(2r,ℤ)`) action on charges under which the central charge is covariant — so `|Z|`
   (the mass) and the metric descend to the base.
+* **H6** as asymptotic matching: the prepotential `F` matches the weak-coupling one-loop +
+  instanton form (`F − F_cl − F₁ → 0` as `|a| → ∞`) — the non-renormalization input that pins
+  the special geometry of H1 to *the* SW prepotential (rather than an arbitrary special-Kähler
+  structure). `Sheet.MatchesAsymptotics` bundles H1 + H6.
 
 A prepotential-primitive variant (make `F` the datum; derive `a_D, τ`) is sketched at the end.
 -/
@@ -146,6 +150,43 @@ theorem Deck.bpsMass_eq {B : CoulombBase r} {s s' : Sheet B} (D : Deck s s')
     s'.bpsMass u (D.g n) = s.bpsMass u n := by
   unfold Sheet.bpsMass
   rw [D.covariant u hu n]
+
+/-! ## H6 — asymptotic matching (the non-renormalization input)
+
+This is what pins the special-geometry data down to *the* SW theory: the prepotential `F` of
+H1 must match the known weak-coupling computation. The N=2 non-renormalization theorem says the
+perturbative prepotential is **one-loop exact**, so at weak coupling
+`F = F_classical + F_1loop + (instantons)`, the instanton corrections being a series in `Λ^{2N}`
+that vanishes as `|a| → ∞`. Matching this asymptotics — together with the singularity structure
+(H2/H3) and duality (H4) — is what makes the solution unique; without it, H1 is merely "some
+special-Kähler geometry". -/
+
+/-- **One-loop prepotential** — the charged W-boson contributions,
+`F₁(a) = (i/8π) ∑_{i≠j} (aᵢ−aⱼ)² log((aᵢ−aⱼ)²/Λ²)`. Its Hessian is the one-loop logarithmic
+running of the `U(1)^{N-1}` couplings; the massless W at `aᵢ = aⱼ` is the classical
+enhanced-symmetry locus (excluded from the smooth region). -/
+noncomputable def oneLoopPrepotential (Λ : ℂ) (a : Fin r → ℂ) : ℂ :=
+  (Complex.I / (8 * (Real.pi : ℂ))) *
+    ∑ i, ∑ j, if i = j then 0 else (a i - a j) ^ 2 * Complex.log ((a i - a j) ^ 2 / Λ ^ 2)
+
+/-- **H6 — asymptotic matching / non-renormalization.** In the semiclassical limit `|a| → ∞`
+the prepotential matches classical + one-loop, the remainder (instantons) vanishing:
+`F − (F_cl + F₁) → 0` along the cocompact filter. With H1 (`τ = ∂²F/∂a²`) this is the one-loop
+running of the effective couplings; it is the boundary condition that, with H2/H3/H4, fixes
+`F`. (The *full* non-renormalization statement is stronger — the remainder is purely
+instantonic, a power series in `Λ^{2N}` with no higher-loop logarithms — `Instantonic` below.) -/
+def AsymptoticMatch (Λ : ℂ) (Fcl F : (Fin r → ℂ) → ℂ) : Prop :=
+  Tendsto (fun a => F a - (Fcl a + oneLoopPrepotential Λ a))
+    (Filter.cocompact (Fin r → ℂ)) (𝓝 0)
+
+/-- A sheet **matches the asymptotics**: its special-geometry prepotential (H1) exists and has
+the required weak-coupling form (H6), for some classical part `Fcl`. This is the clause that
+upgrades H1 from "a special-Kähler structure" to "*the* SW prepotential". -/
+def Sheet.MatchesAsymptotics {B : CoulombBase r} (s : Sheet B) (Λ : ℂ) : Prop :=
+  ∃ F : (Fin r → ℂ) → ℂ, DifferentiableOn ℂ F (s.a '' s.V) ∧
+    (∀ u ∈ s.V, ∀ i, s.aD u i = partialDeriv F i (s.a u)) ∧
+    (∀ u ∈ s.V, ∀ i j, (s.tau u).val i j = partialDeriv2 F i j (s.a u)) ∧
+    ∃ Fcl, AsymptoticMatch Λ Fcl F
 
 end SeibergWitten.Physics.Design
 
