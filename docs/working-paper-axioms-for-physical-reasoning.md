@@ -266,25 +266,30 @@ def Sheet.SingularitiesAreBPS (s) : Prop :=
   (∀ u ∈ s.V, ∀ n ≠ 0, s.centralCharge u n ≠ 0) ∧
   (∀ u₀ ∈ closure s.V ∩ B.Δ, ∃ n ≠ 0, s.BecomesMasslessAt u₀ n)
 
--- H3  Picard–Lefschetz: reflection in the SAME vanishing charge n as H2
+-- H3  Picard–Lefschetz: the monodromy IS an actual deck transformation acting as the
+--     reflection in the SAME vanishing charge n as H2 (not the vacuous ∃ g, g = plReflection n)
 def PicardLefschetzAtGenericStratum (s : Sheet B) : Prop :=
-  ∀ u₀ ∈ closure s.V ∩ B.Δ, ∀ n, s.BecomesMasslessAt u₀ n → ∃ g, g = plReflection n
+  ∀ u₀ ∈ closure s.V ∩ B.Δ, ∀ n, n ≠ 0 → s.BecomesMasslessAt u₀ n →
+    ∃ (s' : Sheet B) (D : Deck s s'), ⇑D.g = plReflection n
 
--- H4  duality gluing: an Sp(2r,ℤ) charge action with covariant central charge
+-- H4  duality gluing: a ℤ-linear (Sp(2r,ℤ)) charge automorphism with covariant central charge
 structure Deck (s s' : Sheet B) where
-  g : ChargeLattice r → ChargeLattice r
-  symplectic : ∀ n n', diracPairing (g n) (g n') = diracPairing n n'   -- ∈ Sp(2r,ℤ)
+  g : ChargeLattice r ≃ₗ[ℤ] ChargeLattice r
+  symplectic : ∀ n n', diracPairing (g n) (g n') = diracPairing n n'
   covariant  : ∀ u ∈ s.V ∩ s'.V, ∀ n, s'.centralCharge u (g n) = s.centralCharge u n
 
--- H5  R-symmetry: a ℤ_{2N} action on the moduli fixing Δ
+-- H5  R-symmetry: a bijection of EXACT order 2N (not id) fixing Δ
 def RSymmetry (B : CoulombBase r) (N : ℕ) : Prop :=
-  ∃ ω, (∀ u, ω^[2*N] u = u) ∧ ω '' B.Δ = B.Δ
+  ∃ ω, Function.Bijective ω ∧ ω^[2*N] = id ∧ (∀ k, 0 < k → k < 2*N → ω^[k] ≠ id) ∧ ω '' B.Δ = B.Δ
 
--- H6  asymptotic matching / non-renormalization (one-loop + purely instantonic remainder)
-def Instantonic (Λ) (N) (Fcl F) : Prop :=
-  ∃ c, ∀ a, F a - Fcl a - oneLoopPrepotential Λ a = ∑' k, c (k+1) a * (Λ^(2*N))^(k+1)
+-- H6  one-loop over ROOTS (eigenvalue differences; nonzero for SU(2)) + purely instantonic tail
+def oneLoopPrepotential (Λ) (a) : ℂ :=        -- ∑_{i≠j} (eᵢ−eⱼ)² log((eᵢ−eⱼ)²/Λ²), e = eigenvalues a
+  (i/8π) * ∑ i, ∑ j, if i=j then 0 else (eᵢ−eⱼ)² * log((eᵢ−eⱼ)²/Λ²)
+def Instantonic (Λ) (N) (F) : Prop :=         -- fixed classical part + Λ≠0 + holomorphic coeffs
+  Λ ≠ 0 ∧ ∃ c, (∀ k, Differentiable ℂ (c k)) ∧
+    ∀ a, F a - classicalPrepotential a - oneLoopPrepotential Λ a = ∑' k, c (k+1) a * (Λ^(2*N))^(k+1)
 def Sheet.MatchesAsymptotics (s) (Λ) (N) : Prop :=     -- H1's F + the non-renormalized form
-  ∃ F Fcl, (… the H1 relations for F …) ∧ Instantonic Λ N Fcl F
+  ∃ F, (… the H1 relations for F …) ∧ Instantonic Λ N F
 
 -- the six, bundled: an N=2 U(1)^{N-1} Seiberg–Witten effective theory
 structure IsSWEffectiveTheory (s : Sheet B) (Λ : ℂ) (N : ℕ) : Prop where
@@ -318,11 +323,14 @@ theorem sw_effective_theory_unique_up_to_duality (s s' : Sheet B)
     (h : IsSWEffectiveTheory s Λ N) (h' : IsSWEffectiveTheory s' Λ N) :
     Nonempty (Deck s s') := by sorry
 
--- GOAL: existence — the SW curve furnishes a sheet satisfying H1–H6
+-- GOAL: existence — the SW curve furnishes a sheet satisfying H1–H6, with Δ the discriminant
+--       locus of the curve family and P's modulus a smooth point in the chart (ties to P)
 theorem sw_curve_admits_effective_theory (P : Polynomial ℂ) (Λ : ℂ)
     (hPdeg : P.natDegree = N) (hN : 2 ≤ N)
     (hsf : Squarefree (P ^ 2 - Polynomial.C (Λ ^ (2 * N)))) :
-    ∃ (B : CoulombBase (N - 1)) (s : Sheet B), IsSWEffectiveTheory s Λ N := by sorry
+    ∃ (B : CoulombBase (N - 1)) (s : Sheet B),
+      IsSWEffectiveTheory s Λ N ∧
+      B.Δ = {u | ¬ Squarefree (swCurvePoly N Λ u)} ∧ swModulus N P ∈ s.V := by sorry
 
 -- PROVED (3): the classical Coulomb branch has dimension N − 1 (the rank), from the gauge group
 theorem coulombBranch_classical (N : ℕ) : Module.finrank ℂ (Fin (N - 1) → ℂ) = N - 1
