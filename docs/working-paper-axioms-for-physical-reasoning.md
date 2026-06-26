@@ -168,6 +168,20 @@ machine confirming nothing else slipped in. Concretely, the audit artifact is:
 — the entire dependency of the result, in five lines, separated into logic, math debt, and the
 one physical input.
 
+We have since pushed this further. The "physics monodromy input" is itself the conclusion of a
+*period-level* layer (the periods of the Seiberg–Witten curve, their Picard–Fuchs equation and
+Gauss–Manin monodromy). We package exactly that layer as a Lean **structure** —
+`PeriodLayer`/`SWPeriodLayer` (Appendix B.3) — and prove the SU(2) **and** general SU(N) headline
+goals (uniqueness *and* existence) *modulo* it. Two points matter for the discipline. First, the
+layer is a *hypothesis*, not a global axiom, so the proved theorems remain standard-3: the
+period-level debt is explicit in each signature, exactly as the physics is. Second, the rank-1
+uniqueness now routes through a genuinely **axiom-free** lemma, `su2_deck_of_periodFrame` (an
+`SL(2,ℤ)` period frame builds the duality gluing, with the central-charge covariance proved from
+`det = 1`) — so "period frame ⇒ duality equivalence" is *proved*, and only the period frame
+itself is assumed. The structure was adversarially reviewed (an external model flagged a false
+"globally constant frame" claim across disconnected chart overlaps, and a U(N)-vs-SU(N) dimension
+slip; both are fixed — connected overlaps, trace-free curves).
+
 ### 4.3 Two things formalizing forced into the open
 
 **The type system can refuse a convenient falsehood.** Our first attempt made the periods
@@ -402,6 +416,40 @@ The SU(2) uniqueness theorem `sw_su2_unique` rests on exactly the two covering/l
 which underlie everything and belong to neither list. (The physical refinement `H4'Duality`
 and its derived consequence `metric_posDef_of_h4'` — that electric–magnetic duality keeps the
 special-Kähler metric positive along the whole monodromy orbit — are proved, standard-3.)
+
+**B.3 — The period-level layer (a structure, not an axiom).** The monodromy input `SameSWMonodromy`
+is itself the conclusion of the *periods* of the SW curve — their Picard–Fuchs equation and
+Gauss–Manin monodromy. We package that layer as a structure and prove the B.1 goals modulo it,
+for SU(2) and for general SU(N):
+
+```lean
+-- the period-level debt, bundled as a *hypothesis* (so the theorems below stay standard-3)
+structure SWPeriodLayer (N : ℕ) (Λ : ℂ) where
+  hN : 2 ≤ N                                                -- SU(N) needs rank N−1 ≥ 1
+  rigidity : ∀ {B : CoulombBase (N - 1)} (s s' : Sheet B), IsConnected (s.V ∩ s'.V) →
+      IsSWEffectiveTheory s Λ N → IsSWEffectiveTheory s' Λ N → Nonempty (Deck s s')
+  realize  : ∀ P : Polynomial ℂ, P.Monic → P.natDegree = N → P.coeff (N - 1) = 0 →
+      Squarefree (P ^ 2 - Polynomial.C (Λ ^ (2 * N))) → ∃ (B : CoulombBase (N - 1)) (s : Sheet B),
+        IsSWEffectiveTheory s Λ N ∧ B.Δ = {u | ¬ Squarefree (swCurvePoly N Λ u)} ∧ swModulus N P ∈ s.V
+
+-- the B.1 goals, now THEOREMS modulo the layer (all standard-3):
+theorem sw_unique_of_swPeriodLayer (PL : SWPeriodLayer N Λ) … : Nonempty (Deck s s')
+theorem sw_exists_of_swPeriodLayer (PL : SWPeriodLayer N Λ) … : ∃ B s, IsSWEffectiveTheory … ∧ …
+
+-- the rank-1 uniqueness routes through an AXIOM-FREE lemma (the SL(2,ℤ) frame builds the gluing,
+-- central-charge covariance proved from det = 1):
+theorem su2_deck_of_periodFrame (s s' : Sheet B) (α β γ δ : ℤ) (hdet : α * δ - β * γ = 1)
+    (hper : … period frame on the overlap …) : Nonempty (Deck s s')   -- #print axioms: the 3 logical only
+```
+
+So "period frame ⇒ duality equivalence" is *proved*; only the period frame (the layer's
+`rigidity`) is assumed, as honest math debt. Discharging the layer — building the period map
+`∮ λ_SW`, its Picard–Fuchs ODE and Gauss–Manin monodromy, and the rigidity argument — is a few
+weeks at genus 1 (the elliptic case, where the `λ`/`θ` machinery already exists) and a
+Mathlib-scale variation-of-Hodge-structure project in general genus. The structure was reviewed
+adversarially: a first version asserted a single globally-constant `SL(2,ℤ)` frame across an
+overlap that can be disconnected (false under monodromy) and quantified over degree-`N` curves
+(the U(N), not SU(N), family); both are corrected (`IsConnected` overlaps; monic trace-free `P`).
 
 ## Acknowledgments
 
