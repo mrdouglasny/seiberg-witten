@@ -91,24 +91,55 @@ Replace the `sorry` in `sw_effective_theory_unique_up_to_duality` (r = 1 case) w
 | D (wire to B.1) | B, C | **reachable** once B supplies the period frame |
 | A (derive `SameSWMonodromy` from H2/H3/H6) | `π₁ → Sp(2,ℤ)` local-system layer | **blocked** (family/Gauss–Manin layer absent) |
 
-So: **B + C + D close the SU(2) B.1 uniqueness goal modulo `SameSWMonodromy`** (the physics
-monodromy input) — turning the `sorry` into a theorem whose footprint is the one already
-advertised. Step A (removing that last input) is the family-layer project, shared with giving
-`EMDualityConsistent` real content.
+**Revised picture (after attempting B′):** Step C is **done** (`su2_deck_of_periodFrame`,
+standard-3) — period frame ⇒ `Deck`. But Step B is **not** the bounded ring-lemma first
+imagined: lifting the *coupling* frame (`su2_frame_alignment`) to the *period* frame needs the
+overall scale, which requires period-level (Picard–Fuchs / Gauss–Manin) structure — see B′
+below. So the reachable rank-1 uniqueness is exactly Step C, with the **period frame** as the
+honest physics input; B′ and A together (removing that input) are the period-level project.
+
+## Step B′ in detail (the coupling→period scale lift) — analysed, and *not* bounded
+
+Step C consumes a **period-vector** frame `(a_D', a') = M·(a_D, a)` (`det M = 1`).
+`su2_frame_alignment` only delivers a **coupling** frame `τ_{s'} = M • τ_s` (a Möbius action).
+Because `τ = a_D/a` is a *ratio*, the coupling frame pins the period vector only **up to an
+overall holomorphic scale**:
+```
+(a_D', a') = λ(u) · M · (a_D, a),   λ : ℂ → ℂ holomorphic, generally nonconstant.
+```
+Reaching `λ ≡ 1` (needed for Step C) requires two inputs the repo does **not** have:
+
+1. **`λ` constant** — from the **Picard–Fuchs ODE**: the periods `a, a_D` solve a common
+   2nd-order linear ODE (a consequence of special geometry H1). Two solution-pairs with the
+   *same monodromy* then differ by a **constant** connection matrix; matching that matrix to
+   `M` (and irreducibility of the SW monodromy, Schur) is what makes the scale constant.
+2. **`λ = 1`** — from **H6**: the weak-coupling asymptotics of the *periods* (not just of `τ`)
+   fix the normalization.
+
+Both need the **period-level local system / Picard–Fuchs structure** that relates the coupling
+`τ` to the full period vector `(a_D, a)` — i.e. the same family / Gauss–Manin layer Step A
+needs. **Conclusion: B′ is not a quick analytic lemma; it is family/ODE-layer work, of
+Step-A-scale difficulty**, not the bounded ring-lemma the earlier scoping suggested.
+
+So the reachable rank-1 uniqueness result *is* `su2_deck_of_periodFrame` (Step C), with the
+**period frame** as the honest physics input. Removing that input (B′ + A) is the period-level
+(Picard–Fuchs / Gauss–Manin) project, not a near-term bounded step.
 
 ## Effort
 
 Recalibrated to the project's Lean-time norms (sister-task, infrastructure present):
-- **Steps B–D: a few active days** (~2–5). The analytic content exists (`sw_su2_unique`); the
-  new work is the `Deck` construction (Step C) — the coupling↔charge covariance is the one
-  genuine lemma, a `2×2` `Sp` computation plus the period/charge pairing identity.
-- **Step A: weeks**, and only after the `π₁ → Sp` local-system / Gauss–Manin layer exists (the
-  general infrastructure investment; not SU(2)-specific).
+- **Step C: done** (a few hours) — `su2_deck_of_periodFrame`, standard-3.
+- **Steps B′ + A: weeks**, and only after the period-level **Picard–Fuchs / Gauss–Manin** layer
+  exists (periods as ODE solutions + the `π₁ → Sp` local system). This is the general
+  infrastructure investment, not SU(2)-specific; B′ and A are both downstream of it.
 
 ## Recommendation
 
-Do **B + C + D** as the next bounded piece: it converts a headline `sorry` into a genuine
-theorem `sw_su2_unique_deck` (or by filling the B.1 `sorry` directly, with `SameSWMonodromy` as
-a hypothesis), resting on **exactly** standard-3 + the two B.2 axioms + the physics monodromy
-input — no new axiom, and the paper's "uniqueness proved for SU(2)" claim becomes literally the
-B.1 statement rather than a separate concrete one. Defer Step A to the family-layer roadmap.
+**Step C is the bankable rank-1 result** — `su2_deck_of_periodFrame` (period frame ⇒ `Deck`,
+standard-3). It is honest to present the **period frame** as the rank-1 physics input: "two
+SU(2) solutions related by an `SL(2,ℤ)` frame are duality-equivalent (a `Deck`)" is proved with
+no axioms. Closing the B.1 `sorry` *without* that input (i.e. deriving the period frame, hence
+proving uniqueness from H1–H6 + B.2 alone) requires the **period-level Picard–Fuchs / Gauss–Manin
+layer** — the same infrastructure as Step A and as giving `EMDualityConsistent` real content.
+That layer is the right next *infrastructure* target; until it exists, the rank-1 uniqueness
+result is Step C modulo the period frame.
