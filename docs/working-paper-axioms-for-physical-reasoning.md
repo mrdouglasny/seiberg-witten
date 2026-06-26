@@ -246,7 +246,7 @@ bundles `Im τ ≻ 0`). None of the following is an `axiom`.
 ```lean
 -- H0  carrier = the data of an N=2 U(1)^{N-1} EFT
 structure CoulombBase (r : ℕ) where
-  Δ : Set (Fin r → ℂ); U : Set (Fin r → ℂ); hUopen : IsOpen U; hUsmooth : U ⊆ Δᶜ
+  Δ : Set (Fin r → ℂ); U : Set (Fin r → ℂ); hUopen : IsOpen U; hUsmooth : U = Δᶜ
 structure Sheet (B : CoulombBase r) where
   V : Set (Fin r → ℂ); hVopen : IsOpen V; hVsub : V ⊆ B.U; hVsc : SimplyConnectedSpace V
   a  : (Fin r → ℂ) → (Fin r → ℂ); ha  : DifferentiableOn ℂ a V    -- special coordinates aᵢ(u)
@@ -255,7 +255,7 @@ structure Sheet (B : CoulombBase r) where
 
 -- H1  special geometry: a prepotential F with aD = ∂F/∂a, τ = ∂²F/∂a²
 def Sheet.SpecialGeometry (s : Sheet B) : Prop :=
-  ∃ F, DifferentiableOn ℂ F (s.a '' s.V) ∧
+  ∃ F, ContDiffOn ℂ 2 F (s.a '' s.V) ∧
     (∀ u ∈ s.V, ∀ i, s.aD u i = partialDeriv F i (s.a u)) ∧
     (∀ u ∈ s.V, ∀ i j, (s.tau u).val i j = partialDeriv2 F i j (s.a u))
 
@@ -301,7 +301,10 @@ structure IsSWEffectiveTheory (s : Sheet B) (Λ : ℂ) (N : ℕ) : Prop where
 ```
 
 `Deck` (H4) relates sheets and is proved to make the BPS mass descend to the base
-(`Deck.bpsMass_eq`). The one rank-1 *monodromy* input that remains a placeholder axiom is
+(`Deck.bpsMass_eq`). Sheets are organized into an `SWAtlas` (covering `B.U`, with overlaps
+`Deck`-glued), so the duality gluing H4 is *part of the theory* and uniqueness is stated at the
+atlas level (`sw_unique_up_to_duality`). The one rank-1 *monodromy* input that remains a
+placeholder axiom is
 `SameSWMonodromy` (Appendix B): the hypothesis that two candidate couplings `f, g` carry the
 same `Sp(2,ℤ)` monodromy around the punctures — physically fixed by which BPS state (monopole
 at `+Λ²`, dyon at `−Λ²`) goes massless where — the input to the rank-1 rigidity theorem
@@ -333,7 +336,7 @@ theorem sw_curve_admits_effective_theory (P : Polynomial ℂ) (Λ : ℂ)
       B.Δ = {u | ¬ Squarefree (swCurvePoly N Λ u)} ∧ swModulus N P ∈ s.V := by sorry
 
 -- PROVED (3): the classical Coulomb branch has dimension N − 1 (the rank), from the gauge group
-theorem coulombBranch_classical (N : ℕ) : Module.finrank ℂ (Fin (N - 1) → ℂ) = N - 1
+theorem coulombBranchDim (N : ℕ) : Module.finrank ℂ (Fin (N - 1) → ℂ) = N - 1
 ```
 
 **B.2 — Classical mathematics not yet in Mathlib** — the only remaining global axioms, to
