@@ -28,6 +28,7 @@ These are **not** debt to be discharged — they are the codified hypotheses the
 | `WeightOneVHS` (base-agnostic weight-1 VHS spec), `SWVariation.toVHS` (SW is an instance) | 3 | **standard-3** (no new axioms) |
 | `siegelOneEquiv` (`Siegel 1 ≃ ℍ`), `MulAction SL(2,ℤ) (Siegel 1)`, `siegelOneEquiv_smul` (g=1 Sp-action) | 3 | **standard-3** (no new axioms; built on Mathlib `ℍ` action) |
 | `duality_preserves_metric_posDef`, `siegelOne_smul_im_pos`, `metric_posDef_of_h4'` (H4′: EM duality ⇒ special-Kähler positivity is duality-stable) | 3 | **standard-3** (the `H4'`-consequence also transits the `SmoothCover` carrier) |
+| `su2DualityMap`, `su2_deck_of_periodFrame` (Step C of SU(2) uniqueness: SL(2,ℤ) period frame ⇒ duality `Deck`, with symplectic + covariant from det 1) | 1b | **standard-3** (no axioms) |
 | `su2BaseEquiv` (SU(2) base `ℂ∖{±Λ²} ≃ ℂ∖{0,1}`), `affineEquiv` | 1b | **standard-3** (no new axioms) |
 | `theta3_eq_jacobiTheta`, `theta3_add_two`, `theta4_add_two`, `modularLambdaFn` def, `oneMinusLambda` | 1b | **standard-3** + `AX_jacobi_quartic`, `AX_theta3_ne_zero` (`oneMinusLambda` only) |
 | `modularLambda_add_two` (`λ(τ+2)=λ(τ)`, i.e. `T²∈Γ(2)`-invariance), `theta2_pow_four`, `theta2_add_two_pow_four` | 1b | **standard-3** (proved dent in `AX_thrice_punctured_uniformization`'s Γ(2)-invariance) |

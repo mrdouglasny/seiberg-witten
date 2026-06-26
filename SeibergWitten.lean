@@ -10,3 +10,4 @@ import SeibergWitten.Physics.SiegelSL2
 import SeibergWitten.Physics.ModularLambda
 import SeibergWitten.Physics.ThetaLambda
 import SeibergWitten.Physics.DualityPositivity
+import SeibergWitten.Physics.SU2Uniqueness

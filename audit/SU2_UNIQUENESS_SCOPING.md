@@ -86,9 +86,9 @@ Replace the `sorry` in `sw_effective_theory_unique_up_to_duality` (r = 1 case) w
 
 | Step | needs | status |
 |---|---|---|
-| B (rigidity ⇒ frame change) | `su2_frame_alignment` (have it) | **reachable now** |
-| C (build `Deck`) | `Sp(2,ℤ)` charge action + covariance algebra | **reachable now** (finite linear algebra) |
-| D (wire to B.1) | B, C | **reachable now** |
+| **C (build `Deck`)** | `Sp(2,ℤ)` charge action + covariance algebra | **DONE** — `su2_deck_of_periodFrame` (`SU2Uniqueness.lean`), **standard-3, zero axioms**: period frame (det 1) ⇒ `Deck`, with `symplectic` + `covariant` derived from `det = 1`. |
+| B (rigidity ⇒ frame change) | `su2_frame_alignment` (have it) + period-vs-coupling scale lift | **partly reachable** — the coupling frame change is `su2_frame_alignment`; lifting it to the *period-vector* frame `(s'.a_D, s'.a) = M·(s.a_D, s.a)` (the input `su2_deck_of_periodFrame` consumes) needs fixing the overall scale (BPS normalization). |
+| D (wire to B.1) | B, C | **reachable** once B supplies the period frame |
 | A (derive `SameSWMonodromy` from H2/H3/H6) | `π₁ → Sp(2,ℤ)` local-system layer | **blocked** (family/Gauss–Manin layer absent) |
 
 So: **B + C + D close the SU(2) B.1 uniqueness goal modulo `SameSWMonodromy`** (the physics
