@@ -63,19 +63,41 @@ Recalibrated to this project's Lean-time norms (sister-task where infrastructure
 
 ## Existing scaffold (build on, don't redo)
 
-- `Family.SWVariation` (polarized integral weight-1 VHS over `U = ℂ^r ∖ Δ`) with
-  `generator_isSymplectic`, `monodromy_mem_symplecticMonoid` — the *specification*.
-- `VHS.WeightOneVHS` (base-agnostic weight-1 VHS) + `SWVariation.toVHS`.
-- `Jacobians.Axioms.RiemannBilinear` (imported by `Hypotheses.lean`).
-- The rank-1 analytic core: `SU2Rigidity.su2_frame_alignment` (coupling rigidity via the Γ(2)
-  covering), `SU2Uniqueness.su2_deck_of_periodFrame` (frame ⇒ `Deck`, zero-axiom).
+**The big asset: `jacobian-challenge` is already the `Jacobians` dependency** (the manifest binds
+`Jacobians → ../jacobian-challenge`). It supplies the **per-fiber (single-curve) period theory** —
+the hardest classical half — largely sorry-free (≈2466 proved, 23 sorry, 15 axioms):
+- `Jacobians.ProjectiveCurve.Elliptic.Periods` — the genus-1 A/B-cycle period integrals
+  (`aLoop_period_eq`, `bLoop_period_eq`): *exactly the SU(2) periods of one elliptic fiber*.
+- `Jacobians.Layer3.Periods` / `PeriodLattice` — period matrix, `periodBasis`, `periodColumns`,
+  and Riemann-bilinear positivity (`eq_zero_of_posDef_mulVec_eq_zero`) ⇒ feeds H1's `Im τ ≻ 0`.
+- `Jacobians.Axioms.RiemannBilinear` (already imported), `AbelianVariety.{Siegel,Theta,ComplexTorus}`,
+  and the large `ProjectiveCurve.Hyperelliptic.*` stack (genus, atlas, cycle basis, involution,
+  forms) — the genus-`(N−1)` SW curve fiber and its Jacobian/period domain.
+- (`jacobian-claude` is complementary: Buzzard's categorical Jacobian-API challenge solved —
+  `genus`, `Jacobian` functor, `ofCurve`, `pushforward`/`pullback`, standard-3 — the abstract
+  abelian-variety side, not the period integrals.)
 
-These are *specs and the rank-1 endgame*; the missing middle is the **period map** (the `∮ λ_SW`
-integrals) and the **Picard–Fuchs ODE**, plus step 4's rigidity argument.
+**What `jacobian-challenge` does NOT have — the family/variation half (the real gap):** it does
+*one curve / one Jacobian*. There is no `GaussManin`, no `PicardFuchs`, no period-matrix
+**variation over the moduli `u`**; its only `monodromy` is covering-space `π₁` monodromy
+(`Topology.CoveringPi1`), **not** the `Sp(2r,ℤ)`-valued Gauss–Manin monodromy of the periods over
+`U`. So the missing middle is precisely: assemble the per-fiber periods into a **variation over
+`u`** (Gauss–Manin connection ⇒ `Sp`-monodromy ⇒ Picard–Fuchs), then the rigidity (step 4).
+
+In this repo: `Family.SWVariation` / `VHS.WeightOneVHS` (`monodromy_mem_symplecticMonoid`) are the
+VHS *spec*; `SU2Rigidity.su2_frame_alignment` (Γ(2)-covering coupling rigidity) and
+`SU2Uniqueness.su2_deck_of_periodFrame` (frame ⇒ `Deck`, zero-axiom) are the rank-1 endgame.
+
+**Revised hardness with this dependency:** the per-fiber build is mostly done, so the period
+layer is largely *family glue* on top of `jacobian-challenge`. At genus 1 especially — sitting on
+`Elliptic.Periods` + this repo's `λ`/`θ` + `AX_developing_map_rigidity` — the remaining work is
+"vary `u` ⇒ `SL(2,ℤ)` Gauss–Manin monodromy + rigidity," which shortens the SU(2) estimate.
 
 ## Recommended ordering
 
-1. **SU(2) period map + Picard–Fuchs ODE** (the elliptic case) — unblocks steps 1–3 at genus 1.
+1. **SU(2) period map + Picard–Fuchs ODE** (the elliptic case) — *reuse* `jacobian-challenge`'s
+   `Elliptic.Periods` (A/B period integrals) and `Layer3.PeriodLattice`; the new content is the
+   *variation over `u`* (how those periods move as the curve's modulus changes). Unblocks 1–3.
 2. **Step 4 rigidity at genus 1** — reuse `AX_developing_map_rigidity`; this discharges
    `PeriodLayer.rigidity` and removes the period-frame hypothesis from the SU(2) closure.
 3. **`realize` at genus 1** — verify H1–H6 on the elliptic period sheet.
