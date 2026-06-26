@@ -67,6 +67,71 @@ are **mutually non-local** iff this is nonzero. The antisymmetric form preserved
 def diracPairing {r : ℕ} (n n' : ChargeLattice r) : ℤ :=
   (∑ i, n.1 i * n'.2 i) - (∑ i, n.2 i * n'.1 i)
 
+/-! ### Dirac-pairing algebra and the Picard–Lefschetz transvection
+
+These live here (with `diracPairing`) so that H3 and the family/monodromy layer share **one**
+`transvection`, and H3's reflection is provably symplectic. -/
+
+theorem diracPairing_self (v : ChargeLattice r) : diracPairing v v = 0 := by
+  unfold diracPairing
+  rw [sub_eq_zero]
+  exact Finset.sum_congr rfl fun i _ => mul_comm _ _
+
+theorem diracPairing_antisymm (a b : ChargeLattice r) :
+    diracPairing a b = -diracPairing b a := by
+  unfold diracPairing
+  have h1 : ∑ i, a.1 i * b.2 i = ∑ i, b.2 i * a.1 i :=
+    Finset.sum_congr rfl fun i _ => mul_comm _ _
+  have h2 : ∑ i, a.2 i * b.1 i = ∑ i, b.1 i * a.2 i :=
+    Finset.sum_congr rfl fun i _ => mul_comm _ _
+  rw [h1, h2]; ring
+
+theorem diracPairing_add_left (a b c : ChargeLattice r) :
+    diracPairing (a + b) c = diracPairing a c + diracPairing b c := by
+  simp only [diracPairing, Prod.fst_add, Prod.snd_add, Pi.add_apply, add_mul,
+    Finset.sum_add_distrib]
+  ring
+
+theorem diracPairing_smul_left (c : ℤ) (a b : ChargeLattice r) :
+    diracPairing (c • a) b = c * diracPairing a b := by
+  simp only [diracPairing, Prod.smul_fst, Prod.smul_snd, Pi.smul_apply, smul_eq_mul,
+    mul_assoc]
+  rw [← Finset.mul_sum, ← Finset.mul_sum, ← mul_sub]
+
+theorem diracPairing_add_right (a b c : ChargeLattice r) :
+    diracPairing a (b + c) = diracPairing a b + diracPairing a c := by
+  rw [diracPairing_antisymm a (b + c), diracPairing_add_left,
+      diracPairing_antisymm b a, diracPairing_antisymm c a]; ring
+
+theorem diracPairing_smul_right (c : ℤ) (a b : ChargeLattice r) :
+    diracPairing a (c • b) = c * diracPairing a b := by
+  rw [diracPairing_antisymm a (c • b), diracPairing_smul_left, diracPairing_antisymm a b]
+  ring
+
+/-- A charge-lattice map is **symplectic** if it preserves the Dirac pairing (lands in
+`Sp(2r,ℤ)`). -/
+def IsSymplectic (f : ChargeLattice r → ChargeLattice r) : Prop :=
+  ∀ v w, diracPairing (f v) (f w) = diracPairing v w
+
+/-- **Picard–Lefschetz transvection** of a vanishing charge `γ`: `T_γ v = v + ⟨v,γ⟩ γ` — the
+local monodromy on the charge lattice around a singularity where `γ` goes massless. This is the
+reflection used in H3 and in the family monodromy layer (`Monodromy.lean`). -/
+def transvection (γ v : ChargeLattice r) : ChargeLattice r :=
+  v + diracPairing v γ • γ
+
+/-- A Picard–Lefschetz transvection preserves the Dirac pairing. -/
+theorem transvection_diracPairing (γ v w : ChargeLattice r) :
+    diracPairing (transvection γ v) (transvection γ w) = diracPairing v w := by
+  simp only [transvection, diracPairing_add_left, diracPairing_add_right,
+    diracPairing_smul_left, diracPairing_smul_right, diracPairing_self, mul_zero, add_zero]
+  rw [diracPairing_antisymm γ w]; ring
+
+/-- Every Picard–Lefschetz transvection is symplectic — so H3's monodromy reflection lands in
+`Sp(2r,ℤ)`. -/
+theorem transvection_isSymplectic (γ : ChargeLattice r) :
+    IsSymplectic (transvection γ) :=
+  fun v w => transvection_diracPairing γ v w
+
 /-! ## Prepotential derivatives -/
 
 /-- `∂F/∂xᵢ` at `x`, for a holomorphic prepotential `F : ℂ^r → ℂ`. -/
@@ -194,11 +259,6 @@ end Sheet
 
 /-! ## H3 — Picard–Lefschetz, H4 — duality gluing, H5 — R-symmetry -/
 
-/-- The Picard–Lefschetz reflection in a vanishing charge `n`: `v ↦ v + ⟨v,n⟩ n` (a
-transvection — invertible and symplectic). -/
-def plReflection (n v : ChargeLattice r) : ChargeLattice r :=
-  v + (diracPairing v n) • n
-
 /-- **H4 — the cover gluing / electric–magnetic duality.** Overlapping sheets differ by a
 duality frame change `g`: a **ℤ-linear automorphism of the charge lattice** preserving the Dirac
 pairing (i.e. an element of `Sp(2r,ℤ)`), under which the central charge is covariant. Hence
@@ -218,10 +278,11 @@ theorem Deck.bpsMass_eq {B : CoulombBase r} {s s' : Sheet B} (D : Deck s s')
 monodromy around it — realized as an *actual* deck transformation `D : Deck s s'` to an adjacent
 sheet — acts on the charge lattice as the reflection in the **vanishing charge** `n` of H2. This
 forces the reflection to be symplectic (it is) and the central charge to transform covariantly
-(a real constraint on the periods), unlike the vacuous `∃ g, g = plReflection n`. -/
+(a real constraint on the periods), unlike a vacuous `∃ g, g = transvection n`. The reflection
+is the shared `transvection` (proved symplectic, `transvection_isSymplectic`). -/
 def PicardLefschetzAtGenericStratum {B : CoulombBase r} (s : Sheet B) : Prop :=
   ∀ u₀ ∈ closure s.V ∩ B.Δ, ∀ n : ChargeLattice r, n ≠ 0 → s.BecomesMasslessAt u₀ n →
-    ∃ (s' : Sheet B) (D : Deck s s'), ⇑D.g = plReflection n
+    ∃ (s' : Sheet B) (D : Deck s s'), ⇑D.g = transvection n
 
 /-- **H5 — R-symmetry.** A `ℤ_{2N}` action on the moduli: a bijection of **exact order `2N`**
 (not the identity) preserving `Δ` — the anomalous `U(1)_R → ℤ_{2N}` fixing the positions of the
