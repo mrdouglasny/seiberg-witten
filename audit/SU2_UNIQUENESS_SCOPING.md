@@ -143,3 +143,11 @@ proving uniqueness from H1–H6 + B.2 alone) requires the **period-level Picard�
 layer** — the same infrastructure as Step A and as giving `EMDualityConsistent` real content.
 That layer is the right next *infrastructure* target; until it exists, the rank-1 uniqueness
 result is Step C modulo the period frame.
+
+**Update — the period frame is now packaged.** That period-level debt is bundled as the
+`PeriodLayer` / `SWPeriodLayer` *structure* (`PeriodLayer.lean`), and the SU(2) **and** general
+SU(N) B.1 goals (uniqueness + existence) are proved *modulo* it (standard-3 — the debt is a
+hypothesis, not an axiom). SU(2) uniqueness routes through the zero-axiom
+`su2_deck_of_periodFrame`. What it would take to *discharge* the layer (the period map, the
+Picard–Fuchs ODE, Gauss–Manin monodromy, the rigidity argument) is scoped in
+[`PERIOD_LAYER_SCOPING.md`](PERIOD_LAYER_SCOPING.md).

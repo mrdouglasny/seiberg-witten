@@ -216,6 +216,21 @@ nothing else slipped in. Concretely, the audit artifact is:
 \noindent the entire dependency of the result, in five lines, separated into logic, math debt,
 and the one physical input.
 
+We have since pushed this further. The ``physics monodromy input'' is itself the conclusion of a
+\emph{period-level} layer (the periods of the Seiberg--Witten curve, their Picard--Fuchs equation
+and Gauss--Manin monodromy). We package exactly that layer as a Lean \textbf{structure}
+(\code{PeriodLayer}/\code{SWPeriodLayer}, Appendix B.3) and prove the SU(2) \emph{and} general
+SU($N$) headline goals (uniqueness \emph{and} existence) \emph{modulo} it. Two points matter for
+the discipline. First, the layer is a \emph{hypothesis}, not a global axiom, so the proved
+theorems remain standard-3: the period-level debt is explicit in each signature, exactly as the
+physics is. Second, the rank-1 uniqueness now routes through a genuinely \textbf{axiom-free}
+lemma, \code{su2\_deck\_of\_periodFrame} (an $SL(2,\mathbb{Z})$ period frame builds the duality
+gluing, with the central-charge covariance proved from $\det = 1$)---so ``period frame $\Rightarrow$
+duality equivalence'' is \emph{proved}, and only the period frame itself is assumed. The structure
+was reviewed adversarially (an external model flagged a false ``globally constant frame'' claim
+across disconnected chart overlaps, and a U($N$)-vs-SU($N$) dimension slip; both are fixed---%
+connected overlaps, trace-free curves).
+
 \subsection{Two things formalizing forced into the open}
 
 \paragraph{The type system can refuse a convenient falsehood.} Our first attempt made the
@@ -460,6 +475,41 @@ logical axioms (\code{propext}, \code{Classical.choice}, \code{Quot.sound}), whi
 everything and belong to neither list. (The physical refinement \code{H4'Duality} and its
 derived consequence \code{metric\_posDef\_of\_h4'}---electric--magnetic duality keeps the
 special-K\"ahler metric positive along the whole monodromy orbit---are proved, standard-3.)
+
+\medskip
+\noindent\textbf{B.3 --- The period-level layer (a structure, not an axiom).} The monodromy input
+\code{SameSWMonodromy} is itself the conclusion of the \emph{periods} of the SW curve---their
+Picard--Fuchs equation and Gauss--Manin monodromy. We package that layer as a structure and prove
+the B.1 goals modulo it, for SU(2) and for general SU($N$):
+
+\begin{Verbatim}
+-- the period-level debt, bundled as a *hypothesis* (so the theorems stay standard-3)
+structure SWPeriodLayer (N : ℕ) (Λ : ℂ) where
+  hN : 2 ≤ N                                            -- SU(N) needs rank N-1 ≥ 1
+  rigidity : ∀ {B : CoulombBase (N-1)} (s s' : Sheet B), IsConnected (s.V ∩ s'.V) →
+      IsSWEffectiveTheory s Λ N → IsSWEffectiveTheory s' Λ N → Nonempty (Deck s s')
+  realize  : ∀ P : Polynomial ℂ, P.Monic → P.natDegree = N → P.coeff (N-1) = 0 →
+      Squarefree (P^2 - Polynomial.C (Λ^(2*N))) → ∃ (B : CoulombBase (N-1)) (s : Sheet B),
+        IsSWEffectiveTheory s Λ N ∧ B.Δ = {u | ¬ Squarefree (swCurvePoly N Λ u)} ∧ ...
+
+-- the B.1 goals, now THEOREMS modulo the layer (all standard-3):
+theorem sw_unique_of_swPeriodLayer (PL : SWPeriodLayer N Λ) ... : Nonempty (Deck s s')
+theorem sw_exists_of_swPeriodLayer (PL : SWPeriodLayer N Λ) ... : ∃ B s, IsSWEffectiveTheory ...
+
+-- rank-1 uniqueness routes through an AXIOM-FREE lemma (frame builds the gluing; covariance
+-- proved from det = 1):
+theorem su2_deck_of_periodFrame (s s' : Sheet B) (α β γ δ : ℤ) (hdet : α*δ - β*γ = 1)
+    (hper : ...period frame on the overlap...) : Nonempty (Deck s s')  -- 3 logical axioms only
+\end{Verbatim}
+
+\noindent So ``period frame $\Rightarrow$ duality equivalence'' is \emph{proved}; only the period
+frame (the layer's \code{rigidity}) is assumed, as honest math debt. Discharging the layer---the
+period map $\oint \lambda_{SW}$, its Picard--Fuchs ODE and Gauss--Manin monodromy, the rigidity
+argument---is a few weeks at genus 1 (the elliptic case, where the $\lambda$/$\theta$ machinery
+already exists) and a Mathlib-scale variation-of-Hodge-structure project in general genus. A first
+version was caught (adversarial review) asserting a single globally-constant $SL(2,\mathbb{Z})$
+frame across a possibly-disconnected overlap, and quantifying over the U($N$) rather than SU($N$)
+family; both are corrected (\code{IsConnected} overlaps; monic trace-free $P$).
 
 \section*{Acknowledgments}
 This formalization and paper were developed with heavy use of Claude (Anthropic), and with
