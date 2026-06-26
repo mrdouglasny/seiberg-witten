@@ -18,7 +18,9 @@ inspectable list, and the prover can report, for any downstream result, exactly 
 assumptions it used. We carry this out for the Seiberg–Witten solution of N=2 SU(N)
 super-Yang–Mills, formalized in Lean 4. We describe what is proved, what is assumed, how the
 assumptions are checked — external review and an independent numerical oracle — and why this
-discipline is a sound standard for validating AI-generated results in theoretical physics.
+discipline is a sound standard for validating AI-generated results in theoretical physics. What
+we offer is a *discipline*, reviewable on its own terms: a reader may take the Seiberg–Witten
+mathematics on trust and still assess the formalization method.
 
 ## 1. Physics is mostly not theorems
 
@@ -66,8 +68,20 @@ This is not a value judgment but a bookkeeping discipline, and it is necessary b
 kernel does not enforce it. A theorem can be proved, axiom-free, and still be the **wrong
 statement** — a dropped hypothesis, a flipped sign, a domain quietly narrowed. And a physical
 assumption written as an innocent-looking definition can smuggle a falsehood past the kernel
-entirely. The discipline forces every physical input into the open as a named axiom, and
+entirely. The discipline forces every physical input into the open as a named hypothesis, and
 every mathematical claim onto the proved side.
+
+For a reader who formalizes *mathematics*, the delta is threefold:
+
+- there is no proof to formalize — the result is unprovable within reach (§1), so the question
+  is not "is the proof correct?" but "are the assumptions explicit and the derivations sound?";
+- the physical lore becomes **named hypotheses** — predicates a theorem takes in its signature
+  — never smuggled into a definition or a convenient default;
+- the residual trust then localizes onto a short list, and `#print axioms` of any result audits
+  exactly which assumptions it used.
+
+Nothing here is special to physics-as-a-subject; it is what changes when the object you
+formalize is an *argument the community trusts* rather than *a theorem with a proof*.
 
 ## 3. The Seiberg–Witten solution in one paragraph
 
@@ -140,7 +154,19 @@ uniqueness of its developing maps — with **no bespoke placeholder**. The two t
 explicit in the proof itself: the physics axiom is irreducible, while the two math axioms are
 debt, discharged once the (Mathlib-scale) complex analysis of §7 lands. This is the
 purification in miniature — the headline reduced to *physics + standard mathematics*, with the
-machine confirming nothing else slipped in.
+machine confirming nothing else slipped in. Concretely, the audit artifact is:
+
+```lean
+#print axioms sw_su2_unique
+-- 'sw_su2_unique' depends on axioms:
+--   [propext, Classical.choice, Quot.sound,          -- logic
+--    AX_thrice_punctured_uniformization,             -- classical math (Γ(2) covering)
+--    AX_developing_map_rigidity,                      -- classical math (lift uniqueness)
+--    SameSWMonodromy]                                 -- physics (the SW monodromy)
+```
+
+— the entire dependency of the result, in five lines, separated into logic, math debt, and the
+one physical input.
 
 ### 4.3 Two things formalizing forced into the open
 
