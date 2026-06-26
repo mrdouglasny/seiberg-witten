@@ -321,10 +321,10 @@ def Sheet.SingularitiesAreBPS (s) : Prop :=
   (∀ u₀ ∈ closure s.V ∩ B.Δ, ∃ n ≠ 0, s.BecomesMasslessAt u₀ n)
 
 -- H3  Picard-Lefschetz: the monodromy IS an actual deck transformation acting as the
---     reflection in the SAME vanishing charge n as H2 (not the vacuous ∃ g, g = plReflection n)
+--     reflection in the SAME vanishing charge n as H2 (not the vacuous ∃ g, g = transvection n)
 def PicardLefschetzAtGenericStratum (s : Sheet B) : Prop :=
   ∀ u₀ ∈ closure s.V ∩ B.Δ, ∀ n, n ≠ 0 → s.BecomesMasslessAt u₀ n →
-    ∃ (s' : Sheet B) (D : Deck s s'), D.g = plReflection n
+    ∃ (s' : Sheet B) (D : Deck s s'), D.g = transvection n
 
 -- H4  duality gluing: a ℤ-linear (Sp(2r,ℤ)) charge automorphism, covariant central charge
 structure Deck (s s' : Sheet B) where
