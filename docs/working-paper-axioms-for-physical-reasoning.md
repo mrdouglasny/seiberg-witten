@@ -123,13 +123,13 @@ The headline claims are different in kind. That the SW curve *realizes* a theory
 the assumptions (existence), and that the assumptions fix the solution **uniquely up to
 `Sp(2r,ℤ)` duality** (uniqueness), are not physical inputs but *mathematical* consequences:
 given the assumptions, each should be a **theorem** — uniqueness, in particular, is a
-period-map rigidity statement. We state them as named axioms today only as placeholders,
-because their proofs are not yet in place (they need the covering and Riemann-mapping
-machinery of §7). Discharging them is precisely that program, and it *purifies* the axiom
-list: it moves these mathematical claims onto the proved side, leaving only the five
-genuinely-physical inputs as assumptions. Until then, printing the axioms behind a result
-shows both — and makes visible exactly which placeholder still stands between the physics and
-the theorem.
+period-map rigidity statement. We therefore state them as **goals** (`theorem … := sorry`),
+*not* axioms — visible holes to close, which never enter the trusted base — because their
+proofs are not yet in place in general (they need the covering and Riemann-mapping machinery of
+§7). Discharging them *purifies* the development: the mathematical claims move onto the proved
+side, leaving only the five genuinely-physical inputs (and the classical-math axioms of §B.2)
+as assumptions. `#print axioms` reports exactly the physical inputs and classical-math axioms a
+result uses; the open goals are flagged by `sorry`.
 
 For SU(2) we have carried this out. The rank-1 uniqueness statement is now a **theorem**:
 printing its axioms returns only the three logical axioms, the physics monodromy input, and
@@ -283,28 +283,32 @@ axiom DualityEquiv     : ∀ {r : ℕ} {Δ : Set (Fin r → ℂ)},          -- S
     LowEnergyData r Δ → LowEnergyData r Δ → Prop
 ```
 
-## Appendix B. Mathematical axioms, used provisionally (debt)
+## Appendix B. Provisional mathematics: goals to prove, and assumed classical axioms
 
-These are *mathematical* claims, distinct in kind from the physics of Appendix A. Each is true
-standard mathematics but not yet proved in our development; each is a debt, tracked natively by
-`#print axioms`.
+These are *mathematical*, distinct in kind from the physics of Appendix A. **B.1** are the
+headline implications we aim to *prove* — stated as goals (`theorem … := sorry`), **not**
+axioms, since they should follow from the physical hypotheses. **B.2** are classical theorems
+not yet in Mathlib that we *assume* as axioms (debt to discharge by porting). Everything the
+kernel actually trusts is tracked by `#print axioms`.
 
-**B.1 — Headline implications, provisionally axiomatized pending proof** (mathematical
-consequences of the physics axioms that *should be theorems*, §4.2):
+**B.1 — Headline implications (goals, not axioms).** Mathematical consequences of the physics
+hypotheses that *should be theorems* (§4.2); stated as `sorry`-goals so they remain visible
+holes rather than trusted assertions:
 
 ```lean
--- uniqueness up to Sp(2r,ℤ) duality        [PROVED for SU(2): sw_su2_unique]
-axiom sw_effective_theory_unique_up_to_duality
+-- GOAL: uniqueness up to Sp(2r,ℤ) duality   [PROVED for SU(2): sw_su2_unique; general open]
+theorem sw_effective_theory_unique_up_to_duality
     {r : ℕ} (Δ : Set (Fin r → ℂ)) (d d' : LowEnergyData r Δ)
     (h : IsSWEffectiveTheory Δ d) (h' : IsSWEffectiveTheory Δ d') :
-    DualityEquiv d d'
+    DualityEquiv d d' := by sorry
 
--- existence: the SW curve realizes a theory satisfying the six hypotheses
-axiom sw_curve_admits_effective_theory
+-- GOAL: existence — the SW curve realizes a theory satisfying the six hypotheses
+theorem sw_curve_admits_effective_theory
     {N : ℕ} (P : Polynomial ℂ) (Λ : ℂ)
     (hPdeg : P.natDegree = N) (hN : 2 ≤ N)
     (hsf : Squarefree (P ^ 2 - Polynomial.C (Λ ^ (2 * N)))) :
-    ∃ (Δ : Set (Fin (N - 1) → ℂ)) (d : LowEnergyData (N - 1) Δ), IsSWEffectiveTheory Δ d
+    ∃ (Δ : Set (Fin (N - 1) → ℂ)) (d : LowEnergyData (N - 1) Δ), IsSWEffectiveTheory Δ d := by
+  sorry
 ```
 
 **B.2 — Classical mathematics not yet in Mathlib**, assumed pending upstream formalization

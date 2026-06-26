@@ -42,11 +42,14 @@ remove it for genus 1.
 
 ## Physics foundations — codified lore (`Physics/Hypotheses.lean`)
 
-These axiomatize the four-plus physical inputs that single out the SW curve. All are
+These axiomatize the physical inputs (H1–H6 + carrier) that single out the SW curve. All are
 `(NOT VERIFIED)` skeleton placeholders pending the later-phase machinery that makes them
-precise; the headline lore axioms are the residual physical trust. Reviewed by Gemini
-(GR) 2026-06-24 — the cover/Liouville, Picard–Lefschetz, and R-symmetry items are from
-that review.
+precise. **The headline implications are not axioms**: uniqueness
+(`sw_effective_theory_unique_up_to_duality`) and existence (`sw_curve_admits_effective_theory`)
+are mathematical consequences of these inputs, so they are stated as `theorem … := sorry`
+*goals* (proved for SU(2) via `sw_su2_unique`; general rank open) and never enter the trusted
+base. Reviewed by Gemini (GR) 2026-06-24 — the cover/Liouville, Picard–Lefschetz, and
+R-symmetry items are from that review.
 
 | Axiom | File:Line | Rating | Sources | Notes |
 |-------|-----------|--------|---------|-------|
@@ -58,8 +61,6 @@ that review.
 | `RSymmetryConsistent` | Hypotheses.lean | Placeholder | GR, LP | H5 `U(1)_R→ℤ_{2N}` fixes `Δ` positions. SW1 §4 |
 | `AsymptoticMatch` | Hypotheses.lean | Placeholder | GR, LP | H6 1-loop+instanton ≍ periods. SW1 §2,4 |
 | `DualityEquiv` | Hypotheses.lean | Placeholder | GR | `Sp(2r,ℤ)` frame-change equivalence |
-| `sw_effective_theory_unique_up_to_duality` | Hypotheses.lean | Needs review | GR, LP | **Headline lore**: hypotheses fix solution up to `Sp(2r,ℤ)`. SW1 |
-| `sw_curve_admits_effective_theory` | Hypotheses.lean | Needs review | GR, LP | **Headline lore**: SW curve realizes such a theory. SW1 |
 | `SameSWMonodromy` | SU2Rigidity.lean | Placeholder | SA | Same `Sp(2,ℤ)` monodromy of two SU(2) period maps; until monodromy layer (Phase 3/4) |
 | `AX_developing_map_rigidity` | SU2Rigidity.lean | Placeholder | SA, LP | **Classical-math axiom (lift uniqueness)**: given the `Γ(2)` covering, two same-monodromy developing maps agree up to a modular frame change. Consumes `AX_thrice_punctured_uniformization`; replaces the retired bespoke `AX_su2_modular_frame_alignment`. Forster (monodromy thm); SW1 §3–4 |
 | `localMonodromy`, `AX_picard_lefschetz_local` | Monodromy.lean | Placeholder | SA, LP | **Monodromy gap**: local monodromy of the family = Picard–Lefschetz transvection; needs family/local-system layer. SW1 §3 |

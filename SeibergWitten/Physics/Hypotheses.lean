@@ -261,45 +261,50 @@ structure IsSWEffectiveTheory (Δ : Set (Fin r → ℂ)) (d : LowEnergyData r Δ
   /-- H6 — weak-coupling asymptotic matching. -/
   matching : AsymptoticMatch d
 
-/-! ## The headline lore: the hypotheses fix the solution -/
+/-! ## The headline goals: the hypotheses fix the solution
 
-/-- **The physical-input lore — uniqueness up to duality.**
+These are **not axioms**. They are the *mathematical implications* the physical hypotheses
+H1–H6 are meant to entail — uniqueness (a period-map rigidity statement) and existence — so
+each is stated as a **goal** (`theorem … := sorry`), to be proved, not asserted into the
+trusted base. Uniqueness is **proved for SU(2)** in `SU2Rigidity.lean` (`sw_su2_unique`,
+modulo the classical-math covering/lift axioms); the general-rank statements remain open. -/
 
-    Any two low-energy effective data with the *same* singular locus `Δ` that both
-    satisfy the six physical hypotheses are electric–magnetic duals of one another. In
-    words: special geometry + the exact singularity structure + Picard–Lefschetz on the
-    generic stratum + duality consistency + R-symmetry + asymptotic matching **fix the
-    Coulomb-branch solution uniquely up to `Sp(2r,ℤ)`** — this is why physicists believe
-    the SW curve is *the* answer. (The Argyres–Douglas strata are then *forced* as the
-    coalescence loci, `ArgyresDouglasLocus`, not independent inputs.)
+/-- **GOAL — uniqueness up to duality** (period-map rigidity; *not* an axiom).
 
+    Any two low-energy effective data with the *same* singular locus `Δ` that both satisfy the
+    six physical hypotheses are electric–magnetic duals of one another: special geometry + the
+    exact singularity structure + Picard–Lefschetz on the generic stratum + duality consistency
+    + R-symmetry + asymptotic matching **fix the Coulomb-branch solution uniquely up to
+    `Sp(2r,ℤ)`** — this is why physicists believe the SW curve is *the* answer. (The
+    Argyres–Douglas strata are then *forced* as coalescence loci, `ArgyresDouglasLocus`, not
+    independent inputs.)
+
+    This is a *consequence* of H1–H6, hence a goal to prove (`sorry`), not a trusted input.
+    **Proved for SU(2)** in `sw_su2_unique`; general rank is open.
     Reference: Seiberg–Witten, hep-th/9407087 (the original uniqueness argument);
-    Argyres–Faraggi / KLYT for SU(N).
-    Faithfulness (NOT VERIFIED): codified physical lore, not a ZFC theorem; the residual
-    trust this project localizes. To be vetted (GR/PR) and *checked* numerically
-    (Nekrasov vs. periods) per the assurance protocol. -/
-axiom sw_effective_theory_unique_up_to_duality
+    Argyres–Faraggi / KLYT for SU(N). -/
+theorem sw_effective_theory_unique_up_to_duality
     {r : ℕ} (Δ : Set (Fin r → ℂ)) (d d' : LowEnergyData r Δ)
     (h : IsSWEffectiveTheory Δ d) (h' : IsSWEffectiveTheory Δ d') :
-    DualityEquiv d d'
+    DualityEquiv d d' := by
+  sorry
 
-/-- **Existence — the SW curve realizes such a theory.**
+/-- **GOAL — existence: the SW curve realizes such a theory** (*not* an axiom).
 
-    The hyperelliptic curve `y² = P_N² − Λ^{2N}` (`swData`), via its period geometry,
-    furnishes low-energy effective data satisfying the six physical hypotheses, with
-    singular locus the discriminant of the curve. Together with
-    `sw_effective_theory_unique_up_to_duality`, this is the statement that the SW curve
+    The hyperelliptic curve `y² = P_N² − Λ^{2N}` (`swData`), via its period geometry, furnishes
+    low-energy effective data satisfying the six physical hypotheses, with singular locus the
+    discriminant of the curve. Together with uniqueness, this is the statement that the SW curve
     gives *the* (essentially unique) low-energy solution of N=2 SU(N) SYM.
 
-    Reference: Seiberg–Witten, hep-th/9407087; KLYT / Argyres–Faraggi (SU(N)).
-    Faithfulness (NOT VERIFIED): the existence of the data is Phase 2 (periods of the
-    SW curve); the six hypotheses for *this* data are codified lore. The `τ ∈ Siegel`
-    half is already a *theorem* here (`sw_coupling_mem_siegel`). -/
-axiom sw_curve_admits_effective_theory
+    A goal to prove (`sorry`), not an axiom: the data is constructed from the periods of the
+    curve (Phase 2), and the `τ ∈ Siegel` half is already a theorem (`sw_coupling_mem_siegel`).
+    Reference: Seiberg–Witten, hep-th/9407087; KLYT / Argyres–Faraggi (SU(N)). -/
+theorem sw_curve_admits_effective_theory
     {N : ℕ} (P : Polynomial ℂ) (Λ : ℂ)
     (hPdeg : P.natDegree = N) (hN : 2 ≤ N)
     (hsf : Squarefree (P ^ 2 - Polynomial.C (Λ ^ (2 * N)))) :
     ∃ (Δ : Set (Fin (N - 1) → ℂ)) (d : LowEnergyData (N - 1) Δ),
-      IsSWEffectiveTheory Δ d
+      IsSWEffectiveTheory Δ d := by
+  sorry
 
 end SeibergWitten.Physics
