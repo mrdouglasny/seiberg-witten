@@ -169,13 +169,14 @@ The headline claims are different in kind. That the SW curve \emph{realizes} a t
 satisfying the assumptions (existence), and that the assumptions fix the solution
 \textbf{uniquely up to $\Sp(2r,\Z)$ duality} (uniqueness), are not physical inputs but
 \emph{mathematical} consequences: given the assumptions, each should be a \textbf{theorem}---
-uniqueness, in particular, is a period-map rigidity statement. We state them as named axioms
-today only as placeholders, because their proofs are not yet in place (they need the covering
-and Riemann-mapping machinery of \S7). Discharging them is precisely that program, and it
-\emph{purifies} the axiom list: it moves these mathematical claims onto the proved side,
-leaving only the five genuinely-physical inputs as assumptions. Until then, printing the axioms
-behind a result shows both---and makes visible exactly which placeholder still stands between
-the physics and the theorem.
+uniqueness, in particular, is a period-map rigidity statement. We therefore state them as
+\textbf{goals} (\code{theorem $\dots$ := sorry}), \emph{not} axioms---visible holes to close,
+which never enter the trusted base---because their proofs are not yet in place in general (they
+need the covering and Riemann-mapping machinery of \S7). Discharging them \emph{purifies} the
+development: the mathematical claims move onto the proved side, leaving only the five
+genuinely-physical inputs (and the classical-math axioms of \S B.2) as assumptions.
+\code{\#print axioms} reports exactly the physical inputs and classical-math axioms a result
+uses; the open goals are flagged by \code{sorry}.
 
 For $SU(2)$ we have carried this out. The rank-1 uniqueness statement is now a
 \textbf{theorem}: printing its axioms returns only the three logical axioms, the physics
@@ -337,29 +338,34 @@ axiom DualityEquiv     : ∀ {r : ℕ} {Δ : Set (Fin r → ℂ)},         -- Sp
     LowEnergyData r Δ → LowEnergyData r Δ → Prop
 \end{Verbatim}
 
-\section{Mathematical axioms, used provisionally (debt)}
+\section{Provisional mathematics: goals to prove, and assumed classical axioms}
 
-These are \emph{mathematical} claims, distinct in kind from the physics of Appendix A. Each is
-true standard mathematics but not yet proved in our development; each is a debt, tracked
-natively by \code{\#print axioms}.
+These are \emph{mathematical}, distinct in kind from the physics of Appendix A. \textbf{B.1}
+are the headline implications we aim to \emph{prove}---stated as goals
+(\code{theorem $\dots$ := sorry}), \textbf{not} axioms, since they should follow from the
+physical hypotheses. \textbf{B.2} are classical theorems not yet in Mathlib that we
+\emph{assume} as axioms (debt to discharge by porting). Everything the kernel actually trusts
+is tracked by \code{\#print axioms}.
 
 \medskip
-\noindent\textbf{B.1 --- Headline implications, provisionally axiomatized pending proof.}
-Mathematical consequences of the physics axioms that \emph{should be theorems} (\S4.2):
+\noindent\textbf{B.1 --- Headline implications (goals, not axioms).} Mathematical consequences
+of the physics hypotheses that \emph{should be theorems} (\S4.2); stated as \code{sorry}-goals
+so they remain visible holes rather than trusted assertions:
 
 \begin{Verbatim}
--- uniqueness up to Sp(2r,ℤ) duality        [PROVED for SU(2): sw_su2_unique]
-axiom sw_effective_theory_unique_up_to_duality
+-- GOAL: uniqueness up to Sp(2r,ℤ) duality  [PROVED for SU(2): sw_su2_unique; general open]
+theorem sw_effective_theory_unique_up_to_duality
     {r : ℕ} (Δ : Set (Fin r → ℂ)) (d d' : LowEnergyData r Δ)
     (h : IsSWEffectiveTheory Δ d) (h' : IsSWEffectiveTheory Δ d') :
-    DualityEquiv d d'
+    DualityEquiv d d' := by sorry
 
--- existence: the SW curve realizes a theory satisfying the six hypotheses
-axiom sw_curve_admits_effective_theory
+-- GOAL: existence — the SW curve realizes a theory satisfying the six hypotheses
+theorem sw_curve_admits_effective_theory
     {N : ℕ} (P : Polynomial ℂ) (Λ : ℂ)
     (hPdeg : P.natDegree = N) (hN : 2 ≤ N)
     (hsf : Squarefree (P ^ 2 - Polynomial.C (Λ ^ (2 * N)))) :
-    ∃ (Δ : Set (Fin (N - 1) → ℂ)) (d : LowEnergyData (N - 1) Δ), IsSWEffectiveTheory Δ d
+    ∃ (Δ : Set (Fin (N - 1) → ℂ)) (d : LowEnergyData (N - 1) Δ), IsSWEffectiveTheory Δ d := by
+  sorry
 \end{Verbatim}
 
 \medskip
