@@ -45,24 +45,24 @@ theorem siegelOne_smul_im_pos (M : Sp2ℤ) (τ : SiegelUpperHalfSpace 1) :
 
 variable {B : CoulombBase 1}
 
-/-- **H4′ — electric–magnetic duality, a physical refinement of H4.** On a rank-1 sheet the
-values of the multivalued coupling are closed under the `Sp(2,ℤ) = SL(2,ℤ)` duality action:
-every duality frame-change of a coupling value is again realized as a coupling value. The
-concrete content of "the monodromy is by electric–magnetic duality" (cf. the `Deck` gluing). -/
-def H4'Duality (s : Sheet B) : Prop :=
-  ∀ (M : Sp2ℤ) (u : Fin 1 → ℂ), ∃ u' : Fin 1 → ℂ, s.tau u' = M • s.tau u
+/-- **H4′ — the duality monodromy acts on the coupling (genuine `π₁ → Sp(2,ℤ)` form).** For the
+deck gluing `D : Deck s s'` — the rank-1 monodromy relating two overlapping sheets — there is an
+`M ∈ Sp(2,ℤ) = SL(2,ℤ)` realizing its action on the effective coupling: `τ' = M • τ` on the
+overlap. This is the concrete content of "the monodromy is electric–magnetic duality", attached
+to an actual gluing, not mere image-closure under all of `SL(2,ℤ)`. -/
+def H4'Duality {s s' : Sheet B} (_D : Deck s s') : Prop :=
+  ∃ M : Sp2ℤ, ∀ u ∈ s.V ∩ s'.V, s'.tau u = M • s.tau u
 
-/-- **H4′ ⇒ positivity is monodromy-stable (the special-geometry consequence).** Assuming
-electric–magnetic duality (`H4'Duality`), every duality frame-change `M • τ(u)` of the coupling
-is realized at some point `u'`, carrying a positive-definite special-Kähler metric
-(`Im τ ≻ 0`). So the no-ghost positivity holds on the whole duality orbit: although `τ` is
-multivalued across sheets, its metric is positive everywhere — a globally consistent positive
-metric on the Coulomb branch. -/
-theorem metric_posDef_of_h4' (s : Sheet B) (h : H4'Duality s)
-    (M : Sp2ℤ) (u : Fin 1 → ℂ) :
-    ∃ u' : Fin 1 → ℂ,
-      s.tau u' = M • s.tau u ∧ ((s.tau u').val.map Complex.im).PosDef := by
-  obtain ⟨u', hu'⟩ := h M u
-  exact ⟨u', hu', (s.tau u').imPosDef⟩
+/-- **H4′ ⇒ positivity is monodromy-stable (the special-geometry consequence).** Under the
+duality monodromy, the special-Kähler metric stays positive: the glued coupling
+`s'.τ(u) = M • s.τ(u)` lands in the Siegel space (`Im τ ≻ 0`). So the no-ghost positivity is
+duality-invariant — although `τ` is multivalued across sheets, its metric is positive on every
+sheet, a globally consistent positive metric on the Coulomb branch. -/
+theorem metric_posDef_of_h4' {s s' : Sheet B} (D : Deck s s') (h : H4'Duality D)
+    {u : Fin 1 → ℂ} (hu : u ∈ s.V ∩ s'.V) :
+    ∃ M : Sp2ℤ,
+      s'.tau u = M • s.tau u ∧ ((s'.tau u).val.map Complex.im).PosDef := by
+  obtain ⟨M, hM⟩ := h
+  exact ⟨M, hM u hu, (s'.tau u).imPosDef⟩
 
 end SeibergWitten.Physics

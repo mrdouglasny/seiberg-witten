@@ -45,70 +45,12 @@ namespace SeibergWitten.Physics
 
 variable {r : ℕ}
 
-/-! ## `diracPairing` is an alternating `ℤ`-bilinear form -/
+/-! ## Dirac-pairing algebra and transvections — now in `Hypotheses.lean`
 
-theorem diracPairing_self (v : ChargeLattice r) : diracPairing v v = 0 := by
-  unfold diracPairing
-  rw [sub_eq_zero]
-  exact Finset.sum_congr rfl fun i _ => mul_comm _ _
-
-theorem diracPairing_antisymm (a b : ChargeLattice r) :
-    diracPairing a b = -diracPairing b a := by
-  unfold diracPairing
-  have h1 : ∑ i, a.1 i * b.2 i = ∑ i, b.2 i * a.1 i :=
-    Finset.sum_congr rfl fun i _ => mul_comm _ _
-  have h2 : ∑ i, a.2 i * b.1 i = ∑ i, b.1 i * a.2 i :=
-    Finset.sum_congr rfl fun i _ => mul_comm _ _
-  rw [h1, h2]; ring
-
-theorem diracPairing_add_left (a b c : ChargeLattice r) :
-    diracPairing (a + b) c = diracPairing a c + diracPairing b c := by
-  simp only [diracPairing, Prod.fst_add, Prod.snd_add, Pi.add_apply, add_mul,
-    Finset.sum_add_distrib]
-  ring
-
-theorem diracPairing_smul_left (c : ℤ) (a b : ChargeLattice r) :
-    diracPairing (c • a) b = c * diracPairing a b := by
-  simp only [diracPairing, Prod.smul_fst, Prod.smul_snd, Pi.smul_apply, smul_eq_mul,
-    mul_assoc]
-  rw [← Finset.mul_sum, ← Finset.mul_sum, ← mul_sub]
-
-theorem diracPairing_add_right (a b c : ChargeLattice r) :
-    diracPairing a (b + c) = diracPairing a b + diracPairing a c := by
-  rw [diracPairing_antisymm a (b + c), diracPairing_add_left,
-      diracPairing_antisymm b a, diracPairing_antisymm c a]; ring
-
-theorem diracPairing_smul_right (c : ℤ) (a b : ChargeLattice r) :
-    diracPairing a (c • b) = c * diracPairing a b := by
-  rw [diracPairing_antisymm a (c • b), diracPairing_smul_left, diracPairing_antisymm a b]
-  ring
-
-/-! ## Symplectic maps and Picard–Lefschetz transvections -/
-
-/-- A charge-lattice map is **symplectic** if it preserves the Dirac pairing. The
-monodromy representation of the SW family lands in this group — concretely `Sp(2r,ℤ)`. -/
-def IsSymplectic (f : ChargeLattice r → ChargeLattice r) : Prop :=
-  ∀ v w, diracPairing (f v) (f w) = diracPairing v w
-
-/-- **Picard–Lefschetz transvection** of a vanishing charge `γ`: `T_γ v = v + ⟨v,γ⟩ γ`.
-This is the local monodromy on the charge lattice around a singularity where the BPS
-state of charge `γ` becomes massless. -/
-def transvection (γ v : ChargeLattice r) : ChargeLattice r :=
-  v + diracPairing v γ • γ
-
-/-- **A Picard–Lefschetz transvection preserves the Dirac pairing.** The algebraic core
-of the monodromy layer: every such local monodromy is symplectic, so the whole monodromy
-representation lands in `Sp(2r,ℤ)`. Proved from bilinearity + `⟨γ,γ⟩ = 0`. -/
-theorem transvection_diracPairing (γ v w : ChargeLattice r) :
-    diracPairing (transvection γ v) (transvection γ w) = diracPairing v w := by
-  simp only [transvection, diracPairing_add_left, diracPairing_add_right,
-    diracPairing_smul_left, diracPairing_smul_right, diracPairing_self, mul_zero, add_zero]
-  rw [diracPairing_antisymm γ w]; ring
-
-/-- Every Picard–Lefschetz transvection is symplectic. -/
-theorem transvection_isSymplectic (γ : ChargeLattice r) :
-    IsSymplectic (transvection γ) :=
-  fun v w => transvection_diracPairing γ v w
+The Dirac-pairing bilinearity lemmas (`diracPairing_self`, `_antisymm`, `_add_left`, …),
+`IsSymplectic`, the Picard–Lefschetz `transvection`, and `transvection_isSymplectic` now live
+beside `diracPairing` in `Hypotheses.lean` — so H3 (`PicardLefschetzAtGenericStratum`) and this
+family layer share **one** `transvection`. They are re-exported by the `import` above. -/
 
 /-! ## The remaining gap: identifying local monodromies as transvections -/
 
