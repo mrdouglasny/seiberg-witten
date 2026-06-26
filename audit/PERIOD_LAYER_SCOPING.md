@@ -19,6 +19,51 @@ Both layers are *hypotheses*, so the theorems are **standard-3**. Discharging th
 building the period geometry that *proves* `rigidity` and `realize`. This doc names the defs and
 theorems that work needs.
 
+## The needed results, in informal mathematics
+
+*Setup.* Fix `Λ ≠ 0`, `N ≥ 2`, rank `r = N − 1`. For a modulus `u` (the trace-free Casimirs) let
+`C_u` be the genus-`r` hyperelliptic curve `y² = P_u(x)² − Λ^{2N}`, and `U = {u : C_u smooth} =
+{Δ(u) ≠ 0}` the moduli base. Let `λ_SW` be the Seiberg–Witten meromorphic differential on `C_u`
+(its `u`-derivatives `∂λ_SW/∂u_i` are holomorphic 1-forms), and fix a symplectic basis
+`A_i, B_i` of `H₁(C_u, ℤ)`.
+
+**(P1) Period map.** The periods `a_i(u) = ∮_{A_i} λ_SW` and `a_{D,i}(u) = ∮_{B_i} λ_SW` are
+holomorphic multivalued functions on `U` (single-valued on its universal cover): the period
+vector varies holomorphically with the modulus (the Gauss–Manin period map is holomorphic).
+
+**(P2) Picard–Fuchs.** `(a, a_D)` satisfy a holomorphic linear ODE system in `u` (the Gauss–Manin
+connection). For SU(2): one second-order Fuchsian ODE in `u`, regular singular points at
+`u = ±Λ²` and `∞`.
+
+**(P3) Special geometry ⇒ H1.** `τ_{ij}(u) = ∂a_{D,i}/∂a_j` is symmetric with positive-definite
+imaginary part (Riemann's bilinear relations), so `τ(u) ∈ Siegel(r)`; and there is a holomorphic
+prepotential `F` with `a_{D,i} = ∂F/∂a_i`, `τ = ∂²F/∂a²`.
+
+**(P4) Monodromy + Picard–Lefschetz ⇒ H3.** Analytic continuation around loops gives
+`ρ : π₁(U) → Sp(2r, ℤ)`. Around each discriminant component — where a cycle `γ` vanishes, i.e. a
+BPS state of charge `γ` becomes massless — the monodromy is the Picard–Lefschetz transvection
+`v ↦ v + ⟨v, γ⟩ γ`. (Discharges `AX_picard_lefschetz_local`.)
+
+**(P5) Rigidity ⇒ `PeriodLayer.rigidity` / B′.** `ρ` is irreducible (for SU(2): two parabolic
+transvections generate a non-abelian, hence irreducible, group). So two period maps over the same
+base with the same monodromy differ by a constant matrix commuting with `ρ`, which by Schur is a
+scalar; the weak-coupling normalization (P6) fixes the scalar to `1`. Hence on a connected overlap
+the two period vectors are related by a single constant `Sp(2r, ℤ)` matrix — **the period frame.**
+
+**(P6) Weak-coupling asymptotics ⇒ H6.** As `u → ∞`, `a_i ∼` the classical value (`a ∼ √(2u)` for
+SU(2)) and `a_{D,i} ∼` the one-loop logarithm `(i/π)·(\text{1-loop coeff})·a_i log(a_i/Λ)` plus an
+instanton series in `Λ^{2N}`, with the **exact** (one-loop-exact) leading coefficients — which is
+what makes the scalar in P5 equal `1` and the period frame integral.
+
+**(P7) Existence ⇒ `PeriodLayer.realize`.** For a smooth modulus the data (P1, P3) assemble into a
+`Sheet` — periods and coupling on a simply-connected chart — satisfying H1–H6, with singular locus
+exactly `{Δ(u) = 0}`. (For `N ≥ 3` the discriminant is a hypersurface with Argyres–Douglas strata
+where several cycles vanish together; P4's transvection picture is the *generic*-stratum statement.)
+
+P5 and P7 are literally the layer's two fields (`rigidity`, `realize`); P1–P4 and P6 are what
+prove them. The one piece with no Lean precedent is the **holomorphic variation** P1/P2 — periods
+moving holomorphically with a flat connection.
+
 ## The basic definitions
 
 | Def | Meaning | Status |
