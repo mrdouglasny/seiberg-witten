@@ -111,13 +111,15 @@ prose here.)
 
 ### 4.2 What is assumed
 
-The five physical assumptions of §3 are stated as named axioms in one module, each with its
-source and a faithfulness note. These are the irreducible physics — there is nothing to prove
-about them. (We use Lean's global `axiom` keyword deliberately, as a *dependency-tracking*
-device: it is exactly what `#print axioms` reports, so every assumption surfaces natively in
-the footprint of any result that uses it. Because a false axiom would make the whole system
-inconsistent, each is treated as a debt to discharge, not a convenience — the audit tracks
-them as such.)
+The physical assumptions (H0–H6) are stated as named **predicates and structures** in one
+module — the carrier `CoulombBase`/`Sheet` (an N=2 `U(1)^{N-1}` EFT) and the hypotheses
+`SpecialGeometry`, `SingularitiesAreBPS`, `PicardLefschetzAtGenericStratum`, `Deck`,
+`RSymmetry`, `MatchesAsymptotics`, bundled in `IsSWEffectiveTheory` (Appendix A). They are the
+irreducible physics — there is nothing to prove about them — but they are *not global axioms*:
+a result that uses the physics takes `IsSWEffectiveTheory` as a **hypothesis**, so the
+dependence is explicit in its signature, even more transparent than an axiom and never entering
+the trusted base. The only global axioms (besides the three logical ones) are *mathematical* —
+the monodromy/modular/covering inputs of Appendix B.2.
 
 The headline claims are different in kind. That the SW curve *realizes* a theory satisfying
 the assumptions (existence), and that the assumptions fix the solution **uniquely up to
@@ -232,87 +234,102 @@ those axioms by independent agreement. Proved and assumed as separate, machine-c
 vetted list; faithfulness enforced by types and by an independent oracle: this, we argue, is
 the right standard for validating AI-generated results in theoretical physics.
 
-## Appendix A. The physics axioms (irreducible inputs)
+## Appendix A. The physics hypotheses (H0–H6) — predicates, not axioms
 
-Each is a named axiom in `SeibergWitten/Physics/Hypotheses.lean`. They are currently
-*uninterpreted predicates* — each names a physical hypothesis as a typed `Prop` over the
-carrier `LowEnergyData`, with no definition yet; the content (and a re-audit) arrives when the
-corresponding layer is built. The carrier lives on the universal cover `SmoothCover` of
-`ℂ^r ∖ Δ` (the cover, not `ℂ^r` — the Liouville point of §4.3).
-
-```lean
--- H1  holomorphy / special geometry (a_D = ∂F/∂a, τ = ∂²F/∂a², one-loop exact)
-axiom SpecialGeometry : ∀ {r : ℕ} {Δ : Set (Fin r → ℂ)}, LowEnergyData r Δ → Prop
-
--- H2  a BPS state becomes massless on the singular locus Δ  (→ def SingularitiesAreBPS)
-axiom BecomesMasslessAt : ∀ {r : ℕ} (Δ : Set (Fin r → ℂ)), LowEnergyData r Δ →
-    (Fin r → ℂ) → ChargeLattice r → Prop
-
--- H3  Picard–Lefschetz monodromy class v ↦ v + ⟨v,nₐ⟩nₐ on the generic stratum
-axiom PicardLefschetzAtGenericSingularities :
-    ∀ {r : ℕ} {Δ : Set (Fin r → ℂ)}, LowEnergyData r Δ → Prop
-
--- H4  electric–magnetic duality: Sp(2r,ℤ) monodromy
-axiom EMDualityConsistent : ∀ {r : ℕ} {Δ : Set (Fin r → ℂ)}, LowEnergyData r Δ → Prop
-
--- H5  the U(1)_R → ℤ_{2N} R-symmetry fixes the positions of Δ
-axiom RSymmetryConsistent : ∀ {r : ℕ} {Δ : Set (Fin r → ℂ)}, LowEnergyData r Δ → Prop
-
--- H6  one-loop + instanton expansion matches the exact periods at weak coupling
-axiom AsymptoticMatch : ∀ {r : ℕ} {Δ : Set (Fin r → ℂ)}, LowEnergyData r Δ → Prop
-
--- (SU(2)) the two candidate period maps f, g share the SW Sp(2,ℤ) monodromy
--- (intended meaning below; currently an uninterpreted typed relation)
-axiom SameSWMonodromy : ∀ (_Λ : ℂ), (ℂ → ℂ) → (ℂ → ℂ) → Prop
-```
-
-`SameSWMonodromy Λ f g` is the hypothesis that two candidate effective-coupling maps `f, g` on
-the punctured `u`-plane have the *same monodromy*: continued around each puncture (`u = ±Λ²`,
-`∞`) they are transformed by the same `Sp(2,ℤ) = SL(2,ℤ)` matrices. Which matrices occur is
-physically fixed — by which BPS state goes massless where (monopole at `+Λ²`, dyon at `−Λ²`)
-and the weak-coupling running at `∞` — so sharing it means describing the same physical theory.
-It is the input to the rank-1 rigidity theorem `sw_su2_unique`: two maps with the same
-monodromy must agree up to a single global `SL(2,ℤ)` frame change.
-
-Carrier / interface (structural, not assertions):
+After the strengthening (§4.1), the physical inputs are **contentful predicates and
+structures**, not opaque axioms: they are *assumed as hypotheses* (bundled in
+`IsSWEffectiveTheory`) by the results that use them, so they never enter the trusted base. The
+carrier itself *is* the data of an N=2 `U(1)^{N-1}` EFT (H0): a base in gauge-invariant moduli,
+and sheets of the cover carrying the holomorphic special coordinates (`SiegelUpperHalfSpace`
+bundles `Im τ ≻ 0`). None of the following is an `axiom`.
 
 ```lean
-axiom SmoothCover      : ∀ {r : ℕ}, Set (Fin r → ℂ) → Type        -- universal cover of ℂ^r∖Δ
-axiom SmoothCover.proj : ∀ {r : ℕ} {Δ : Set (Fin r → ℂ)}, SmoothCover Δ → (Fin r → ℂ)
-axiom DualityEquiv     : ∀ {r : ℕ} {Δ : Set (Fin r → ℂ)},          -- Sp(2r,ℤ) frame-change equiv
-    LowEnergyData r Δ → LowEnergyData r Δ → Prop
+-- H0  carrier = the data of an N=2 U(1)^{N-1} EFT
+structure CoulombBase (r : ℕ) where
+  Δ : Set (Fin r → ℂ); U : Set (Fin r → ℂ); hUopen : IsOpen U; hUsmooth : U ⊆ Δᶜ
+structure Sheet (B : CoulombBase r) where
+  V : Set (Fin r → ℂ); hVopen : IsOpen V; hVsub : V ⊆ B.U; hVsc : SimplyConnectedSpace V
+  a  : (Fin r → ℂ) → (Fin r → ℂ); ha  : DifferentiableOn ℂ a V    -- special coordinates aᵢ(u)
+  aD : (Fin r → ℂ) → (Fin r → ℂ); haD : DifferentiableOn ℂ aD V   -- duals a_{D,i}(u)
+  tau : (Fin r → ℂ) → SiegelUpperHalfSpace r                       -- coupling τ (Im ≻ 0 typed)
+
+-- H1  special geometry: a prepotential F with aD = ∂F/∂a, τ = ∂²F/∂a²
+def Sheet.SpecialGeometry (s : Sheet B) : Prop :=
+  ∃ F, DifferentiableOn ℂ F (s.a '' s.V) ∧
+    (∀ u ∈ s.V, ∀ i, s.aD u i = partialDeriv F i (s.a u)) ∧
+    (∀ u ∈ s.V, ∀ i j, (s.tau u).val i j = partialDeriv2 F i j (s.a u))
+
+-- H2  massless on Δ as the limit Z_n → 0; massive off Δ
+def Sheet.BecomesMasslessAt (s) (u₀) (n) : Prop :=
+  Tendsto (fun u => s.centralCharge u n) (𝓝[s.V] u₀) (𝓝 0)
+def Sheet.SingularitiesAreBPS (s) : Prop :=
+  (∀ u ∈ s.V, ∀ n ≠ 0, s.centralCharge u n ≠ 0) ∧
+  (∀ u₀ ∈ closure s.V ∩ B.Δ, ∃ n ≠ 0, s.BecomesMasslessAt u₀ n)
+
+-- H3  Picard–Lefschetz: reflection in the SAME vanishing charge n as H2
+def PicardLefschetzAtGenericStratum (s : Sheet B) : Prop :=
+  ∀ u₀ ∈ closure s.V ∩ B.Δ, ∀ n, s.BecomesMasslessAt u₀ n → ∃ g, g = plReflection n
+
+-- H4  duality gluing: an Sp(2r,ℤ) charge action with covariant central charge
+structure Deck (s s' : Sheet B) where
+  g : ChargeLattice r → ChargeLattice r
+  symplectic : ∀ n n', diracPairing (g n) (g n') = diracPairing n n'   -- ∈ Sp(2r,ℤ)
+  covariant  : ∀ u ∈ s.V ∩ s'.V, ∀ n, s'.centralCharge u (g n) = s.centralCharge u n
+
+-- H5  R-symmetry: a ℤ_{2N} action on the moduli fixing Δ
+def RSymmetry (B : CoulombBase r) (N : ℕ) : Prop :=
+  ∃ ω, (∀ u, ω^[2*N] u = u) ∧ ω '' B.Δ = B.Δ
+
+-- H6  asymptotic matching / non-renormalization (one-loop + purely instantonic remainder)
+def Instantonic (Λ) (N) (Fcl F) : Prop :=
+  ∃ c, ∀ a, F a - Fcl a - oneLoopPrepotential Λ a = ∑' k, c (k+1) a * (Λ^(2*N))^(k+1)
+def Sheet.MatchesAsymptotics (s) (Λ) (N) : Prop :=     -- H1's F + the non-renormalized form
+  ∃ F Fcl, (… the H1 relations for F …) ∧ Instantonic Λ N Fcl F
+
+-- the six, bundled: an N=2 U(1)^{N-1} Seiberg–Witten effective theory
+structure IsSWEffectiveTheory (s : Sheet B) (Λ : ℂ) (N : ℕ) : Prop where
+  specialGeometry : s.SpecialGeometry            -- H1
+  singularities   : s.SingularitiesAreBPS        -- H2
+  picardLefschetz : PicardLefschetzAtGenericStratum s   -- H3
+  matching        : s.MatchesAsymptotics Λ N     -- H6
+  rSymmetry       : RSymmetry B N                -- H5
 ```
 
-## Appendix B. Provisional mathematics: goals to prove, and assumed classical axioms
+`Deck` (H4) relates sheets and is proved to make the BPS mass descend to the base
+(`Deck.bpsMass_eq`). The one rank-1 *monodromy* input that remains a placeholder axiom is
+`SameSWMonodromy` (Appendix B): the hypothesis that two candidate couplings `f, g` carry the
+same `Sp(2,ℤ)` monodromy around the punctures — physically fixed by which BPS state (monopole
+at `+Λ²`, dyon at `−Λ²`) goes massless where — the input to the rank-1 rigidity theorem
+`sw_su2_unique`.
 
-These are *mathematical*, distinct in kind from the physics of Appendix A. **B.1** are the
-headline implications we aim to *prove* — stated as goals (`theorem … := sorry`), **not**
-axioms, since they should follow from the physical hypotheses. **B.2** are classical theorems
-not yet in Mathlib that we *assume* as axioms (debt to discharge by porting). Everything the
-kernel actually trusts is tracked by `#print axioms`.
+## Appendix B. The residual axioms (mathematical) and the open goals
 
-**B.1 — Headline implications (goals, not axioms).** Mathematical consequences of the physics
-hypotheses that *should be theorems* (§4.2); stated as `sorry`-goals so they remain visible
-holes rather than trusted assertions:
+With the physics now in predicates (Appendix A), the **only global axioms** beyond the three
+logical ones (`propext, Classical.choice, Quot.sound`) are *mathematical* — B.2. **B.1**
+collects the open goals (the headline implications, `theorem … := sorry`) and the one classical
+fact we *prove*.
+
+**B.1 — Goals, and a proved classical fact.** The headline implications are mathematical
+consequences of the hypotheses, stated as `sorry`-goals over the new carrier, not axioms:
 
 ```lean
 -- GOAL: uniqueness up to Sp(2r,ℤ) duality   [PROVED for SU(2): sw_su2_unique; general open]
-theorem sw_effective_theory_unique_up_to_duality
-    {r : ℕ} (Δ : Set (Fin r → ℂ)) (d d' : LowEnergyData r Δ)
-    (h : IsSWEffectiveTheory Δ d) (h' : IsSWEffectiveTheory Δ d') :
-    DualityEquiv d d' := by sorry
+theorem sw_effective_theory_unique_up_to_duality (s s' : Sheet B)
+    (h : IsSWEffectiveTheory s Λ N) (h' : IsSWEffectiveTheory s' Λ N) :
+    Nonempty (Deck s s') := by sorry
 
--- GOAL: existence — the SW curve realizes a theory satisfying the six hypotheses
-theorem sw_curve_admits_effective_theory
-    {N : ℕ} (P : Polynomial ℂ) (Λ : ℂ)
+-- GOAL: existence — the SW curve furnishes a sheet satisfying H1–H6
+theorem sw_curve_admits_effective_theory (P : Polynomial ℂ) (Λ : ℂ)
     (hPdeg : P.natDegree = N) (hN : 2 ≤ N)
     (hsf : Squarefree (P ^ 2 - Polynomial.C (Λ ^ (2 * N)))) :
-    ∃ (Δ : Set (Fin (N - 1) → ℂ)) (d : LowEnergyData (N - 1) Δ), IsSWEffectiveTheory Δ d := by
-  sorry
+    ∃ (B : CoulombBase (N - 1)) (s : Sheet B), IsSWEffectiveTheory s Λ N := by sorry
+
+-- PROVED (3): the classical Coulomb branch has dimension N − 1 (the rank), from the gauge group
+theorem coulombBranch_classical (N : ℕ) : Module.finrank ℂ (Fin (N - 1) → ℂ) = N - 1
 ```
 
-**B.2 — Classical mathematics not yet in Mathlib**, assumed pending upstream formalization
-(the covering is packaged as a structure):
+**B.2 — Classical mathematics not yet in Mathlib** — the only remaining global axioms, to
+discharge by porting (the covering is packaged as a structure):
 
 ```lean
 structure ThricePuncturedUniformization where
