@@ -126,7 +126,8 @@ structure CoulombBase (r : ℕ) where
   Δ : Set (Fin r → ℂ)
   U : Set (Fin r → ℂ)
   hUopen : IsOpen U
-  hUsmooth : U ⊆ Δᶜ
+  /-- the smooth locus is *exactly* the complement of the singular locus (so `Δ` is closed). -/
+  hUsmooth : U = Δᶜ
 
 /-- **A sheet** of the cover over a simply-connected open `V ⊆ U`, carrying the single-valued
 holomorphic special coordinates `a, a_D` and coupling `τ` of the `U(1)^{N-1}` EFT. -/
@@ -137,6 +138,9 @@ structure Sheet (B : CoulombBase r) where
   hVsc : SimplyConnectedSpace V
   a : (Fin r → ℂ) → (Fin r → ℂ)
   ha : DifferentiableOn ℂ a V
+  /-- `a` is a local biholomorphism (good coordinates): injective on the chart, so with
+  holomorphy the inverse is holomorphic and `∂/∂a` is well-defined. -/
+  haInj : Set.InjOn a V
   aD : (Fin r → ℂ) → (Fin r → ℂ)
   haD : DifferentiableOn ℂ aD V
   tau : (Fin r → ℂ) → SiegelUpperHalfSpace r
@@ -156,7 +160,7 @@ noncomputable def bpsMass (u : Fin r → ℂ) (n : ChargeLattice r) : ℝ :=
 /-- **H1 — special geometry.** A holomorphic prepotential `F` with `a_{D,i} = ∂F/∂aᵢ` and
 `τ_{ij} = ∂²F/∂aᵢ∂aⱼ` — the full special-Kähler structure in one statement. -/
 def SpecialGeometry : Prop :=
-  ∃ F : (Fin r → ℂ) → ℂ, DifferentiableOn ℂ F (s.a '' s.V) ∧
+  ∃ F : (Fin r → ℂ) → ℂ, ContDiffOn ℂ 2 F (s.a '' s.V) ∧
     (∀ u ∈ s.V, ∀ i, s.aD u i = partialDeriv F i (s.a u)) ∧
     (∀ u ∈ s.V, ∀ i j, (s.tau u).val i j = partialDeriv2 F i j (s.a u))
 
@@ -174,14 +178,14 @@ def SingularitiesAreBPS : Prop :=
 /-- **Argyres–Douglas locus (derived).** Boundary points where two *mutually non-local* charges
 become massless together. -/
 def ArgyresDouglasLocus : Set (Fin r → ℂ) :=
-  { u₀ | ∃ n n' : ChargeLattice r, n ≠ 0 ∧ n' ≠ 0 ∧ diracPairing n n' ≠ 0 ∧
-        s.BecomesMasslessAt u₀ n ∧ s.BecomesMasslessAt u₀ n' }
+  { u₀ | u₀ ∈ closure s.V ∩ B.Δ ∧ ∃ n n' : ChargeLattice r, n ≠ 0 ∧ n' ≠ 0 ∧
+        diracPairing n n' ≠ 0 ∧ s.BecomesMasslessAt u₀ n ∧ s.BecomesMasslessAt u₀ n' }
 
 /-- **H6 — asymptotic matching, bundled with H1.** The prepotential of H1 has the
 non-renormalized weak-coupling form (`Instantonic`); this upgrades "a special-Kähler structure"
 to "*the* SW prepotential". -/
 def MatchesAsymptotics (Λ : ℂ) (N : ℕ) : Prop :=
-  ∃ F : (Fin r → ℂ) → ℂ, DifferentiableOn ℂ F (s.a '' s.V) ∧
+  ∃ F : (Fin r → ℂ) → ℂ, ContDiffOn ℂ 2 F (s.a '' s.V) ∧
     (∀ u ∈ s.V, ∀ i, s.aD u i = partialDeriv F i (s.a u)) ∧
     (∀ u ∈ s.V, ∀ i j, (s.tau u).val i j = partialDeriv2 F i j (s.a u)) ∧
     Instantonic Λ N F
@@ -238,6 +242,18 @@ structure IsSWEffectiveTheory {B : CoulombBase r} (s : Sheet B) (Λ : ℂ) (N : 
   matching : s.MatchesAsymptotics Λ N
   rSymmetry : RSymmetry B N
 
+/-- **An atlas for an SW effective theory** (this is where H4 lives). A family of sheets
+**covering** the smooth base `B.U`, each a single-sheet effective theory, with overlapping
+sheets **glued** by an `Sp(2r,ℤ)` deck transformation. The global object the physics describes —
+the duality gluing (H4) is *part of the theory*, not merely a relation between two isolated
+sheets. -/
+structure SWAtlas (B : CoulombBase r) (Λ : ℂ) (N : ℕ) where
+  ι : Type
+  sheets : ι → Sheet B
+  covers : B.U ⊆ ⋃ i, (sheets i).V
+  isSW : ∀ i, IsSWEffectiveTheory (sheets i) Λ N
+  glued : ∀ i j, ((sheets i).V ∩ (sheets j).V).Nonempty → Nonempty (Deck (sheets i) (sheets j))
+
 /-- **(3) — classical Coulomb branch.** A regular adjoint vev of `SU(N)` breaks the gauge group
 to its maximal torus `U(1)^{N-1}` and the classical Coulomb branch is the Cartan mod Weyl, of
 complex dimension `N − 1`. The genuine content is the centralizer theorem (regular semisimple
@@ -245,7 +261,7 @@ element ⇒ maximal torus), *derivable* from the classical scalar potential; her
 the dimension/rank fact `dim_ℂ ℂ^{N-1} = N − 1`, with the full Higgsing derivation a future
 Lie-theory item. (The quantum corrections — the metric, `Δ` as the discriminant — are the
 separate headline goal.) -/
-theorem coulombBranch_classical (N : ℕ) :
+theorem coulombBranchDim (N : ℕ) :
     Module.finrank ℂ (Fin (N - 1) → ℂ) = N - 1 := by
   rw [Module.finrank_pi, Fintype.card_fin]
 
@@ -255,6 +271,15 @@ H1–H6, hence a goal to prove. **Proved for SU(2)** in `sw_su2_unique`; general
 theorem sw_effective_theory_unique_up_to_duality {B : CoulombBase r} (s s' : Sheet B)
     {Λ : ℂ} {N : ℕ} (h : IsSWEffectiveTheory s Λ N) (h' : IsSWEffectiveTheory s' Λ N) :
     Nonempty (Deck s s') := by
+  sorry
+
+/-- **GOAL — uniqueness up to duality, at the atlas level.** Any two SW atlases over the same
+base are related by `Sp(2r,ℤ)` duality wherever their charts overlap — the global form of
+uniqueness (the duality gluing, not a relation between two isolated sheets). A consequence of
+H1–H6; a goal to prove, with the SU(2) case `sw_su2_unique`. -/
+theorem sw_unique_up_to_duality {B : CoulombBase r} {Λ : ℂ} {N : ℕ} (A A' : SWAtlas B Λ N) :
+    ∀ i i', ((A.sheets i).V ∩ (A'.sheets i').V).Nonempty →
+      Nonempty (Deck (A.sheets i) (A'.sheets i')) := by
   sorry
 
 /-- The monic degree-`N` polynomial with subleading coefficients the moduli `u` (the traceless
