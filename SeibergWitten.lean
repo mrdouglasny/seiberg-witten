@@ -12,3 +12,4 @@ import SeibergWitten.Physics.ThetaLambda
 import SeibergWitten.Physics.DualityPositivity
 import SeibergWitten.Physics.SU2Uniqueness
 import SeibergWitten.Physics.PeriodLayer
+import SeibergWitten.Physics.SWFamily

@@ -98,6 +98,11 @@ layer is largely *family glue* on top of `jacobian-challenge`. At genus 1 especi
 1. **SU(2) period map + Picard–Fuchs ODE** (the elliptic case) — *reuse* `jacobian-challenge`'s
    `Elliptic.Periods` (A/B period integrals) and `Layer3.PeriodLattice`; the new content is the
    *variation over `u`* (how those periods move as the curve's modulus changes). Unblocks 1–3.
+   *Done (bridge): `Physics/SWFamily.lean` realizes the SW fiber `y²=(x²−u)²−Λ⁴` as
+   `jacobian-challenge`'s `HyperellipticData` over `u` and proves `genus = 1` (standard-3, via its
+   own genus formula) — so the per-fiber curve type is reusable. The `u`-variation of the periods
+   on top of it remains the new build (measured: `jacobian-challenge` has no curve-in-a-parameter
+   notion).*
 2. **Step 4 rigidity at genus 1** — reuse `AX_developing_map_rigidity`; this discharges
    `PeriodLayer.rigidity` and removes the period-frame hypothesis from the SU(2) closure.
 3. **`realize` at genus 1** — verify H1–H6 on the elliptic period sheet.
