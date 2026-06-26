@@ -79,26 +79,43 @@ noncomputable def partialDeriv2 (F : (Fin r → ℂ) → ℂ) (i j : Fin r) (x :
 
 /-! ## H6 — one-loop prepotential and the non-renormalization input -/
 
-/-- **One-loop prepotential** — the charged W-boson contributions
-`F₁(a) = (i/8π) ∑_{i≠j} (aᵢ−aⱼ)² log((aᵢ−aⱼ)²/Λ²)`. Its Hessian is the one-loop running of the
-`U(1)^{N-1}` couplings. -/
+/-- The `N = r+1` eigenvalues of the adjoint scalar, reconstructed traceless from the `r`
+special coordinates: `(a₀, …, a_{r-1}, −∑ aᵢ)`. The W-bosons run over their *differences* (the
+roots), which is why the one-loop sum below is over `Fin (r+1)` and is nonzero already for
+SU(2) (`r = 1`: the single root `a₀ − (−a₀) = 2a₀`). -/
+noncomputable def eigenvalues (a : Fin r → ℂ) : Fin (r + 1) → ℂ :=
+  Fin.snoc a (-(∑ i, a i))
+
+/-- **One-loop prepotential** — the charged W-boson contributions, summed over the **roots**
+`αᵢⱼ·a = eᵢ − eⱼ` (differences of eigenvalues):
+`F₁(a) = (i/8π) ∑_{i≠j} (eᵢ−eⱼ)² log((eᵢ−eⱼ)²/Λ²)`. Its Hessian is the one-loop running of the
+`U(1)^{N-1}` couplings. (Nonzero for SU(2), unlike a sum over the `r` coordinates alone.) -/
 noncomputable def oneLoopPrepotential (Λ : ℂ) (a : Fin r → ℂ) : ℂ :=
   (Complex.I / (8 * (Real.pi : ℂ))) *
-    ∑ i, ∑ j, if i = j then 0 else (a i - a j) ^ 2 * Complex.log ((a i - a j) ^ 2 / Λ ^ 2)
+    ∑ i, ∑ j, if i = j then 0 else
+      (eigenvalues a i - eigenvalues a j) ^ 2 *
+        Complex.log ((eigenvalues a i - eigenvalues a j) ^ 2 / Λ ^ 2)
+
+/-- Classical prepotential `F_cl(a) = ½ ∑ aᵢ²` (up to the bare coupling `τ₀`). -/
+noncomputable def classicalPrepotential (a : Fin r → ℂ) : ℂ := (1 / 2) * ∑ i, (a i) ^ 2
 
 /-- **Asymptotic matching (weak form).** `F − (F_cl + F₁) → 0` as `|a| → ∞` — the instanton
-corrections vanish at weak coupling. -/
-def AsymptoticMatch (Λ : ℂ) (Fcl F : (Fin r → ℂ) → ℂ) : Prop :=
-  Tendsto (fun a => F a - (Fcl a + oneLoopPrepotential Λ a))
+corrections vanish at weak coupling. The classical part is *fixed* (`classicalPrepotential`). -/
+def AsymptoticMatch (Λ : ℂ) (F : (Fin r → ℂ) → ℂ) : Prop :=
+  Tendsto (fun a => F a - (classicalPrepotential a + oneLoopPrepotential Λ a))
     (Filter.cocompact (Fin r → ℂ)) (𝓝 0)
 
-/-- **H6 — non-renormalization (sharp form).** The deviation of `F` from classical + one-loop is
-**purely instantonic**: a power series in the instanton factor `Λ^{2N}` with no higher-loop
-logarithms. This is N=2 one-loop-exactness; it strengthens `AsymptoticMatch` (its `|a|→∞`
-consequence). -/
-def Instantonic (Λ : ℂ) (N : ℕ) (Fcl F : (Fin r → ℂ) → ℂ) : Prop :=
-  ∃ c : ℕ → (Fin r → ℂ) → ℂ, ∀ a : Fin r → ℂ,
-    F a - Fcl a - oneLoopPrepotential Λ a = ∑' k : ℕ, c (k + 1) a * (Λ ^ (2 * N)) ^ (k + 1)
+/-- **H6 — non-renormalization (sharp form).** With the classical part *fixed* and `Λ ≠ 0`, the
+deviation of `F` from classical + one-loop is **purely instantonic**: a power series in the
+instanton factor `Λ^{2N}` with **holomorphic** coefficients and no higher-loop logarithms. The
+fixed `F_cl` and the holomorphy of the coefficients are what keep this from being vacuous (a
+free `F_cl`/coefficient could absorb any `F`). N=2 one-loop-exactness; strengthens
+`AsymptoticMatch`. -/
+def Instantonic (Λ : ℂ) (N : ℕ) (F : (Fin r → ℂ) → ℂ) : Prop :=
+  Λ ≠ 0 ∧ ∃ c : ℕ → (Fin r → ℂ) → ℂ, (∀ k, Differentiable ℂ (c k)) ∧
+    ∀ a : Fin r → ℂ,
+      F a - classicalPrepotential a - oneLoopPrepotential Λ a
+        = ∑' k : ℕ, c (k + 1) a * (Λ ^ (2 * N)) ^ (k + 1)
 
 /-! ## H0 — the carrier: an N=2 `U(1)^{N-1}` EFT over the Coulomb branch -/
 
@@ -164,32 +181,26 @@ def ArgyresDouglasLocus : Set (Fin r → ℂ) :=
 non-renormalized weak-coupling form (`Instantonic`); this upgrades "a special-Kähler structure"
 to "*the* SW prepotential". -/
 def MatchesAsymptotics (Λ : ℂ) (N : ℕ) : Prop :=
-  ∃ F Fcl : (Fin r → ℂ) → ℂ, DifferentiableOn ℂ F (s.a '' s.V) ∧
+  ∃ F : (Fin r → ℂ) → ℂ, DifferentiableOn ℂ F (s.a '' s.V) ∧
     (∀ u ∈ s.V, ∀ i, s.aD u i = partialDeriv F i (s.a u)) ∧
     (∀ u ∈ s.V, ∀ i j, (s.tau u).val i j = partialDeriv2 F i j (s.a u)) ∧
-    Instantonic Λ N Fcl F
+    Instantonic Λ N F
 
 end Sheet
 
 /-! ## H3 — Picard–Lefschetz, H4 — duality gluing, H5 — R-symmetry -/
 
-/-- The Picard–Lefschetz reflection in a vanishing charge `n`: `v ↦ v + ⟨v,n⟩ n`. -/
+/-- The Picard–Lefschetz reflection in a vanishing charge `n`: `v ↦ v + ⟨v,n⟩ n` (a
+transvection — invertible and symplectic). -/
 def plReflection (n v : ChargeLattice r) : ChargeLattice r :=
   v + (diracPairing v n) • n
 
-/-- **H3 — Picard–Lefschetz at the generic stratum.** At a generic component of `Δ` the deck
-monodromy acts on charges as the reflection in the **vanishing charge** `n` of H2 — so H3 shares
-the vanishing `n` with H2. (Skeleton: the family/local-system layer makes the deck action
-concrete.) -/
-def PicardLefschetzAtGenericStratum {B : CoulombBase r} (s : Sheet B) : Prop :=
-  ∀ u₀ ∈ closure s.V ∩ B.Δ, ∀ n : ChargeLattice r,
-    s.BecomesMasslessAt u₀ n → ∃ g : ChargeLattice r → ChargeLattice r, g = plReflection n
-
-/-- **H4 — the cover gluing / electric–magnetic duality.** Overlapping sheets differ by a charge
-map `g` preserving the Dirac pairing (= `Sp(2r,ℤ)`) under which the central charge is covariant;
-hence `|Z|` (mass) and the metric descend to the base. -/
+/-- **H4 — the cover gluing / electric–magnetic duality.** Overlapping sheets differ by a
+duality frame change `g`: a **ℤ-linear automorphism of the charge lattice** preserving the Dirac
+pairing (i.e. an element of `Sp(2r,ℤ)`), under which the central charge is covariant. Hence
+`|Z|` (mass) and the metric descend to the base. -/
 structure Deck {B : CoulombBase r} (s s' : Sheet B) where
-  g : ChargeLattice r → ChargeLattice r
+  g : ChargeLattice r ≃ₗ[ℤ] ChargeLattice r
   symplectic : ∀ n n', diracPairing (g n) (g n') = diracPairing n n'
   covariant : ∀ u ∈ s.V ∩ s'.V, ∀ n, s'.centralCharge u (g n) = s.centralCharge u n
 
@@ -199,9 +210,21 @@ theorem Deck.bpsMass_eq {B : CoulombBase r} {s s' : Sheet B} (D : Deck s s')
     s'.bpsMass u (D.g n) = s.bpsMass u n := by
   unfold Sheet.bpsMass; rw [D.covariant u hu n]
 
-/-- **H5 — R-symmetry.** A `ℤ_{2N}` action on the moduli preserving `Δ`. Skeleton predicate. -/
+/-- **H3 — Picard–Lefschetz at the generic stratum.** At a generic component of `Δ` the
+monodromy around it — realized as an *actual* deck transformation `D : Deck s s'` to an adjacent
+sheet — acts on the charge lattice as the reflection in the **vanishing charge** `n` of H2. This
+forces the reflection to be symplectic (it is) and the central charge to transform covariantly
+(a real constraint on the periods), unlike the vacuous `∃ g, g = plReflection n`. -/
+def PicardLefschetzAtGenericStratum {B : CoulombBase r} (s : Sheet B) : Prop :=
+  ∀ u₀ ∈ closure s.V ∩ B.Δ, ∀ n : ChargeLattice r, n ≠ 0 → s.BecomesMasslessAt u₀ n →
+    ∃ (s' : Sheet B) (D : Deck s s'), ⇑D.g = plReflection n
+
+/-- **H5 — R-symmetry.** A `ℤ_{2N}` action on the moduli: a bijection of **exact order `2N`**
+(not the identity) preserving `Δ` — the anomalous `U(1)_R → ℤ_{2N}` fixing the positions of the
+singularities. Order-exactly-`2N` rules out the vacuous `ω = id`. -/
 def RSymmetry (B : CoulombBase r) (N : ℕ) : Prop :=
-  ∃ ω : (Fin r → ℂ) → (Fin r → ℂ), (∀ u, ω^[2 * N] u = u) ∧ ω '' B.Δ = B.Δ
+  ∃ ω : (Fin r → ℂ) → (Fin r → ℂ), Function.Bijective ω ∧ ω^[2 * N] = id ∧
+    (∀ k, 0 < k → k < 2 * N → ω^[k] ≠ id) ∧ ω '' B.Δ = B.Δ
 
 /-! ## The N=2 `U(1)^{N-1}` effective theory, and the headline goals -/
 
@@ -234,13 +257,30 @@ theorem sw_effective_theory_unique_up_to_duality {B : CoulombBase r} (s s' : She
     Nonempty (Deck s s') := by
   sorry
 
-/-- **GOAL — existence.** The SW curve `y² = P_N² − Λ^{2N}`, via its period geometry, furnishes
-a sheet satisfying the six hypotheses. A goal to prove (the data is the periods of the curve —
-Phase 2); the `τ ∈ Siegel` half is already a theorem (`sw_coupling_mem_siegel`). -/
+/-- The monic degree-`N` polynomial with subleading coefficients the moduli `u` (the traceless
+`SU(N)` Casimirs): `X^N + ∑_{i<N-1} uᵢ Xⁱ`. -/
+noncomputable def swModuliPoly (N : ℕ) (u : Fin (N - 1) → ℂ) : Polynomial ℂ :=
+  Polynomial.X ^ N + ∑ i : Fin (N - 1), Polynomial.C (u i) * Polynomial.X ^ (i : ℕ)
+
+/-- The SW curve polynomial `swModuliPoly² − Λ^{2N}` at modulus `u`. -/
+noncomputable def swCurvePoly (N : ℕ) (Λ : ℂ) (u : Fin (N - 1) → ℂ) : Polynomial ℂ :=
+  swModuliPoly N u ^ 2 - Polynomial.C (Λ ^ (2 * N))
+
+/-- The modulus point of a polynomial `P` — its subleading coefficients. -/
+noncomputable def swModulus (N : ℕ) (P : Polynomial ℂ) : Fin (N - 1) → ℂ := fun i => P.coeff i
+
+/-- **GOAL — existence (tied to the curve `P`).** For the SW curve `y² = P² − Λ^{2N}` (smooth at
+`P`, by `hsf`), there is a Coulomb base whose **singular locus is exactly the discriminant locus
+of the curve family** `{u | ¬ Squarefree (swCurvePoly N Λ u)}`, and a sheet around `P`'s modulus
+satisfying the six hypotheses. A goal to prove (the data are the periods of the SW differential
+of this curve — Phase 2); the `τ ∈ Siegel` half is already a theorem (`sw_coupling_mem_siegel`). -/
 theorem sw_curve_admits_effective_theory {N : ℕ} (P : Polynomial ℂ) (Λ : ℂ)
     (hPdeg : P.natDegree = N) (hN : 2 ≤ N)
     (hsf : Squarefree (P ^ 2 - Polynomial.C (Λ ^ (2 * N)))) :
-    ∃ (B : CoulombBase (N - 1)) (s : Sheet B), IsSWEffectiveTheory s Λ N := by
+    ∃ (B : CoulombBase (N - 1)) (s : Sheet B),
+      IsSWEffectiveTheory s Λ N ∧
+      B.Δ = {u | ¬ Squarefree (swCurvePoly N Λ u)} ∧
+      swModulus N P ∈ s.V := by
   sorry
 
 end SeibergWitten.Physics
