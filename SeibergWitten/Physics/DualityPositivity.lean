@@ -43,29 +43,26 @@ theorem siegelOne_smul_im_pos (M : Sp2ℤ) (τ : SiegelUpperHalfSpace 1) :
   rw [siegelOneEquiv_smul]
   exact (M • siegelOneEquiv τ).2
 
-variable {Δ : Set (Fin 1 → ℂ)}
+variable {B : CoulombBase 1}
 
-/-- **H4′ — electric–magnetic duality, a physical refinement of H4 (`EMDualityConsistent`).**
-The values of the multivalued effective coupling are closed under the `Sp(2,ℤ) = SL(2,ℤ)`
-duality action: every duality frame-change of a coupling value is again realized as a coupling
-value on some sheet of the universal cover. This is the concrete content of "the monodromy is
-by electric–magnetic duality", stated directly on the data — more physical than the abstract
-`EMDualityConsistent`, which it is intended to imply. -/
-def H4'Duality (d : LowEnergyData 1 Δ) : Prop :=
-  ∀ (M : Sp2ℤ) (p : SmoothCover Δ), ∃ q : SmoothCover Δ, d.tau q = M • d.tau p
+/-- **H4′ — electric–magnetic duality, a physical refinement of H4.** On a rank-1 sheet the
+values of the multivalued coupling are closed under the `Sp(2,ℤ) = SL(2,ℤ)` duality action:
+every duality frame-change of a coupling value is again realized as a coupling value. The
+concrete content of "the monodromy is by electric–magnetic duality" (cf. the `Deck` gluing). -/
+def H4'Duality (s : Sheet B) : Prop :=
+  ∀ (M : Sp2ℤ) (u : Fin 1 → ℂ), ∃ u' : Fin 1 → ℂ, s.tau u' = M • s.tau u
 
 /-- **H4′ ⇒ positivity is monodromy-stable (the special-geometry consequence).** Assuming
-electric–magnetic duality (`H4'Duality`), every duality frame-change `M • τ(p)` of the
-coupling is realized by an actual sheet `q` of the cover, and that sheet carries a
-positive-definite special-Kähler metric (`Im τ ≻ 0`). So the no-ghost positivity holds on the
-whole duality orbit: although `τ` is multivalued, its metric is positive everywhere it is
-defined — a globally consistent positive metric on the Coulomb branch. (With
-`sw_metric_posDef`, which gives positivity at the base point, this closes the loop.) -/
-theorem metric_posDef_of_h4' (d : LowEnergyData 1 Δ) (h : H4'Duality d)
-    (M : Sp2ℤ) (p : SmoothCover Δ) :
-    ∃ q : SmoothCover Δ,
-      d.tau q = M • d.tau p ∧ ((d.tau q).val.map Complex.im).PosDef := by
-  obtain ⟨q, hq⟩ := h M p
-  exact ⟨q, hq, (d.tau q).imPosDef⟩
+electric–magnetic duality (`H4'Duality`), every duality frame-change `M • τ(u)` of the coupling
+is realized at some point `u'`, carrying a positive-definite special-Kähler metric
+(`Im τ ≻ 0`). So the no-ghost positivity holds on the whole duality orbit: although `τ` is
+multivalued across sheets, its metric is positive everywhere — a globally consistent positive
+metric on the Coulomb branch. -/
+theorem metric_posDef_of_h4' (s : Sheet B) (h : H4'Duality s)
+    (M : Sp2ℤ) (u : Fin 1 → ℂ) :
+    ∃ u' : Fin 1 → ℂ,
+      s.tau u' = M • s.tau u ∧ ((s.tau u').val.map Complex.im).PosDef := by
+  obtain ⟨u', hu'⟩ := h M u
+  exact ⟨u', hu', (s.tau u').imPosDef⟩
 
 end SeibergWitten.Physics
