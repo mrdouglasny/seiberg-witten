@@ -40,27 +40,24 @@ the inherited `AX_PeriodCycleBasis` — jacobian-challenge's hyperelliptic cycle
 axiom, **off the Buzzard critical path**. The axiom-free SU(2) route (Phase 1b) would
 remove it for genus 1.
 
-## Physics foundations — codified lore (`Physics/Hypotheses.lean`)
+## Physics foundations — hypotheses (`Physics/Hypotheses.lean`)
 
-These axiomatize the physical inputs (H1–H6 + carrier) that single out the SW curve. All are
-`(NOT VERIFIED)` skeleton placeholders pending the later-phase machinery that makes them
-precise. **The headline implications are not axioms**: uniqueness
-(`sw_effective_theory_unique_up_to_duality`) and existence (`sw_curve_admits_effective_theory`)
-are mathematical consequences of these inputs, so they are stated as `theorem … := sorry`
-*goals* (proved for SU(2) via `sw_su2_unique`; general rank open) and never enter the trusted
-base. Reviewed by Gemini (GR) 2026-06-24 — the cover/Liouville, Picard–Lefschetz, and
-R-symmetry items are from that review.
+After the strengthening refactor, the physical inputs **H0–H6 are no longer axioms**: they are
+*contentful predicates and structures* — `CoulombBase`, `Sheet`, `Sheet.SpecialGeometry` (H1),
+`Sheet.SingularitiesAreBPS`/`BecomesMasslessAt` (H2), `PicardLefschetzAtGenericStratum` (H3),
+`Deck` (H4), `RSymmetry` (H5), `Sheet.MatchesAsymptotics`/`Instantonic` (H6) — bundled in
+`IsSWEffectiveTheory` and **assumed as hypotheses** of the headline goals, so they never enter
+the trusted base. The headline implications `sw_effective_theory_unique_up_to_duality` and
+`sw_curve_admits_effective_theory` are `theorem … := sorry` **goals** (uniqueness proved for
+SU(2) via `sw_su2_unique`; general rank open); `coulombBranch_classical` (`dim ℂ^{N-1} = N−1`)
+is **proved**. The old opaque physics axioms (`SpecialGeometry`, `EMDualityConsistent`,
+`SmoothCover`, …) are **retired**.
 
-| Axiom | File:Line | Rating | Sources | Notes |
-|-------|-----------|--------|---------|-------|
-| `SmoothCover`, `SmoothCover.proj` | Hypotheses.lean | Placeholder | GR | Carrier: univ. cover of `ℂ^r∖Δ` (fixes Liouville triviality of global `τ`) |
-| `SpecialGeometry` | Hypotheses.lean | Placeholder | GR, LP | H1 holomorphy: `a_D=∂F/∂a`, `τ=∂²F/∂a²`, 1-loop exact. SW1 §2 |
-| `BecomesMasslessAt` | Hypotheses.lean | Placeholder | GR | `Z→0` limit at `Δ` (H2 building block) |
-| `PicardLefschetzAtGenericSingularities` | Hypotheses.lean | Placeholder | GR, LP | H3 monodromy class `v↦v+⟨v,nₐ⟩nₐ` on the *generic* stratum of `Δ`. SW1 §3 |
-| `EMDualityConsistent` | Hypotheses.lean | Placeholder | GR, LP | H4 `Sp(2r,ℤ)` monodromy. SW1 §3–4 |
-| `RSymmetryConsistent` | Hypotheses.lean | Placeholder | GR, LP | H5 `U(1)_R→ℤ_{2N}` fixes `Δ` positions. SW1 §4 |
-| `AsymptoticMatch` | Hypotheses.lean | Placeholder | GR, LP | H6 1-loop+instanton ≍ periods. SW1 §2,4 |
-| `DualityEquiv` | Hypotheses.lean | Placeholder | GR | `Sp(2r,ℤ)` frame-change equivalence |
+So the only remaining axioms are **mathematical**, not physical — the monodromy / modular /
+covering inputs below, plus `SameSWMonodromy`. Reviewed by Gemini (GR) 2026-06-24.
+
+| Axiom | File | Rating | Sources | Notes |
+|-------|------|--------|---------|-------|
 | `SameSWMonodromy` | SU2Rigidity.lean | Placeholder | SA | Same `Sp(2,ℤ)` monodromy of two SU(2) period maps; until monodromy layer (Phase 3/4) |
 | `AX_developing_map_rigidity` | SU2Rigidity.lean | Placeholder | SA, LP | **Classical-math axiom (lift uniqueness)**: given the `Γ(2)` covering, two same-monodromy developing maps agree up to a modular frame change. Consumes `AX_thrice_punctured_uniformization`; replaces the retired bespoke `AX_su2_modular_frame_alignment`. Forster (monodromy thm); SW1 §3–4 |
 | `localMonodromy`, `AX_picard_lefschetz_local` | Monodromy.lean | Placeholder | SA, LP | **Monodromy gap**: local monodromy of the family = Picard–Lefschetz transvection; needs family/local-system layer. SW1 §3 |
@@ -78,8 +75,7 @@ is **proved, standard-3**, and no bespoke placeholder remains. Discharging the c
 upstream (Schwarz reflection ⇒ Riemann mapping ⇒ the `Γ(2)` cover) and the lift-uniqueness
 step removes the math debt; the physics axiom `SameSWMonodromy` is irreducible.
 
-`SingularitiesAreBPS`, `diracPairing`, `ArgyresDouglasLocus`, and `IsSWEffectiveTheory`
-are *definitions/structures* (not axioms) — in particular Argyres–Douglas points are a
-*derived* notion (coalescence of mutually-non-local vanishing cycles), not a physical
-input. Per-result axiom sets are tracked in `formalization.yaml › main_results` and
-verified by `#print axioms`.
+All of `CoulombBase`, `Sheet`, the H1–H6 predicates above, `centralCharge`, `diracPairing`,
+`ArgyresDouglasLocus`, and `IsSWEffectiveTheory` are *definitions/structures* (not axioms) — in
+particular Argyres–Douglas points are a *derived* notion (coalescence of mutually-non-local
+vanishing cycles), not a physical input. Per-result axiom sets are tracked by `#print axioms`.
