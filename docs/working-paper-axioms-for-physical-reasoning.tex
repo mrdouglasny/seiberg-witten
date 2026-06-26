@@ -511,6 +511,23 @@ version was caught (adversarial review) asserting a single globally-constant $SL
 frame across a possibly-disconnected overlap, and quantifying over the U($N$) rather than SU($N$)
 family; both are corrected (\code{IsConnected} overlaps; monic trace-free $P$).
 
+\medskip
+\noindent\textbf{The mathematical input, stated plainly.} Collected, the headline's entire
+mathematical debt is \emph{one} classical object---the \textbf{variation of Hodge structure of the
+Seiberg--Witten curve family}: the periods $\oint \lambda_{SW}$ varying holomorphically over the
+moduli $u$, with their Picard--Fuchs equation and $Sp(2r,\mathbb{Z})$ Gauss--Manin monodromy. The
+B.2 axioms are not independent inputs; they are exactly its \textbf{genus-1 classical pieces}---the
+$\Gamma(2)$ uniformization $\mathbb{H}/\Gamma(2)\cong\mathbb{C}\setminus\{0,1\}$ and developing-map
+rigidity (the rank-1 period map and its monodromy/rigidity), the Picard--Lefschetz transvection,
+and two Jacobi $\theta$ identities---and B.3 packages the same object as a structure at all ranks.
+The fiber side already exists: the SW curve embeds in \code{jacobian-challenge}'s hyperelliptic
+type with genus 1 proved (\code{swEllipticData\_genus}, standard-3), and that library supplies the
+per-fiber periods, Riemann-bilinear positivity, Siegel/$\theta$. The single capability that
+remains---at \emph{every} rank---is the \textbf{variation}: that period integrals move
+holomorphically with a flat Gauss--Manin connection ($Sp$-monodromy), not yet formalized in Lean.
+The whole result reduces to that one capability: a few months at genus 1 (on the existing
+$\mathbb{H}$/modular/$\lambda$/$\theta$ machinery), a Mathlib-scale project for general SU($N$).
+
 \section*{Acknowledgments}
 This formalization and paper were developed with heavy use of Claude (Anthropic), and with
 Gemini (Google) and Codex (OpenAI) for cross-checking, second opinions, and review. I thank

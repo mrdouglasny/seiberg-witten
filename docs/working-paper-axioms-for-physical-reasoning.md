@@ -451,6 +451,21 @@ adversarially: a first version asserted a single globally-constant `SL(2,ℤ)` f
 overlap that can be disconnected (false under monodromy) and quantified over degree-`N` curves
 (the U(N), not SU(N), family); both are corrected (`IsConnected` overlaps; monic trace-free `P`).
 
+**The mathematical input, stated plainly.** Collected, the headline's entire mathematical debt is
+*one* classical object — the **variation of Hodge structure of the Seiberg–Witten curve family**:
+the periods `∮ λ_SW` varying holomorphically over the moduli `u`, with their Picard–Fuchs equation
+and `Sp(2r,ℤ)` Gauss–Manin monodromy. The B.2 axioms are not independent inputs; they are exactly
+its **genus-1 classical pieces** — the `Γ(2)` uniformization `ℍ/Γ(2) ≅ ℂ∖{0,1}` and developing-map
+rigidity (the rank-1 period map and its monodromy/rigidity), the Picard–Lefschetz transvection,
+and two Jacobi `θ` identities — and B.3 packages the same object as a structure at all ranks. The
+fiber side already exists: the SW curve embeds in `jacobian-challenge`'s hyperelliptic type with
+genus 1 proved (`swEllipticData_genus`, standard-3), and that library supplies the per-fiber
+periods, Riemann-bilinear positivity, Siegel/`θ`. The single capability that remains — at *every*
+rank — is the **variation**: that period integrals move holomorphically with a flat Gauss–Manin
+connection (`Sp`-monodromy), which is not yet formalized in Lean. The whole result reduces to that
+one capability: a few months at genus 1 (on the existing `ℍ`/modular/`λ`/`θ` machinery), a
+Mathlib-scale project for general SU(N).
+
 ## Acknowledgments
 
 This formalization and paper were developed with heavy use of Claude (Anthropic), and with
