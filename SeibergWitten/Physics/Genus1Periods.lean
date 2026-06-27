@@ -138,4 +138,36 @@ theorem swOmegaDerivIntegrand_continuousOn_segment (Λ u : ℂ) (a b : ℝ)
   have hpoly : ContinuousAt (fun s : ℝ => (-(2 * ((s : ℂ) ^ 2 - u)))) t := by fun_prop
   exact ((continuousAt_const.mul hcpow).mul hpoly).continuousWithinAt
 
+/-- **G2 — the period is holomorphic in the modulus (assembly).** Over a real contour `[a,b]` that
+stays off the branch cut on a neighbourhood `s` of `u₀` (`hmem`), with the `u`-derivative integrand
+dominated by an integrable `bound` (`hbd`), the period `u ↦ ∫_a^b (dx/y)` has the expected complex
+derivative `∫_a^b ∂/∂u (dx/y)` — differentiation under the integral sign. All hypotheses are
+discharged by the per-`x` helpers above through Mathlib's
+`hasDerivAt_integral_of_dominated_loc_of_deriv_le` (the same engine as `model_period_differentiable`).
+This is P1 for the genus-1 SW period along an off-cut contour; the remaining G2 piece is the
+integrable `√`-singularity when the contour ends at branch points. -/
+theorem swPeriodSeg_hasDerivAt (Λ : ℂ) (a b : ℝ) {u₀ : ℂ} {s : Set ℂ} (hs : s ∈ nhds u₀)
+    (hmem : ∀ u ∈ s, ∀ t ∈ Set.uIcc a b, swCurveValue Λ u (t : ℂ) ∈ Complex.slitPlane)
+    (bound : ℝ → ℝ) (hbound_int : IntervalIntegrable bound MeasureTheory.volume a b)
+    (hbd : ∀ t ∈ Set.uIoc a b, ∀ u ∈ s,
+      ‖(-(2 : ℂ)⁻¹) * (swCurveValue Λ u (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
+          (-(2 * ((t : ℂ) ^ 2 - u)))‖ ≤ bound t) :
+    HasDerivAt (fun u => ∫ t in a..b, swOmegaIntegrand Λ u (t : ℂ))
+      (∫ t in a..b, (-(2 : ℂ)⁻¹) * (swCurveValue Λ u₀ (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
+          (-(2 * ((t : ℂ) ^ 2 - u₀)))) u₀ := by
+  have hu₀ : u₀ ∈ s := mem_of_mem_nhds hs
+  refine (intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := fun (u : ℂ) (t : ℝ) => swOmegaIntegrand Λ u (t : ℂ))
+    (F' := fun (u : ℂ) (t : ℝ) => (-(2 : ℂ)⁻¹) * (swCurveValue Λ u (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
+        (-(2 * ((t : ℂ) ^ 2 - u)))) (bound := bound) hs ?_ ?_ ?_ ?_ hbound_int ?_).2
+  · exact Filter.eventually_of_mem hs fun u hu =>
+      ((swOmegaIntegrand_continuousOn_segment Λ u a b (hmem u hu)).mono
+        Set.uIoc_subset_uIcc).aestronglyMeasurable measurableSet_uIoc
+  · exact swOmegaIntegrand_intervalIntegrable Λ u₀ a b (hmem u₀ hu₀)
+  · exact ((swOmegaDerivIntegrand_continuousOn_segment Λ u₀ a b (hmem u₀ hu₀)).mono
+      Set.uIoc_subset_uIcc).aestronglyMeasurable measurableSet_uIoc
+  · exact MeasureTheory.ae_of_all _ fun t ht u hu => hbd t ht u hu
+  · exact MeasureTheory.ae_of_all _ fun t ht u hu =>
+      swOmegaIntegrand_hasDerivAt_modulus Λ (t : ℂ) u (hmem u hu t (Set.uIoc_subset_uIcc ht))
+
 end SeibergWitten.Physics
