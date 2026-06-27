@@ -48,18 +48,23 @@ After the strengthening refactor, the physical inputs **H0–H6 are no longer ax
 *contentful predicates and structures* — `CoulombBase`, `Sheet`, `Sheet.SpecialGeometry` (H1),
 `Sheet.SingularitiesAreBPS`/`BecomesMasslessAt` (H2), `PicardLefschetzAtGenericStratum` (H3),
 `Deck` (H4), `RSymmetry` (H5), `Sheet.MatchesAsymptotics`/`Instantonic` (H6) — bundled in
-`IsSWEffectiveTheory` and **assumed as hypotheses** of the headline goals, so they never enter
-the trusted base. The headline implications `sw_effective_theory_unique_up_to_duality` and
-`sw_curve_admits_effective_theory` are `theorem … := sorry` **goals** (uniqueness proved for
-SU(2) via `sw_su2_unique`; general rank open); `coulombBranch_classical` (`dim ℂ^{N-1} = N−1`)
-is **proved**. The old opaque physics axioms (`SpecialGeometry`, `EMDualityConsistent`,
-`SmoothCover`, …) are **retired**.
+`IsSWEffectiveTheory` and **assumed as hypotheses** of the headline theorems, so they never enter
+the trusted base. The headline implications `sw_effective_theory_unique_up_to_duality`,
+`sw_unique_up_to_duality`, and `sw_curve_admits_effective_theory` (`Physics/PeriodLayer.lean`) are
+now **proved theorems — no `sorry`** — resting on the physics postulates plus the single
+period-level math axiom `swPeriodLayer` (`#print axioms` = **standard-3 + `swPeriodLayer`**). The
+rank-1 uniqueness `SU2.sw_su2_unique` rests instead on the finer `B.2` covering/lift axioms +
+`SameSWMonodromy`. `coulombBranchDim` (`dim ℂ^{N-1} = N−1`) is **proved**. The old opaque physics
+axioms (`SpecialGeometry`, `EMDualityConsistent`, `SmoothCover`, …) are **retired**.
 
-So the only remaining axioms are **mathematical**, not physical — the monodromy / modular /
-covering inputs below, plus `SameSWMonodromy`. Reviewed by Gemini (GR) 2026-06-24.
+So the only remaining axioms are **mathematical**, not physical — the consolidated period axiom
+`swPeriodLayer`, and the finer monodromy / modular / covering inputs below (the genus-1 pieces of
+that period geometry, used by the rank-1 route). Reviewed by Gemini (GR) 2026-06-24; Codex (GR)
+2026-06-27.
 
 | Axiom | File | Rating | Sources | Notes |
 |-------|------|--------|---------|-------|
+| `swPeriodLayer` | PeriodLayer.lean | Placeholder | SA | **Consolidated period-level (Picard–Fuchs / Gauss–Manin) math axiom**: the SW period geometry exists (`SWPeriodLayer N Λ`). The single math input the general headline (`sw_effective_theory_unique_up_to_duality`, `sw_curve_admits_effective_theory`) rests on. Discharged when the period geometry is built (`audit/PERIOD_LAYER_SCOPING.md`; future `riemann-periods`). The `SWPeriodLayer` structure was GR/Codex-vetted (connectedness, trace-free `SU(N)` slice, `N≥2`). |
 | `SameSWMonodromy` | SU2Rigidity.lean | Placeholder | SA | Same `Sp(2,ℤ)` monodromy of two SU(2) period maps; until monodromy layer (Phase 3/4) |
 | `AX_developing_map_rigidity` | SU2Rigidity.lean | Placeholder | SA, LP | **Classical-math axiom (lift uniqueness)**: given the `Γ(2)` covering, two same-monodromy developing maps agree up to a modular frame change. Consumes `AX_thrice_punctured_uniformization`; replaces the retired bespoke `AX_su2_modular_frame_alignment`. Forster (monodromy thm); SW1 §3–4 |
 | `localMonodromy`, `AX_picard_lefschetz_local` | Monodromy.lean | Placeholder | SA, LP | **Monodromy gap**: local monodromy of the family = Picard–Lefschetz transvection; needs family/local-system layer. SW1 §3 |

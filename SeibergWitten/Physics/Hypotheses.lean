@@ -326,22 +326,11 @@ theorem coulombBranchDim (N : ℕ) :
     Module.finrank ℂ (Fin (N - 1) → ℂ) = N - 1 := by
   rw [Module.finrank_pi, Fintype.card_fin]
 
-/-- **GOAL — uniqueness up to duality** (period-map rigidity; *not* an axiom). Two SW effective
-theories over the same base are related by an `Sp(2r,ℤ)` duality `Deck`. A *consequence* of
-H1–H6, hence a goal to prove. **Proved for SU(2)** in `sw_su2_unique`; general rank open. -/
-theorem sw_effective_theory_unique_up_to_duality {B : CoulombBase r} (s s' : Sheet B)
-    {Λ : ℂ} {N : ℕ} (h : IsSWEffectiveTheory s Λ N) (h' : IsSWEffectiveTheory s' Λ N) :
-    Nonempty (Deck s s') := by
-  sorry
-
-/-- **GOAL — uniqueness up to duality, at the atlas level.** Any two SW atlases over the same
-base are related by `Sp(2r,ℤ)` duality wherever their charts overlap — the global form of
-uniqueness (the duality gluing, not a relation between two isolated sheets). A consequence of
-H1–H6; a goal to prove, with the SU(2) case `sw_su2_unique`. -/
-theorem sw_unique_up_to_duality {B : CoulombBase r} {Λ : ℂ} {N : ℕ} (A A' : SWAtlas B Λ N) :
-    ∀ i i', ((A.sheets i).V ∩ (A'.sheets i').V).Nonempty →
-      Nonempty (Deck (A.sheets i) (A'.sheets i')) := by
-  sorry
+/-! **Headline — uniqueness up to duality (sheet- and atlas-level).** A mathematical *consequence*
+of H1–H6, not an axiom. Stated and **proved** (no `sorry`) in `Physics/PeriodLayer.lean` as
+`sw_effective_theory_unique_up_to_duality` / `sw_unique_up_to_duality`, from the physics postulates
+plus the period-level math axiom `swPeriodLayer` (on a *connected* chart overlap). The rank-1 case
+is `SU2.sw_su2_unique`, resting only on the `B.2` covering/lift axioms + the monodromy input. -/
 
 /-- The monic degree-`N` polynomial with subleading coefficients the moduli `u` (the traceless
 `SU(N)` Casimirs): `X^N + ∑_{i<N-1} uᵢ Xⁱ`. -/
@@ -355,18 +344,10 @@ noncomputable def swCurvePoly (N : ℕ) (Λ : ℂ) (u : Fin (N - 1) → ℂ) : P
 /-- The modulus point of a polynomial `P` — its subleading coefficients. -/
 noncomputable def swModulus (N : ℕ) (P : Polynomial ℂ) : Fin (N - 1) → ℂ := fun i => P.coeff i
 
-/-- **GOAL — existence (tied to the curve `P`).** For the SW curve `y² = P² − Λ^{2N}` (smooth at
-`P`, by `hsf`), there is a Coulomb base whose **singular locus is exactly the discriminant locus
-of the curve family** `{u | ¬ Squarefree (swCurvePoly N Λ u)}`, and a sheet around `P`'s modulus
-satisfying the six hypotheses. A goal to prove (the data are the periods of the SW differential
-of this curve — Phase 2); the `τ ∈ Siegel` half is already a theorem (`sw_coupling_mem_siegel`). -/
-theorem sw_curve_admits_effective_theory {N : ℕ} (P : Polynomial ℂ) (Λ : ℂ)
-    (hPdeg : P.natDegree = N) (hN : 2 ≤ N)
-    (hsf : Squarefree (P ^ 2 - Polynomial.C (Λ ^ (2 * N)))) :
-    ∃ (B : CoulombBase (N - 1)) (s : Sheet B),
-      IsSWEffectiveTheory s Λ N ∧
-      B.Δ = {u | ¬ Squarefree (swCurvePoly N Λ u)} ∧
-      swModulus N P ∈ s.V := by
-  sorry
+/-! **Headline — existence (tied to the curve `P`).** That the SW curve `y² = P² − Λ^{2N}` realizes
+an effective theory whose singular locus is exactly the discriminant locus
+`{u | ¬ Squarefree (swCurvePoly N Λ u)}`. Stated and **proved** (no `sorry`) as
+`sw_curve_admits_effective_theory` in `Physics/PeriodLayer.lean`, from the physics postulates +
+`swPeriodLayer` (with `P` monic, degree `N`, trace-free — the `SU(N)` slice). -/
 
 end SeibergWitten.Physics
