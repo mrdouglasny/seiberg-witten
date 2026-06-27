@@ -248,7 +248,43 @@ over the moduli space. The covering rests in turn on the **Riemann mapping theor
 formalized in Isabelle/HOL), which we have scoped as upstream contributions. The point is that
 "is this physics right?" becomes a precise, prioritized list of theorems to build.
 
-## 8. Related work
+## 8. Prospects: deriving the physical assumptions
+
+The hypotheses of §4.1 are themselves *consequences* of the microscopic definition of N=2
+super-Yang–Mills, reached by physical arguments of varying rigor. Some of them are, on inspection,
+**theorems** — and formalizing those would push the assumed frontier one level deeper, deriving the
+parent N=2 structure from inputs more primitive than its own data. Three tiers.
+
+**Already within reach.** The **BPS bound** `M ≥ |Z|` is a positivity lemma about the
+centrally-extended N=2 algebra: a Hermitian combination of supercharges has a positive-semidefinite
+anticommutator matrix whose eigenvalues are `M ± |Z|`, the BPS (short-multiplet) case being its
+kernel. This is finite-dimensional linear algebra — Mathlib's positive-semidefinite API suffices —
+and it derives the core of H2 from the algebra alone, with no quantum field theory.
+**Dirac–Schwinger–Zwanziger quantization** splits into a theorem and a postulate: the
+electromagnetic field angular momentum of a dyon pair is the antisymmetric pairing
+`(q₁g₂ − q₂g₁)/4π` (an explicit `∫ x×(E×B)`), and requiring angular momentum to be quantized forces
+that pairing into `ℤ` — the integer symplectic structure of the charge lattice (H0), with the
+duality group `Sp(2r,ℤ)` (H4) its automorphisms preserving the central charge. The computation is
+formalizable; the quantization is one further named postulate, in the spirit of the others.
+
+**Formalizable, but needing infrastructure.** Special geometry (H1) follows from N=2 superspace
+invariance of the vector-multiplet action — formalizable once N=2 superspace is built; the one-loop
+exactness behind H6 rests on holomorphy and nonrenormalization (more tractable than the loop
+integral it constrains); the discrete R-symmetry (H5) is what the chiral anomaly leaves of `U(1)_R`,
+an index computation. Real, but substantial.
+
+**Beyond reach, for now.** That N=2 SYM *exists* as an interacting four-dimensional theory, with
+these multiplets and a BPS spectrum carried by genuine states, presupposes constructing the quantum
+field theory — the same barrier as the solution itself. The algebra is exactly what one gets to
+*assume*; its realization is what cannot yet be assumed away.
+
+The lesson mirrors the body. Just as the headline reduced to physics plus standard mathematics, the
+physics itself partly reduces: the BPS bound and the Dirac pairing are mathematics in disguise, and
+formalizing them would move the frontier from "assume special geometry, the BPS bound, and a
+symplectic lattice" to "assume the supersymmetry algebra and angular-momentum quantization." Each
+such step shrinks what must be taken on trust.
+
+## 9. Related work
 
 The assurance artifacts (correspondence index, fidelity review, numerical validation, axiom
 audit) follow the conventions of the author's own `formalization-assurance` project
@@ -257,7 +293,7 @@ mathematical contributions are framed for the Lean FRO's Tau Ceti library. The R
 Isabelle/HOL (Paulson); the Schwarz reflection principle and the SW solution appear
 unformalized before this work.
 
-## 9. Conclusion
+## 10. Conclusion
 
 A rigorous proof of the Seiberg–Witten solution lies beyond reach — it presupposes
 constructing the quantum field theory itself — yet the result is as certain as anything in
