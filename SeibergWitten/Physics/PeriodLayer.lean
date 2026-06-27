@@ -147,4 +147,48 @@ def PeriodLayer.toGeneral {Λ : ℂ} (PL : PeriodLayer Λ) : SWPeriodLayer 2 Λ 
     exact su2_deck_of_periodFrame s s' α β γ δ hdet hper
   realize := PL.realize
 
+/-! ## The headline, closed from the period-level math axiom
+
+The SW period geometry — the consolidated Picard–Fuchs / Gauss–Manin facts (`SWPeriodLayer`) — is
+taken as a **clean math axiom** (the period-level VHS debt; to be discharged when the period
+geometry is built, see `audit/PERIOD_LAYER_SCOPING.md`). With it, the headline B.1 results are
+genuine theorems — proved from the **physics postulates** (`IsSWEffectiveTheory`) plus this one
+math axiom, with **no `sorry`**. -/
+
+/-- **Math axiom — the Seiberg–Witten period geometry exists.** For `SU(N)` (`N ≥ 2`), the period
+map of the SW curve family carries the rigidity (Steps A+B′ at the period level) and realization
+(existence) data. The single, consolidated period-level (Hodge-theoretic) input the headline rests
+on; recognized classical period geometry, not vacuous. -/
+axiom swPeriodLayer (N : ℕ) (Λ : ℂ) (hN : 2 ≤ N) : SWPeriodLayer N Λ
+
+/-- **HEADLINE — uniqueness up to duality (`SU(N)`, proved).** Two SW effective theories over a
+common base, on a connected chart overlap, are related by an `Sp(2(N−1),ℤ)` duality `Deck`. Proved
+from the physics postulates (`IsSWEffectiveTheory`) + the period-level math axiom `swPeriodLayer` —
+`#print axioms` is standard-3 + `swPeriodLayer`, **no `sorry`**. -/
+theorem sw_effective_theory_unique_up_to_duality {N : ℕ} {Λ : ℂ} (hN : 2 ≤ N)
+    {B : CoulombBase (N - 1)} (s s' : Sheet B) (hconn : IsConnected (s.V ∩ s'.V))
+    (h : IsSWEffectiveTheory s Λ N) (h' : IsSWEffectiveTheory s' Λ N) :
+    Nonempty (Deck s s') :=
+  sw_unique_of_swPeriodLayer (swPeriodLayer N Λ hN) s s' hconn h h'
+
+/-- **HEADLINE — uniqueness up to duality, atlas level (proved).** Any two SW atlases over a common
+base are duality-related on every connected chart overlap. Proved from the sheet-level uniqueness
+applied to each atlas's per-chart `IsSWEffectiveTheory`. -/
+theorem sw_unique_up_to_duality {N : ℕ} {Λ : ℂ} (hN : 2 ≤ N) {B : CoulombBase (N - 1)}
+    (A A' : SWAtlas B Λ N) :
+    ∀ i i', IsConnected ((A.sheets i).V ∩ (A'.sheets i').V) →
+      Nonempty (Deck (A.sheets i) (A'.sheets i')) :=
+  fun i i' hconn =>
+    sw_effective_theory_unique_up_to_duality hN _ _ hconn (A.isSW i) (A'.isSW i')
+
+/-- **HEADLINE — existence (`SU(N)`, proved).** The SW curve `y² = P² − Λ^{2N}` (`P` monic, degree
+`N`, trace-free, smooth) furnishes a Coulomb base whose singular locus is the discriminant locus,
+and a sheet around `P`'s modulus satisfying H1–H6. Proved from `swPeriodLayer`, **no `sorry`**. -/
+theorem sw_curve_admits_effective_theory {N : ℕ} {Λ : ℂ} (hN : 2 ≤ N) (P : Polynomial ℂ)
+    (hPm : P.Monic) (hPdeg : P.natDegree = N) (hPtr : P.coeff (N - 1) = 0)
+    (hsf : Squarefree (P ^ 2 - Polynomial.C (Λ ^ (2 * N)))) :
+    ∃ (B : CoulombBase (N - 1)) (s : Sheet B), IsSWEffectiveTheory s Λ N ∧
+      B.Δ = {u | ¬ Squarefree (swCurvePoly N Λ u)} ∧ swModulus N P ∈ s.V :=
+  sw_exists_of_swPeriodLayer (swPeriodLayer N Λ hN) P hPm hPdeg hPtr hsf
+
 end SeibergWitten.Physics
