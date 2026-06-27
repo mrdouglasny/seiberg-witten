@@ -151,33 +151,47 @@ singularities; and matching to the one-loop-plus-instanton expansion at weak cou
 
 \subsection{What is assumed}
 
-The physical content is the six hypotheses \textbf{H0--H6}. Each is a named Lean \textbf{predicate
-or structure}, never a global axiom: a theorem that uses the physics carries their bundle
-\code{IsSWEffectiveTheory} as a \emph{hypothesis}, so the assumptions are written into its type and
-never enter the trusted base---more transparent than an axiom. In physics terms, with the Lean
-carrier:
+The physical content is six hypotheses \textbf{H0--H6}, each a named Lean \textbf{predicate or
+structure} (never a global axiom: a theorem that uses the physics carries their bundle
+\code{IsSWEffectiveTheory} as a \emph{hypothesis}, so the assumptions live in its type, not the
+trusted base). They are \textbf{not independent postulates}: every one is a \emph{specialization of}
+\textbf{N=2 supersymmetry}---the eight supercharges of the theory---together with the gauge data
+($SU(N)$, asymptotic freedom) and unitarity. We give each with its physical origin and Lean carrier:
 
 \begin{itemize}
-\item \textbf{H0 --- the carrier.} An N=2 $U(1)^{N-1}$ effective theory: a moduli base
-\code{CoulombBase} and a chart \code{Sheet} carrying the periods $a, a_D$ and coupling $\tau$,
-living on the universal cover of the moduli space minus its singular locus.
-\item \textbf{H1 --- special geometry.} A prepotential $F$ with $a_D = \partial F/\partial a$ and
-$\tau = \partial^2 F/\partial a^2$ (\code{Sheet.SpecialGeometry}).
-\item \textbf{H2 --- BPS singularities.} On the singular locus a BPS state becomes massless
-($Z_n \to 0$); the spectrum is massive off it (\code{Sheet.SingularitiesAreBPS}).
-\item \textbf{H3 --- Picard--Lefschetz monodromy.} Monodromy around a singularity is the symplectic
-transvection in the vanishing charge (\code{PicardLefschetzAtGenericStratum}).
-\item \textbf{H4 --- electric--magnetic duality.} Charts glue by $\Sp(2r,\Z)$ charge automorphisms
-that preserve the Dirac pairing and the central charge (\code{Deck}); sheets form a duality-glued
-atlas (\code{SWAtlas}).
-\item \textbf{H5 --- R-symmetry.} A discrete R-symmetry of exact order $2N$ on the moduli, fixing
+\item \textbf{H0 --- the carrier} (\emph{N=2 SUSY $+$ Coulomb-phase Higgsing}). A generic adjoint
+vev breaks $SU(N)\to U(1)^{N-1}$, leaving $r=N-1$ abelian N=2 vector multiplets; their special
+coordinates $a, a_D$, coupling $\tau$, and the charge lattice with its Dirac pairing are the data
+(\code{CoulombBase}/\code{Sheet}), on the universal cover of the moduli space minus its singularities.
+\item \textbf{H1 --- special geometry} (\emph{N=2 SUSY; unitarity}). Eight supercharges force the
+Coulomb branch to be rigid special K\"ahler: one holomorphic prepotential $F$ with
+$a_D = \partial F/\partial a$, $\tau = \partial^2 F/\partial a^2$; $\Imag\tau\succ 0$ is positivity
+of the gauge kinetic term, the no-ghost (unitarity) condition (\code{Sheet.SpecialGeometry}).
+\item \textbf{H2 --- BPS singularities} (\emph{the central-charge BPS bound}). The N=2 algebra
+carries a central charge $Z$; all states obey $M\ge|Z|$, saturated by BPS states. A singularity of
+the effective theory is a charged BPS state going massless, $Z_n\to 0$
+(\code{Sheet.SingularitiesAreBPS}).
+\item \textbf{H3 --- Picard--Lefschetz monodromy} (\emph{running induced by a light charged state}).
+Encircling a point where the BPS state of charge $n$ is massless, its one-loop logarithm produces
+exactly the symplectic Picard--Lefschetz transvection in $n$
+(\code{PicardLefschetzAtGenericStratum}).
+\item \textbf{H4 --- electric--magnetic duality} (\emph{Montonen--Olive / Seiberg--Witten duality}).
+The freedom in which charges count as ``electric'' is the symplectic group $\Sp(2r,\Z)$ preserving
+the Dirac pairing and the central charge; charts glue by it (\code{Deck}; sheets form a
+duality-glued \code{SWAtlas}).
+\item \textbf{H5 --- R-symmetry} (\emph{the anomalous $U(1)_R$}). The classical $U(1)_R$ is broken
+by instantons to a discrete subgroup, acting on the moduli (order $2N$ for $SU(N)$) and permuting
 the singular locus (\code{RSymmetry}).
-\item \textbf{H6 --- weak-coupling asymptotics.} The prepotential matches the one-loop term (over
-roots) plus the instanton expansion (\code{Sheet.MatchesAsymptotics}).
+\item \textbf{H6 --- weak-coupling asymptotics} (\emph{N=2 nonrenormalization $+$ asymptotic
+freedom}). The prepotential is \textbf{one-loop exact} in perturbation theory; the remainder is a
+sum of instanton corrections weighted by the dynamical scale $\Lambda^{2N}$
+(\code{Sheet.MatchesAsymptotics}).
 \end{itemize}
 
-Full Lean definitions are in Appendix A. One rank-1 monodromy input remains a named placeholder
-axiom (\code{SameSWMonodromy}, Appendix B); everything else physical is a hypothesis.
+The rank-1 monodromy input \code{SameSWMonodromy} (Appendix B) is itself a consequence of
+H2$+$H3---which BPS state is light where fixes the monodromy. Full Lean definitions are in
+Appendix A, which also discusses factoring these as one general N=2 special-geometry structure that
+\code{IsSWEffectiveTheory} specializes.
 
 \subsection{What is proved}
 
@@ -324,6 +338,20 @@ structures}, not opaque axioms: they are \emph{assumed as hypotheses} (bundled i
 \code{IsSWEffectiveTheory}) by the results that use them, so they never enter the trusted base.
 The carrier itself \emph{is} the data of an N=2 $U(1)^{N-1}$ EFT (H0). None of the following is
 an \code{axiom}.
+
+\paragraph{One principle, specialized.} The six are not independent postulates but facets of
+\textbf{N=2 supersymmetry} read off the Coulomb branch: SUSY fixes the special-K\"ahler prepotential
+(H1) and the central-charge BPS bound (H2); the BPS spectrum then dictates the monodromy (H3) and,
+with the symplectic charge lattice, electric--magnetic duality (H4); the chiral anomaly fixes the
+discrete R-symmetry (H5); and the N=2 nonrenormalization theorem fixes the weak-coupling form (H6).
+Only the \emph{gauge data}---the group $SU(N)$, its one-loop $\beta$-function coefficient (asymptotic
+freedom), and the dynamical scale $\Lambda$---is added to single out this theory. A natural refactor,
+flagged as future work, is to formalize that parent \textbf{once}: an abstract N=2 special-geometry /
+BPS Coulomb branch (special coordinates, charge lattice with Dirac pairing, central charge with the
+BPS bound, anomaly-discrete R-symmetry, nonrenormalized prepotential), with \code{IsSWEffectiveTheory}
+obtained as its specialization at $SU(N)$, $\Lambda$. The hypotheses below would then be \emph{derived
+projections} of one structure rather than seven siblings, and the matter and higher-rank theories
+would follow by changing only the gauge data.
 
 \begin{Verbatim}
 -- H0  carrier = the data of an N=2 U(1)^{N-1} EFT
