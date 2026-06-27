@@ -309,6 +309,44 @@ reflection principle}---general complex analysis, absent from Lean (RMT is forma
 Isabelle/HOL), which we have scoped as upstream contributions. The point is that ``is this
 physics right?'' becomes a precise, prioritized list of theorems to build.
 
+\section{Prospects: deriving the physical assumptions}
+
+The hypotheses of \S4.1 are themselves \emph{consequences} of the microscopic definition of N=2
+super-Yang--Mills, reached by physical arguments of varying rigor. Some of them are, on inspection,
+\textbf{theorems}---and formalizing those would push the assumed frontier one level deeper, deriving
+the parent N=2 structure from inputs more primitive than its own data. Three tiers.
+
+\paragraph{Already within reach.} The \textbf{BPS bound} $M \ge |Z|$ is a positivity lemma about the
+centrally-extended N=2 algebra: a Hermitian combination of supercharges has a positive-semidefinite
+anticommutator matrix whose eigenvalues are $M \pm |Z|$, the BPS (short-multiplet) case being its
+kernel. This is finite-dimensional linear algebra---Mathlib's positive-semidefinite API
+suffices---and it derives the core of H2 from the algebra alone, with no quantum field theory.
+\textbf{Dirac--Schwinger--Zwanziger quantization} splits into a theorem and a postulate: the
+electromagnetic field angular momentum of a dyon pair is the antisymmetric pairing
+$(q_1 g_2 - q_2 g_1)/4\pi$ (an explicit $\int \mathbf{x}\times(\mathbf{E}\times\mathbf{B})$), and
+requiring angular momentum to be quantized forces that pairing into $\Z$---the integer symplectic
+structure of the charge lattice (H0), with the duality group $\Sp(2r,\Z)$ (H4) its automorphisms
+preserving the central charge. The computation is formalizable; the quantization is one further
+named postulate, in the spirit of the others.
+
+\paragraph{Formalizable, but needing infrastructure.} Special geometry (H1) follows from N=2
+superspace invariance of the vector-multiplet action---formalizable once N=2 superspace is built;
+the one-loop exactness behind H6 rests on holomorphy and nonrenormalization (more tractable than the
+loop integral it constrains); the discrete R-symmetry (H5) is what the chiral anomaly leaves of
+$U(1)_R$, an index computation. Real, but substantial.
+
+\paragraph{Beyond reach, for now.} That N=2 SYM \emph{exists} as an interacting four-dimensional
+theory, with these multiplets and a BPS spectrum carried by genuine states, presupposes constructing
+the quantum field theory---the same barrier as the solution itself. The algebra is exactly what one
+gets to \emph{assume}; its realization is what cannot yet be assumed away.
+
+\medskip
+The lesson mirrors the body. Just as the headline reduced to physics plus standard mathematics, the
+physics itself partly reduces: the BPS bound and the Dirac pairing are mathematics in disguise, and
+formalizing them would move the frontier from ``assume special geometry, the BPS bound, and a
+symplectic lattice'' to ``assume the supersymmetry algebra and angular-momentum quantization.'' Each
+such step shrinks what must be taken on trust.
+
 \section{Related work}
 
 The assurance artifacts (correspondence index, fidelity review, numerical validation, axiom
