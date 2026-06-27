@@ -82,6 +82,16 @@ theorem swOmegaIntegrand_hasDerivAt_modulus (Λ x u₀ : ℂ)
       ((-(2 : ℂ)⁻¹) * (swCurveValue Λ u₀ x) ^ ((-(2 : ℂ)⁻¹) - 1) * (-(2 * (x ^ 2 - u₀)))) u₀ := by
   simpa only [swOmegaIntegrand] using (swCurveValue_hasDerivAt_modulus Λ x u₀).cpow_const h
 
+/-- **G2 integrability ingredient.** The `dx/y` integrand is continuous in the fibre coordinate at
+any point off the branch cut (`y² ∈ slitPlane`). Over a contour that stays off the cut this gives
+continuity ⇒ interval-integrability of the integrand and its `u`-derivative — the measurability /
+`IntervalIntegrable` hypotheses the dominated-derivative lemma needs. -/
+theorem swOmegaIntegrand_continuousAt_fibre (Λ u x₀ : ℂ)
+    (h : swCurveValue Λ u x₀ ∈ Complex.slitPlane) :
+    ContinuousAt (fun x => swOmegaIntegrand Λ u x) x₀ :=
+  (continuousAt_cpow_const h).comp
+    (swCurveValue_differentiable_fibre Λ u).continuous.continuousAt
+
 /-- **G2 domination integrand — the norm of `∂(dx/y)/∂u`.** `‖∂/∂u (y²)^(−1/2)‖ =
 ‖x²−u‖·‖y²‖^(−3/2)`. With `‖y²‖` bounded below off the branch cut and `‖x²−u‖` bounded above on a
 compact contour-neighbourhood, this is the integrable bound `hasDerivAt_integral_of_dominated_…`
