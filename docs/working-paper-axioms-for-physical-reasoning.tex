@@ -485,7 +485,7 @@ derived consequence \code{metric\_posDef\_of\_h4'}---electric--magnetic duality 
 special-K\"ahler metric positive along the whole monodromy orbit---are proved, standard-3.)
 
 \medskip
-\noindent\textbf{B.3 --- The period-level layer (a structure, not an axiom).} The monodromy input
+\noindent\textbf{B.3 --- The period-level layer (a structure; its existence is \S B.1's single axiom).} The monodromy input
 \code{SameSWMonodromy} is itself the conclusion of the \emph{periods} of the SW curve---their
 Picard--Fuchs equation and Gauss--Manin monodromy. We package that layer as a structure and prove
 the B.1 goals modulo it, for SU(2) and for general SU($N$):
@@ -511,7 +511,10 @@ theorem su2_deck_of_periodFrame (s s' : Sheet B) (α β γ δ : ℤ) (hdet : α*
 \end{Verbatim}
 
 \noindent So ``period frame $\Rightarrow$ duality equivalence'' is \emph{proved}; only the period
-frame (the layer's \code{rigidity}) is assumed, as honest math debt. Discharging the layer---the
+frame (the layer's \code{rigidity}) is assumed, as honest math debt. Taking the layer's
+\emph{existence} as the single axiom \code{swPeriodLayer} (\S B.1) discharges that hypothesis once,
+so the \textbf{named} headline theorems are closed, with \code{\#print axioms} $=$ standard-3 $+$
+\code{swPeriodLayer}. Discharging the layer---the
 period map $\oint \lambda_{SW}$, its Picard--Fuchs ODE and Gauss--Manin monodromy, the rigidity
 argument---is a few weeks at genus 1 (the elliptic case, where the $\lambda$/$\theta$ machinery
 already exists) and a Mathlib-scale variation-of-Hodge-structure project in general genus. A first

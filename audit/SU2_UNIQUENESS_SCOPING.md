@@ -1,9 +1,14 @@
 # Scoping: closing the SU(2) uniqueness goal (B.1) as a theorem
 
-*How to turn the rank-1 case of the headline `sw_effective_theory_unique_up_to_duality`
-(`Physics/Hypotheses.lean`, currently `theorem … := sorry`) into a real theorem, with **no new
-axiom** beyond the B.2 math debt already assumed. Companion to
+*How to turn the rank-1 case of the headline `sw_effective_theory_unique_up_to_duality` into a real
+theorem, with **no new axiom** beyond the B.2 math debt already assumed. Companion to
 [`COVERING_SCOPING.md`](COVERING_SCOPING.md) and the working paper §7.*
+
+> **STATUS (done).** The rank-1 case is **proved** as `SU2.sw_su2_unique` (footprint: standard-3 +
+> the B.2 covering/lift axioms + `SameSWMonodromy`, no period axiom). The general-`N` headline is
+> closed in `Physics/PeriodLayer.lean` from the consolidated `swPeriodLayer` axiom — the headline
+> theorems no longer live as `sorry`-goals in `Hypotheses.lean`. The plan below is retained as the
+> route to *discharging* `SameSWMonodromy` / the period layer.
 
 ## Target
 
