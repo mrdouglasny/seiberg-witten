@@ -64,8 +64,8 @@ covering inputs below, plus `SameSWMonodromy`. Reviewed by Gemini (GR) 2026-06-2
 | `AX_developing_map_rigidity` | SU2Rigidity.lean | Placeholder | SA, LP | **Classical-math axiom (lift uniqueness)**: given the `Γ(2)` covering, two same-monodromy developing maps agree up to a modular frame change. Consumes `AX_thrice_punctured_uniformization`; replaces the retired bespoke `AX_su2_modular_frame_alignment`. Forster (monodromy thm); SW1 §3–4 |
 | `localMonodromy`, `AX_picard_lefschetz_local` | Monodromy.lean | Placeholder | SA, LP | **Monodromy gap**: local monodromy of the family = Picard–Lefschetz transvection; needs family/local-system layer. SW1 §3 |
 | `AX_thrice_punctured_uniformization` | ModularLambda.lean | Placeholder | LP | **Classical analytic input**: modular `λ` realizes `ℍ` as universal cover of `ℂ∖{0,1}` (`Γ(2)` deck group); now realized by the concrete `modularLambdaFn`, and consumed by `sw_su2_unique` via `su2_frame_alignment` |
-| `AX_jacobi_quartic` (`θ₃⁴=θ₂⁴+θ₄⁴`) | ThetaLambda.lean | Placeholder | LP | Jacobi's quartic identity — concrete theta-series computation; bounded target |
-| `AX_theta3_ne_zero` (`θ₃≠0` on `ℍ`) | ThetaLambda.lean | Placeholder | LP | standard theta non-vanishing |
+| `AX_jacobi_quartic` (`θ₃⁴=θ₂⁴+θ₄⁴`) | ThetaLambda.lean | Likely correct | LP, CAS | Jacobi's quartic identity. **CAS-verified** (`audit/theta_identities_cas_check.py`): exact integer `q`-series identity to order 200 (`θ₃⁴` coeffs = `r₄(n)`, the four-square counts), numeric error `2.7e-14`. Lean proof = Sturm bound on `M₂(Γ(2))` (bound 1 ⇒ ~2 coeffs); needs the modular-forms dimension/Sturm infra (ModularForms roadmap) |
+| `AX_theta3_ne_zero` (`θ₃≠0` on `ℍ`) | ThetaLambda.lean | Likely correct | LP, CAS | Standard theta non-vanishing. **CAS-checked** non-vanishing on an `ℍ`-grid (`audit/theta_identities_cas_check.py`). Lean proof = Jacobi triple product (all factors `≠0`, `|q|<1`) or the form's divisor; not a symbolic-algebra check |
 
 **Phase 1b (SU(2) rigidity).** `SeibergWitten/Physics/SU2Rigidity.lean` proves the rank-1
 case of `sw_effective_theory_unique_up_to_duality` as a *theorem* (`sw_su2_unique`) modulo
