@@ -67,3 +67,14 @@ positivity), modulo the off-critical-path `AX_PeriodCycleBasis`. Plus the SU(2)
 (original SW) genus-1 specialization. Build wires `jacobian-challenge` as a Lake
 path dependency; see `BUILD.md`. Next: Phase 1b (axiom-free SU(2)) and Phase 2
 (special coordinates / prepotential).
+
+**Physics-foundations layer** (`SeibergWitten/Physics/`) — the project's foundations track: the SW
+physical hypotheses H0–H6 as contentful predicates (`IsSWEffectiveTheory`), with the **headline
+theorems proved** — uniqueness up to `Sp(2(N−1),ℤ)` duality (`sw_effective_theory_unique_up_to_duality`,
+atlas-level `sw_unique_up_to_duality`) and existence (`sw_curve_admits_effective_theory`), in
+`Physics/PeriodLayer.lean`. `#print axioms` of each = **standard-3 + one consolidated math axiom
+`swPeriodLayer`** (the period-level Picard–Fuchs / Gauss–Manin geometry), no `sorry`. SU(2)
+uniqueness (`SU2.sw_su2_unique`) is on the finer footprint (the `Γ(2)` covering/lift + `θ` axioms +
+`SameSWMonodromy`, no period axiom). The physics never enters the trusted base — it lives in the
+hypotheses. Full axiom list: `AXIOM_AUDIT.md`; the write-up:
+`docs/working-paper-axioms-for-physical-reasoning.pdf`.

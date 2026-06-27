@@ -426,7 +426,7 @@ which underlie everything and belong to neither list. (The physical refinement `
 and its derived consequence `metric_posDef_of_h4'` — that electric–magnetic duality keeps the
 special-Kähler metric positive along the whole monodromy orbit — are proved, standard-3.)
 
-**B.3 — The period-level layer (a structure, not an axiom).** The monodromy input `SameSWMonodromy`
+**B.3 — The period-level layer (a structure; its existence is §B.1's single axiom).** The monodromy input `SameSWMonodromy`
 is itself the conclusion of the *periods* of the SW curve — their Picard–Fuchs equation and
 Gauss–Manin monodromy. We package that layer as a structure and prove the B.1 goals modulo it,
 for SU(2) and for general SU(N):
@@ -452,7 +452,10 @@ theorem su2_deck_of_periodFrame (s s' : Sheet B) (α β γ δ : ℤ) (hdet : α 
 ```
 
 So "period frame ⇒ duality equivalence" is *proved*; only the period frame (the layer's
-`rigidity`) is assumed, as honest math debt. Discharging the layer — building the period map
+`rigidity`) is assumed, as honest math debt. Taking the layer's *existence* as the single axiom
+`swPeriodLayer` (§B.1) discharges that hypothesis once, so the **named** headline theorems
+(`sw_effective_theory_unique_up_to_duality`, `sw_curve_admits_effective_theory`) are closed, with
+`#print axioms` = standard-3 + `swPeriodLayer`. Discharging the layer — building the period map
 `∮ λ_SW`, its Picard–Fuchs ODE and Gauss–Manin monodromy, and the rigidity argument — is a few
 weeks at genus 1 (the elliptic case, where the `λ`/`θ` machinery already exists) and a
 Mathlib-scale variation-of-Hodge-structure project in general genus. The structure was reviewed
