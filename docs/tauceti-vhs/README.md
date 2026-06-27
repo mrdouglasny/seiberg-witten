@@ -48,7 +48,10 @@ Suggested home: `TauCeti/Geometry/Hodge/` (`…/Hodge/Structure.lean`, `…/Pola
 
 - **Weight-general, polarized, integral.** State pure Hodge structures for arbitrary weight `n`,
   on a finitely-generated `ℤ`-module (rational/real variants by base change). Do **not** hardcode
-  weight 1; weight 1 is the *example*, not the definition.
+  weight 1; weight 1 is the *example*, not the definition. (The `Targets.lean` signatures *sketch*
+  the `ℂ`-realization `V_ℂ` with its real structure `conj`; the full library carries the integral
+  lattice `V_ℤ`, and the polarization is the `ℂ`-extension of a real form — encoded there by the
+  conjugation-compatibility field `real`.)
 - **Period domains à la Griffiths.** The classifying space `D` of polarized Hodge structures of a
   fixed Hodge type is a homogeneous space `G_ℝ/V`, open in a flag variety; weight 1 recovers Siegel
   (`Sp(2g,ℝ)/U(g)`). Build `D` at general type; do not collapse to Siegel.
@@ -85,9 +88,12 @@ Suggested home: `TauCeti/Geometry/Hodge/` (`…/Hodge/Structure.lean`, `…/Pola
 - **L4 — Variations of Hodge structure.** Abstract VHS over a complex base (local system +
   filtration bundle + Griffiths transversality); the **period map** `B̃ → D` (holomorphic,
   horizontal) and **monodromy** `ρ : π₁(B) → G(ℤ)`.
-- **L5 — Rigidity & semisimplicity of monodromy** (the representation-theoretic facts provable at
-  this level): irreducible monodromy ⇒ scalar centralizer (Schur); the theorem of the fixed part
-  in its linear-algebraic form.
+- **L5 — Rigidity & semisimplicity.** Two tiers, kept distinct: (i) the **linear-algebraic engine**
+  — finite-dimensional Schur (irreducible representation ⇒ scalar commutant), the milestone stated
+  in `Targets.lean`; and (ii) the **genuine theorems** that invoke it — period-map rigidity and
+  Deligne's *theorem of the fixed part* / semisimplicity of monodromy — which require actual
+  *polarizable VHS* hypotheses (a real variation, not merely a form-preserving representation) and
+  are the deeper targets, not the Schur lemma itself.
 
 ## Relation to sibling roadmaps
 
