@@ -82,4 +82,15 @@ theorem swOmegaIntegrand_hasDerivAt_modulus (Λ x u₀ : ℂ)
       ((-(2 : ℂ)⁻¹) * (swCurveValue Λ u₀ x) ^ ((-(2 : ℂ)⁻¹) - 1) * (-(2 * (x ^ 2 - u₀)))) u₀ := by
   simpa only [swOmegaIntegrand] using (swCurveValue_hasDerivAt_modulus Λ x u₀).cpow_const h
 
+/-- **G2 domination integrand — the norm of `∂(dx/y)/∂u`.** `‖∂/∂u (y²)^(−1/2)‖ =
+‖x²−u‖·‖y²‖^(−3/2)`. With `‖y²‖` bounded below off the branch cut and `‖x²−u‖` bounded above on a
+compact contour-neighbourhood, this is the integrable bound `hasDerivAt_integral_of_dominated_…`
+consumes — the last ingredient before the period-integral holomorphy assembly. -/
+theorem swOmegaIntegrand_deriv_norm (Λ x u₀ : ℂ) :
+    ‖(-(2 : ℂ)⁻¹) * (swCurveValue Λ u₀ x) ^ ((-(2 : ℂ)⁻¹) - 1) * (-(2 * (x ^ 2 - u₀)))‖
+      = ‖x ^ 2 - u₀‖ * ‖swCurveValue Λ u₀ x‖ ^ (-(3 / 2) : ℝ) := by
+  rw [show ((-(2 : ℂ)⁻¹) - 1) = (((-(3 / 2) : ℝ)) : ℂ) by push_cast; ring]
+  simp only [norm_mul, norm_neg, norm_inv, Complex.norm_cpow_real, Complex.norm_ofNat]
+  ring
+
 end SeibergWitten.Physics
