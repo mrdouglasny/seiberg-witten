@@ -88,6 +88,11 @@ Suggested home: `TauCeti/Geometry/Hodge/` (`…/Hodge/Structure.lean`, `…/Pola
 - **L4 — Variations of Hodge structure.** Abstract VHS over a complex base (local system +
   filtration bundle + Griffiths transversality); the **period map** `B̃ → D` (holomorphic,
   horizontal) and **monodromy** `ρ : π₁(B) → G(ℤ)`.
+  *Mathlib interface:* model the **local system** as a functor from the fundamental groupoid
+  `CategoryTheory.FundamentalGroupoid B` to `Module ℤ` (equivalently, on a connected base, a
+  `π₁(B,b₀)`-representation on the fiber — Mathlib's `FundamentalGroup` / `MonoidHom`); the
+  filtration bundle and Griffiths transversality build on Mathlib's complex-manifold + connection
+  API. `Targets.lean` records only the monodromy-representation facet (`PolarizedMonodromyRepresentation`).
 - **L5 — Rigidity & semisimplicity.** Two tiers, kept distinct: (i) the **linear-algebraic engine**
   — finite-dimensional Schur (irreducible representation ⇒ scalar commutant), the milestone stated
   in `Targets.lean`; and (ii) the **genuine theorems** that invoke it — period-map rigidity and

@@ -74,6 +74,32 @@ example {n : ℤ} (hs : HodgeStructure H n) (pol : Polarization hs)
       (W' = ⨆ p, W' ⊓ hs.piece p) ∧ (∀ v ∈ W, ∀ w ∈ W', pol.Q v w = 0) :=
   sorry
 
+/-- **L2 — mixed Hodge structure (schematic).** A real structure `conj`, an increasing **weight
+filtration** `W_•` (defined over `ℝ` here via `conj`-stability; over `ℚ` in the full theory), and a
+decreasing **Hodge filtration** `F^•` on `V_ℂ`, such that `F` induces a pure weight-`k` Hodge
+structure on each graded `grᵂ_k = W_k / W_{k−1}`. The graded-purity is the crux (ℚ/ℂ + subquotient
+bookkeeping); recorded here via the subquotient type. The full version must pin the *induced*
+filtration/conjugation on `grᵂ_k` (not an arbitrary HS) — see README. -/
+structure MixedHodgeStructure (H : Type*) [AddCommGroup H] [Module ℂ H] [FiniteDimensional ℂ H] where
+  conj : H →ₛₗ[starRingEnd ℂ] H
+  conj_involutive : Function.Involutive conj
+  W : ℤ → Submodule ℂ H
+  W_monotone : Monotone W
+  W_conj : ∀ k, (W k).map conj = W k
+  F : ℤ → Submodule ℂ H
+  F_antitone : Antitone F
+  graded_pure : ∀ k,
+    Nonempty (HodgeStructure (↥(W k) ⧸ (W (k - 1)).submoduleOf (W k)) k)
+
+/-- **L2 milestone — strictness (Deligne).** A morphism of mixed Hodge structures is **strict** for
+the weight filtration: a `ℂ`-linear `f` compatible with `W`, `F`, `conj` satisfies
+`range f ⊓ W'_k = f(W_k)` (and likewise for `F`). -/
+example {H' : Type*} [AddCommGroup H'] [Module ℂ H'] [FiniteDimensional ℂ H']
+    (mhs : MixedHodgeStructure H) (mhs' : MixedHodgeStructure H') (f : H →ₗ[ℂ] H')
+    (_hW : ∀ k, (mhs.W k).map f ≤ mhs'.W k) (_hF : ∀ p, (mhs.F p).map f ≤ mhs'.F p)
+    (_hconj : ∀ v, f (mhs.conj v) = mhs'.conj (f v)) :
+    ∀ k, LinearMap.range f ⊓ mhs'.W k = (mhs.W k).map f := sorry
+
 /-- **L4 — the monodromy facet of a VHS.** The *full* L4 target is a variation of Hodge structure
 over a base `B`: a local system + a holomorphic Hodge-filtration bundle + Griffiths transversality
 (`∇F^p ⊆ F^{p−1}⊗Ω¹`), with monodromy landing in `G(ℤ)` — see README. This signature captures only
