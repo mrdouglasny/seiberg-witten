@@ -119,4 +119,23 @@ theorem swOmegaIntegrand_intervalIntegrable (Λ u : ℂ) (a b : ℝ)
     IntervalIntegrable (fun t : ℝ => swOmegaIntegrand Λ u (t : ℂ)) MeasureTheory.volume a b :=
   (swOmegaIntegrand_continuousOn_segment Λ u a b hmem).intervalIntegrable
 
+/-- **G2 assembly block — derivative-integrand continuity.** The `u`-derivative integrand
+`(−1/2)(y²)^(−3/2)(−2(x²−u))` is continuous along an off-cut contour — the `hF'_meas` source for
+the dominated-derivative lemma (the last measurability hypothesis of the period-holomorphy
+assembly). -/
+theorem swOmegaDerivIntegrand_continuousOn_segment (Λ u : ℂ) (a b : ℝ)
+    (hmem : ∀ t ∈ Set.uIcc a b, swCurveValue Λ u (t : ℂ) ∈ Complex.slitPlane) :
+    ContinuousOn (fun t : ℝ =>
+        (-(2 : ℂ)⁻¹) * (swCurveValue Λ u (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
+          (-(2 * ((t : ℂ) ^ 2 - u)))) (Set.uIcc a b) := by
+  intro t ht
+  have hsv : ContinuousAt (fun s : ℝ => swCurveValue Λ u (s : ℂ)) t :=
+    (swCurveValue_differentiable_fibre Λ u).continuous.continuousAt.comp
+      Complex.continuous_ofReal.continuousAt
+  have hcpow : ContinuousAt
+      (fun s : ℝ => (swCurveValue Λ u (s : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1)) t :=
+    hsv.cpow continuousAt_const (hmem t ht)
+  have hpoly : ContinuousAt (fun s : ℝ => (-(2 * ((s : ℂ) ^ 2 - u)))) t := by fun_prop
+  exact ((continuousAt_const.mul hcpow).mul hpoly).continuousWithinAt
+
 end SeibergWitten.Physics
