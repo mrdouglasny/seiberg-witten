@@ -272,4 +272,38 @@ theorem swPeriodSeg_differentiableAt (Λ : ℂ) (a b : ℝ) {u₀ : ℂ} {s : Se
     DifferentiableAt ℂ (swPeriodSeg Λ a b) u₀ :=
   (swPeriodSeg_hasDerivAt Λ a b hs hmem bound hbound_int hbd).differentiableAt
 
+/-- **G3 — the period's derivative is itself differentiable (second-derivative assembly).** The
+period's first-derivative function `u ↦ ∫_a^b ∂/∂u(dx/y)` has derivative `∫_a^b ∂²/∂u²(dx/y)` over
+an off-cut contour with a dominated second-derivative integrand — i.e. the period is twice
+holomorphic in `u`. Same dominated-derivative engine as `swPeriodSeg_hasDerivAt`, one level up,
+with hypotheses discharged by the `swOmega2Integrand_*` / `swOmegaDerivIntegrand_*` helpers and the
+explicit `swOmegaIntegrand_hasDeriv2_modulus`. Feeds the Picard–Fuchs ODE identity (G3). -/
+theorem swPeriodSeg_deriv_hasDerivAt (Λ : ℂ) (a b : ℝ) {u₀ : ℂ} {s : Set ℂ} (hs : s ∈ nhds u₀)
+    (hmem : ∀ u ∈ s, ∀ t ∈ Set.uIcc a b, swCurveValue Λ u (t : ℂ) ∈ Complex.slitPlane)
+    (bound : ℝ → ℝ) (hbound_int : IntervalIntegrable bound MeasureTheory.volume a b)
+    (hbd : ∀ t ∈ Set.uIoc a b, ∀ u ∈ s,
+      ‖3 * ((t : ℂ) ^ 2 - u) ^ 2 * (swCurveValue Λ u (t : ℂ)) ^ (-(5 : ℂ) / 2)
+        - (swCurveValue Λ u (t : ℂ)) ^ (-(3 : ℂ) / 2)‖ ≤ bound t) :
+    HasDerivAt
+      (fun u => ∫ t in a..b, (-(2 : ℂ)⁻¹) * (swCurveValue Λ u (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
+        (-(2 * ((t : ℂ) ^ 2 - u))))
+      (∫ t in a..b, 3 * ((t : ℂ) ^ 2 - u₀) ^ 2 * (swCurveValue Λ u₀ (t : ℂ)) ^ (-(5 : ℂ) / 2)
+        - (swCurveValue Λ u₀ (t : ℂ)) ^ (-(3 : ℂ) / 2)) u₀ := by
+  have hu₀ : u₀ ∈ s := mem_of_mem_nhds hs
+  refine (intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le
+    (F := fun (u : ℂ) (t : ℝ) => (-(2 : ℂ)⁻¹) * (swCurveValue Λ u (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
+      (-(2 * ((t : ℂ) ^ 2 - u))))
+    (F' := fun (u : ℂ) (t : ℝ) => 3 * ((t : ℂ) ^ 2 - u) ^ 2 *
+        (swCurveValue Λ u (t : ℂ)) ^ (-(5 : ℂ) / 2) - (swCurveValue Λ u (t : ℂ)) ^ (-(3 : ℂ) / 2))
+    (bound := bound) hs ?_ ?_ ?_ ?_ hbound_int ?_).2
+  · exact Filter.eventually_of_mem hs fun u hu =>
+      ((swOmegaDerivIntegrand_continuousOn_segment Λ u a b (hmem u hu)).mono
+        Set.uIoc_subset_uIcc).aestronglyMeasurable measurableSet_uIoc
+  · exact swOmegaDerivIntegrand_intervalIntegrable Λ u₀ a b (hmem u₀ hu₀)
+  · exact ((swOmega2Integrand_continuousOn_segment Λ u₀ a b (hmem u₀ hu₀)).mono
+      Set.uIoc_subset_uIcc).aestronglyMeasurable measurableSet_uIoc
+  · exact MeasureTheory.ae_of_all _ fun t ht u hu => hbd t ht u hu
+  · exact MeasureTheory.ae_of_all _ fun t ht u hu =>
+      swOmegaIntegrand_hasDeriv2_modulus Λ (t : ℂ) u (hmem u hu t (Set.uIoc_subset_uIcc ht))
+
 end SeibergWitten.Physics
