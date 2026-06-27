@@ -194,6 +194,34 @@ theorem swOmegaDerivIntegrand_intervalIntegrable (Λ u : ℂ) (a b : ℝ)
           (-(2 * ((t : ℂ) ^ 2 - u)))) MeasureTheory.volume a b :=
   (swOmegaDerivIntegrand_continuousOn_segment Λ u a b hmem).intervalIntegrable
 
+/-- **G3 assembly block — second-derivative-integrand continuity.** The integrand
+`3(x²−u)²(y²)^(−5/2) − (y²)^(−3/2)` is continuous along an off-cut contour — the `hF'_meas` source
+for the second-derivative assembly. -/
+theorem swOmega2Integrand_continuousOn_segment (Λ u : ℂ) (a b : ℝ)
+    (hmem : ∀ t ∈ Set.uIcc a b, swCurveValue Λ u (t : ℂ) ∈ Complex.slitPlane) :
+    ContinuousOn (fun t : ℝ =>
+        3 * ((t : ℂ) ^ 2 - u) ^ 2 * (swCurveValue Λ u (t : ℂ)) ^ (-(5 : ℂ) / 2)
+          - (swCurveValue Λ u (t : ℂ)) ^ (-(3 : ℂ) / 2)) (Set.uIcc a b) := by
+  intro t ht
+  have hsv : ContinuousAt (fun s : ℝ => swCurveValue Λ u (s : ℂ)) t :=
+    (swCurveValue_differentiable_fibre Λ u).continuous.continuousAt.comp
+      Complex.continuous_ofReal.continuousAt
+  have h5 : ContinuousAt (fun s : ℝ => (swCurveValue Λ u (s : ℂ)) ^ (-(5 : ℂ) / 2)) t :=
+    hsv.cpow continuousAt_const (hmem t ht)
+  have h3 : ContinuousAt (fun s : ℝ => (swCurveValue Λ u (s : ℂ)) ^ (-(3 : ℂ) / 2)) t :=
+    hsv.cpow continuousAt_const (hmem t ht)
+  have hpoly : ContinuousAt (fun s : ℝ => 3 * ((s : ℂ) ^ 2 - u) ^ 2) t := by fun_prop
+  exact ((hpoly.mul h5).sub h3).continuousWithinAt
+
+/-- **G3 assembly block — second-derivative-integrand integrability.** Hence it is
+interval-integrable on an off-cut contour (`hF_int` for the second-derivative assembly). -/
+theorem swOmega2Integrand_intervalIntegrable (Λ u : ℂ) (a b : ℝ)
+    (hmem : ∀ t ∈ Set.uIcc a b, swCurveValue Λ u (t : ℂ) ∈ Complex.slitPlane) :
+    IntervalIntegrable (fun t : ℝ =>
+        3 * ((t : ℂ) ^ 2 - u) ^ 2 * (swCurveValue Λ u (t : ℂ)) ^ (-(5 : ℂ) / 2)
+          - (swCurveValue Λ u (t : ℂ)) ^ (-(3 : ℂ) / 2)) MeasureTheory.volume a b :=
+  (swOmega2Integrand_continuousOn_segment Λ u a b hmem).intervalIntegrable
+
 /-- The genus-1 SW period over a real contour `[a,b]`: the holomorphic-differential period
 `∫_a^b dx/y` (`= ∂a/∂u` up to normalization). The named object the period layer's holomorphy,
 Picard–Fuchs (G3), and monodromy (G5) statements refer to. -/
