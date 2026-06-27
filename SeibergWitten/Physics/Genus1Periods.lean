@@ -55,6 +55,14 @@ theorem swCurveValue_hasDerivAt_modulus (Λ x u₀ : ℂ) :
   convert h2 using 1
   push_cast; ring
 
+/-- **G2 domination ingredient — the integrand norm.** `‖(y²)^(−1/2)‖ = ‖y²‖^(−1/2)` (real
+`rpow`), unconditionally. Lower-bounding `‖y²‖` away from `0` on a compact contour-neighbourhood
+then bounds the integrand, the integrable bound the dominated-derivative lemma needs for G2. -/
+theorem swOmegaIntegrand_norm (Λ u x : ℂ) :
+    ‖swOmegaIntegrand Λ u x‖ = ‖swCurveValue Λ u x‖ ^ (-(2⁻¹) : ℝ) := by
+  rw [swOmegaIntegrand, show (-(2 : ℂ)⁻¹) = (((-(2⁻¹) : ℝ)) : ℂ) by push_cast; ring]
+  exact Complex.norm_cpow_real _ _
+
 /-- **G2, per-`x` ingredient.** The `dx/y` integrand is holomorphic in the modulus `u` at any `u₀`
 where the fibre value `y²` lies off the branch cut of `(·)^(−1/2)` (the slit plane `ℂ ∖ (−∞,0]`) —
 the per-fibre-coordinate input to differentiating the period `∮` under the integral sign (the
