@@ -14,3 +14,4 @@ import SeibergWitten.Physics.SU2Uniqueness
 import SeibergWitten.Physics.PeriodLayer
 import SeibergWitten.Physics.SWFamily
 import SeibergWitten.Physics.PeriodVariationProbe
+import SeibergWitten.Physics.Genus1Periods
