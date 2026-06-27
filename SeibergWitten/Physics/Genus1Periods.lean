@@ -45,4 +45,13 @@ theorem swCurveValue_differentiable_fibre (Λ u : ℂ) :
     Differentiable ℂ (fun x => swCurveValue Λ u x) := by
   unfold swCurveValue; fun_prop
 
+/-- **G2, per-`x` ingredient.** The `dx/y` integrand is holomorphic in the modulus `u` at any `u₀`
+where the fibre value `y²` lies off the branch cut of `(·)^(−1/2)` (the slit plane `ℂ ∖ (−∞,0]`) —
+the per-fibre-coordinate input to differentiating the period `∮` under the integral sign (the
+remaining G2 work being the integrable `√`-singularity at the branch points). -/
+theorem swOmegaIntegrand_differentiableAt_modulus (Λ x u₀ : ℂ)
+    (h : swCurveValue Λ u₀ x ∈ Complex.slitPlane) :
+    DifferentiableAt ℂ (fun u => swOmegaIntegrand Λ u x) u₀ :=
+  ((swCurveValue_differentiable_modulus Λ x).differentiableAt).cpow_const h
+
 end SeibergWitten.Physics
