@@ -126,6 +126,18 @@ theorem swOmegaIntegrand_intervalIntegrable (Λ u : ℂ) (a b : ℝ)
     IntervalIntegrable (fun t : ℝ => swOmegaIntegrand Λ u (t : ℂ)) MeasureTheory.volume a b :=
   (swOmegaIntegrand_continuousOn_segment Λ u a b hmem).intervalIntegrable
 
+/-- **G3 ingredient — the integrand is twice `u`-differentiable.** The first `u`-derivative
+integrand `(−1/2)(y²)^(−3/2)(−2(x²−u))` is itself differentiable in `u` off the branch cut — so
+the period's second `u`-derivative exists (the input to the Picard–Fuchs derivation). -/
+theorem swOmegaDerivIntegrand_differentiableAt_modulus (Λ x u₀ : ℂ)
+    (h : swCurveValue Λ u₀ x ∈ Complex.slitPlane) :
+    DifferentiableAt ℂ
+      (fun u => (-(2 : ℂ)⁻¹) * (swCurveValue Λ u x) ^ ((-(2 : ℂ)⁻¹) - 1) *
+        (-(2 * (x ^ 2 - u)))) u₀ := by
+  apply DifferentiableAt.mul
+  · exact (((swCurveValue_differentiable_modulus Λ x).differentiableAt).cpow_const h).const_mul _
+  · fun_prop
+
 /-- **G2 assembly block — derivative-integrand continuity.** The `u`-derivative integrand
 `(−1/2)(y²)^(−3/2)(−2(x²−u))` is continuous along an off-cut contour — the `hF'_meas` source for
 the dominated-derivative lemma (the last measurability hypothesis of the period-holomorphy
