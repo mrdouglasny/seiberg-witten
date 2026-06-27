@@ -106,29 +106,41 @@ to the one-loop-plus-instanton expansion at weak coupling.
 
 ### 4.1 What is assumed
 
-The physical content is the six hypotheses **H0–H6**. Each is a named Lean **predicate or
-structure**, never a global axiom: a theorem that uses the physics carries their bundle
-`IsSWEffectiveTheory` as a *hypothesis*, so the assumptions are written into its type and never
-enter the trusted base — more transparent than an axiom. In physics terms, with the Lean carrier:
+The physical content is six hypotheses **H0–H6**, each a named Lean **predicate or structure**
+(never a global axiom: a theorem that uses the physics carries their bundle `IsSWEffectiveTheory`
+as a *hypothesis*, so the assumptions live in its type, not the trusted base). They are **not
+independent postulates**: every one is a *specialization of* **N=2 supersymmetry** — the eight
+supercharges of the theory — together with the gauge data (`SU(N)`, asymptotic freedom) and
+unitarity. We give each with its physical origin and its Lean carrier:
 
-- **H0 — the carrier.** An N=2 `U(1)^{N−1}` effective theory: a moduli base `CoulombBase` and a
-  chart `Sheet` carrying the periods `a, a_D` and coupling `τ`, living on the universal cover of
-  the moduli space minus its singular locus.
-- **H1 — special geometry.** A prepotential `F` with `a_D = ∂F/∂a` and `τ = ∂²F/∂a²`
+- **H0 — the carrier** (*N=2 SUSY + Coulomb-phase Higgsing*). A generic adjoint vev breaks
+  `SU(N) → U(1)^{N−1}`, leaving `r = N−1` abelian N=2 vector multiplets; their special coordinates
+  `a, a_D`, coupling `τ`, and the charge lattice with its Dirac pairing are the data
+  (`CoulombBase`/`Sheet`), on the universal cover of the moduli space minus its singular locus.
+- **H1 — special geometry** (*N=2 SUSY; unitarity*). Eight supercharges force the Coulomb branch to
+  be rigid special Kähler: one holomorphic prepotential `F` with `a_D = ∂F/∂a`, `τ = ∂²F/∂a²`;
+  `Im τ ≻ 0` is positivity of the gauge kinetic term — the no-ghost (unitarity) condition
   (`Sheet.SpecialGeometry`).
-- **H2 — BPS singularities.** On the singular locus a BPS state becomes massless (`Z_n → 0`); the
-  spectrum is massive off it (`Sheet.SingularitiesAreBPS`).
-- **H3 — Picard–Lefschetz monodromy.** Monodromy around a singularity is the symplectic
-  transvection in the vanishing charge (`PicardLefschetzAtGenericStratum`).
-- **H4 — electric–magnetic duality.** Charts glue by `Sp(2r,ℤ)` charge automorphisms that preserve
-  the Dirac pairing and the central charge (`Deck`); sheets form a duality-glued atlas (`SWAtlas`).
-- **H5 — R-symmetry.** A discrete R-symmetry of exact order `2N` on the moduli, fixing the singular
+- **H2 — BPS singularities** (*the central-charge BPS bound*). The N=2 algebra carries a central
+  charge `Z`; all states obey `M ≥ |Z|`, saturated by BPS states. A singularity of the effective
+  theory is a charged BPS state going massless, `Z_n → 0` (`Sheet.SingularitiesAreBPS`).
+- **H3 — Picard–Lefschetz monodromy** (*running induced by a light charged state*). Encircling a
+  point where the BPS state of charge `n` is massless, its one-loop logarithm produces exactly the
+  symplectic Picard–Lefschetz transvection in `n` (`PicardLefschetzAtGenericStratum`).
+- **H4 — electric–magnetic duality** (*Montonen–Olive / Seiberg–Witten duality*). The freedom in
+  which charges count as "electric" is the symplectic group `Sp(2r,ℤ)` preserving the Dirac pairing
+  and the central charge; charts glue by it (`Deck`; sheets form a duality-glued `SWAtlas`).
+- **H5 — R-symmetry** (*the anomalous `U(1)_R`*). The classical `U(1)_R` is broken by instantons to
+  a discrete subgroup, acting on the moduli (order `2N` for `SU(N)`) and permuting the singular
   locus (`RSymmetry`).
-- **H6 — weak-coupling asymptotics.** The prepotential matches the one-loop term (over roots) plus
-  the instanton expansion (`Sheet.MatchesAsymptotics`).
+- **H6 — weak-coupling asymptotics** (*N=2 nonrenormalization + asymptotic freedom*). The
+  prepotential is **one-loop exact** in perturbation theory; the remainder is a sum of instanton
+  corrections weighted by the dynamical scale `Λ^{2N}` (`Sheet.MatchesAsymptotics`).
 
-Full Lean definitions are in Appendix A. One rank-1 monodromy input remains a named placeholder
-axiom (`SameSWMonodromy`, Appendix B); everything else physical is a hypothesis.
+The rank-1 monodromy input `SameSWMonodromy` (Appendix B) is itself a consequence of H2+H3 — which
+BPS state is light where fixes the monodromy. Full Lean definitions are in Appendix A, which also
+discusses factoring these as one general N=2 special-geometry structure that `IsSWEffectiveTheory`
+specializes.
 
 ### 4.2 What is proved
 
@@ -263,6 +275,20 @@ structures**, not opaque axioms: they are *assumed as hypotheses* (bundled in
 carrier itself *is* the data of an N=2 `U(1)^{N-1}` EFT (H0): a base in gauge-invariant moduli,
 and sheets of the cover carrying the holomorphic special coordinates (`SiegelUpperHalfSpace`
 bundles `Im τ ≻ 0`). None of the following is an `axiom`.
+
+**One principle, specialized.** The six are not independent postulates but facets of **N=2
+supersymmetry** read off the Coulomb branch: SUSY fixes the special-Kähler prepotential (H1) and the
+central-charge BPS bound (H2); the BPS spectrum then dictates the monodromy (H3) and, with the
+symplectic charge lattice, electric–magnetic duality (H4); the chiral anomaly fixes the discrete
+R-symmetry (H5); and the N=2 nonrenormalization theorem fixes the weak-coupling form (H6). Only the
+*gauge data* — the group `SU(N)`, its one-loop β-function coefficient (asymptotic freedom), and the
+dynamical scale `Λ` — is added to single out this theory. A natural refactor, flagged as future
+work, is to formalize that parent **once**: an abstract N=2 special-geometry / BPS Coulomb branch
+(special coordinates, charge lattice with Dirac pairing, central charge with the BPS bound,
+anomaly-discrete R-symmetry, nonrenormalized prepotential), with `IsSWEffectiveTheory` obtained as
+its specialization at `SU(N)`, `Λ`. The hypotheses below would then be *derived projections* of one
+structure rather than seven siblings, and the matter and higher-rank theories would follow by
+changing only the gauge data.
 
 ```lean
 -- H0  carrier = the data of an N=2 U(1)^{N-1} EFT
