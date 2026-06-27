@@ -170,4 +170,15 @@ theorem swPeriodSeg_hasDerivAt (Λ : ℂ) (a b : ℝ) {u₀ : ℂ} {s : Set ℂ}
   · exact MeasureTheory.ae_of_all _ fun t ht u hu =>
       swOmegaIntegrand_hasDerivAt_modulus Λ (t : ℂ) u (hmem u hu t (Set.uIoc_subset_uIcc ht))
 
+/-- **G2 — the off-cut period is holomorphic in the modulus** (`DifferentiableAt` packaging of
+`swPeriodSeg_hasDerivAt`). -/
+theorem swPeriodSeg_differentiableAt (Λ : ℂ) (a b : ℝ) {u₀ : ℂ} {s : Set ℂ} (hs : s ∈ nhds u₀)
+    (hmem : ∀ u ∈ s, ∀ t ∈ Set.uIcc a b, swCurveValue Λ u (t : ℂ) ∈ Complex.slitPlane)
+    (bound : ℝ → ℝ) (hbound_int : IntervalIntegrable bound MeasureTheory.volume a b)
+    (hbd : ∀ t ∈ Set.uIoc a b, ∀ u ∈ s,
+      ‖(-(2 : ℂ)⁻¹) * (swCurveValue Λ u (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
+          (-(2 * ((t : ℂ) ^ 2 - u)))‖ ≤ bound t) :
+    DifferentiableAt ℂ (fun u => ∫ t in a..b, swOmegaIntegrand Λ u (t : ℂ)) u₀ :=
+  (swPeriodSeg_hasDerivAt Λ a b hs hmem bound hbound_int hbd).differentiableAt
+
 end SeibergWitten.Physics

@@ -35,12 +35,14 @@ So genus 1 is *analysis + the existing modular layer*, not new infrastructure.
   `a'(u) ∝ ∮ swOmegaIntegrand` (the holomorphic-differential period). Model the A-cycle concretely
   as the segment between two branch points (a real interval with `u`-dependent endpoints), the
   B-cycle as the complementary contour.
-- **G2 — holomorphy (P1).** `a, a_D` holomorphic on `U = ℂ ∖ {±Λ²}`. **New work:** extend the probe
-  from the bounded model to (i) the `cpow` integrand `(…)^(−1/2)` (holomorphic in `u` off the
-  branch cut — `Complex.differentiableAt_cpow` + chain rule, a per-`x` fact), and (ii) the
-  *integrable* `√`-singularity at the branch-point endpoints + the moving endpoints (a substitution
-  fixes the contour). Same lemma (`hasDerivAt_integral_of_dominated_loc_of_deriv_le`); the friction
-  is the domination across the singularity.
+- **G2 — holomorphy (P1).** `a, a_D` holomorphic on `U = ℂ ∖ {±Λ²}`. **DONE for off-cut contours**
+  (`Genus1Periods.lean`, standard-3): `swPeriodSeg_hasDerivAt` / `swPeriodSeg_differentiableAt` —
+  the period `u ↦ ∫_a^b (dx/y)` over a contour off the branch cut has the explicit derivative
+  `∫_a^b ∂/∂u(dx/y)`, via `hasDerivAt_integral_of_dominated_loc_of_deriv_le`, with every hypothesis
+  discharged by per-`x` helpers (`…_differentiableAt_modulus`, `…_hasDerivAt_modulus`, `…_norm`,
+  `…_deriv_norm`, `…_continuousOn_segment`, `…DerivIntegrand_continuousOn_segment`). **Remaining:**
+  the *integrable* `√`-singularity at the branch-point endpoints of a full A-cycle + the moving
+  endpoints (a substitution fixes the contour) — the domination across the singularity.
 - **G3 — Picard–Fuchs (P2).** The SU(2) periods satisfy an explicit 2nd-order ODE in `u` (regular
   singular points at `±Λ², ∞`). Target: exhibit `p, q` and verify
   `a'' + p a' + q a = 0` (and same for `a_D`) by differentiating under the integral (G2's
