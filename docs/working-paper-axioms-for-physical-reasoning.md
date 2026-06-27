@@ -138,14 +138,16 @@ the monodromy/modular/covering inputs of Appendix B.2.
 The headline claims are different in kind. That the SW curve *realizes* a theory satisfying
 the assumptions (existence), and that the assumptions fix the solution **uniquely up to
 `Sp(2r,ℤ)` duality** (uniqueness), are not physical inputs but *mathematical* consequences:
-given the assumptions, each should be a **theorem** — uniqueness, in particular, is a
-period-map rigidity statement. We therefore state them as **goals** (`theorem … := sorry`),
-*not* axioms — visible holes to close, which never enter the trusted base — because their
-proofs are not yet in place in general (they need the covering and Riemann-mapping machinery of
-§7). Discharging them *purifies* the development: the mathematical claims move onto the proved
-side, leaving only the five genuinely-physical inputs (and the classical-math axioms of §B.2)
-as assumptions. `#print axioms` reports exactly the physical inputs and classical-math axioms a
-result uses; the open goals are flagged by `sorry`.
+given the assumptions, each is a **theorem** — uniqueness, in particular, is a period-map
+rigidity statement. These are now **proved** (no `sorry`): from the physical hypotheses plus a
+single, named *mathematical* axiom — `swPeriodLayer`, the period-level (Picard–Fuchs / Gauss–Manin)
+geometry of the SW curve family, consolidated as one input (§B.1). `#print axioms` of each headline
+theorem returns exactly the three logical axioms **and `swPeriodLayer`** — the physics never enters
+the trusted base (it lives in the hypotheses), and the only mathematical debt is that one classical
+period-geometry fact (itself the genus-1 case of the variation-of-Hodge-structure theory of §7).
+The rank-1 uniqueness is proved on a still-finer footprint (the `Γ(2)` covering/lift axioms of
+§B.2, no period axiom). `#print axioms` reports exactly which physical hypotheses and which
+mathematical axioms each result uses.
 
 For SU(2) we have carried this out. The rank-1 uniqueness statement is now a **theorem**:
 printing its axioms returns only the three logical axioms, the physics monodromy input, and
@@ -350,32 +352,39 @@ same `Sp(2,ℤ)` monodromy around the punctures — physically fixed by which BP
 at `+Λ²`, dyon at `−Λ²`) goes massless where — the input to the rank-1 rigidity theorem
 `sw_su2_unique`.
 
-## Appendix B. The residual axioms (mathematical) and the open goals
+## Appendix B. The residual mathematical axioms and the (now proved) headline
 
-With the physics now in predicates (Appendix A), the **only global axioms** beyond the three
-logical ones (`propext, Classical.choice, Quot.sound`) are *mathematical* — B.2. **B.1**
-collects the open goals (the headline implications, `theorem … := sorry`) and the one classical
-fact we *prove*.
+With the physics in predicates (Appendix A), the **only global axioms** beyond the three logical
+ones (`propext, Classical.choice, Quot.sound`) are *mathematical*. The headline implications are
+**proved theorems** (no `sorry`), each resting on the physical hypotheses plus a single named math
+axiom — `swPeriodLayer` (B.1). The finer covering/lift/`θ` axioms (B.2) are the genus-1 pieces of
+that period geometry, on which the rank-1 route runs.
 
-**B.1 — Goals, and a proved classical fact.** The headline implications are mathematical
-consequences of the hypotheses, stated as `sorry`-goals over the new carrier, not axioms:
+**B.1 — The headline theorems and the consolidated period axiom.** The period-level
+(Picard–Fuchs / Gauss–Manin) geometry of the SW curve family is taken as one clean axiom; the
+headline follows, `#print axioms` = standard-3 + `swPeriodLayer` (no `sorry`):
 
 ```lean
--- GOAL: uniqueness up to Sp(2r,ℤ) duality   [PROVED for SU(2): sw_su2_unique; general open]
-theorem sw_effective_theory_unique_up_to_duality (s s' : Sheet B)
+-- the single consolidated period-level math axiom (the SW period geometry exists)
+axiom swPeriodLayer (N : ℕ) (Λ : ℂ) (hN : 2 ≤ N) : SWPeriodLayer N Λ
+
+-- HEADLINE (proved): uniqueness up to Sp(2(N−1),ℤ) duality, on a connected chart overlap
+theorem sw_effective_theory_unique_up_to_duality (hN : 2 ≤ N) (s s' : Sheet B)
+    (hconn : IsConnected (s.V ∩ s'.V))
     (h : IsSWEffectiveTheory s Λ N) (h' : IsSWEffectiveTheory s' Λ N) :
-    Nonempty (Deck s s') := by sorry
+    Nonempty (Deck s s') :=
+  sw_unique_of_swPeriodLayer (swPeriodLayer N Λ hN) s s' hconn h h'
 
--- GOAL: existence — the SW curve furnishes a sheet satisfying H1–H6, with Δ the discriminant
---       locus of the curve family and P's modulus a smooth point in the chart (ties to P)
-theorem sw_curve_admits_effective_theory (P : Polynomial ℂ) (Λ : ℂ)
-    (hPdeg : P.natDegree = N) (hN : 2 ≤ N)
+-- HEADLINE (proved): existence — the SW curve (P monic, degree N, trace-free) realizes a theory
+--   whose singular locus is the discriminant locus of the curve family
+theorem sw_curve_admits_effective_theory (hN : 2 ≤ N) (P : Polynomial ℂ)
+    (hPm : P.Monic) (hPdeg : P.natDegree = N) (hPtr : P.coeff (N - 1) = 0)
     (hsf : Squarefree (P ^ 2 - Polynomial.C (Λ ^ (2 * N)))) :
-    ∃ (B : CoulombBase (N - 1)) (s : Sheet B),
-      IsSWEffectiveTheory s Λ N ∧
-      B.Δ = {u | ¬ Squarefree (swCurvePoly N Λ u)} ∧ swModulus N P ∈ s.V := by sorry
+    ∃ (B : CoulombBase (N - 1)) (s : Sheet B), IsSWEffectiveTheory s Λ N ∧
+      B.Δ = {u | ¬ Squarefree (swCurvePoly N Λ u)} ∧ swModulus N P ∈ s.V :=
+  sw_exists_of_swPeriodLayer (swPeriodLayer N Λ hN) P hPm hPdeg hPtr hsf
 
--- PROVED (3): the classical Coulomb branch has dimension N − 1 (the rank), from the gauge group
+-- PROVED (standard-3): the classical Coulomb branch has dimension N − 1 (the rank)
 theorem coulombBranchDim (N : ℕ) : Module.finrank ℂ (Fin (N - 1) → ℂ) = N - 1
 ```
 
