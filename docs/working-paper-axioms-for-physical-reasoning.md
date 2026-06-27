@@ -125,64 +125,33 @@ prose here.)
 
 ### 4.2 What is assumed
 
-The physical assumptions (H0–H6) are stated as named **predicates and structures** in one
-module — the carrier `CoulombBase`/`Sheet` (an N=2 `U(1)^{N-1}` EFT) and the hypotheses
-`SpecialGeometry`, `SingularitiesAreBPS`, `PicardLefschetzAtGenericStratum`, `Deck`,
-`RSymmetry`, `MatchesAsymptotics`, bundled in `IsSWEffectiveTheory` (Appendix A). They are the
-irreducible physics — there is nothing to prove about them — but they are *not global axioms*:
-a result that uses the physics takes `IsSWEffectiveTheory` as a **hypothesis**, so the
-dependence is explicit in its signature, even more transparent than an axiom and never entering
-the trusted base. The only global axioms (besides the three logical ones) are *mathematical* —
-the monodromy/modular/covering inputs of Appendix B.2.
+The physical content — the six hypotheses H0–H6 — enters as named **predicates and structures**,
+not as global axioms. The carrier is an N=2 `U(1)^{N−1}` effective theory; the hypotheses (special
+geometry, BPS singularities, the Picard–Lefschetz monodromy, electric–magnetic duality,
+R-symmetry, the weak-coupling asymptotics) are bundled into one predicate, `IsSWEffectiveTheory`
+(Appendix A). They are the irreducible physics — there is nothing to prove about them — but a
+result that uses them takes `IsSWEffectiveTheory` as a *hypothesis*, so its physical assumptions
+are visible in its statement and never enter the trusted base. That is even more transparent than
+an axiom: the dependence is written into the theorem's type.
 
-The headline claims are different in kind. That the SW curve *realizes* a theory satisfying
-the assumptions (existence), and that the assumptions fix the solution **uniquely up to
-`Sp(2r,ℤ)` duality** (uniqueness), are not physical inputs but *mathematical* consequences:
-given the assumptions, each is a **theorem** — uniqueness, in particular, is a period-map
-rigidity statement. These are now **proved** (no `sorry`): from the physical hypotheses plus a
-single, named *mathematical* axiom — `swPeriodLayer`, the period-level (Picard–Fuchs / Gauss–Manin)
-geometry of the SW curve family, consolidated as one input (§B.1). `#print axioms` of each headline
-theorem returns exactly the three logical axioms **and `swPeriodLayer`** — the physics never enters
-the trusted base (it lives in the hypotheses), and the only mathematical debt is that one classical
-period-geometry fact (itself the genus-1 case of the variation-of-Hodge-structure theory of §7).
-The rank-1 uniqueness is proved on a still-finer footprint (the `Γ(2)` covering/lift axioms of
-§B.2, no period axiom). `#print axioms` reports exactly which physical hypotheses and which
-mathematical axioms each result uses.
+The headline claims are different in kind. That the Seiberg–Witten curve *realizes* such a theory
+(existence), and that the hypotheses fix it **uniquely up to `Sp(2r,ℤ)` electric–magnetic duality**
+(uniqueness), are not physical inputs but mathematical consequences — uniqueness, in particular, is
+a period-map rigidity statement. Both are now **proved theorems**, with no gaps. Beyond the physics
+hypotheses, each rests on a *single* named mathematical input: the **period geometry of the curve
+family** — how the periods of the Seiberg–Witten differential vary over the space of vacua, the
+classical *variation of Hodge structure* of the family. That one input aside, the proofs are
+complete.
 
-For SU(2) we have carried this out. The rank-1 uniqueness statement is now a **theorem**:
-printing its axioms returns only the three logical axioms, the physics monodromy input, and
-two named **classical-math** axioms — the modular-`λ` covering `ℍ/Γ(2) ≅ ℂ∖{0,1}` and the
-uniqueness of its developing maps — with **no bespoke placeholder**. The two tiers are now
-explicit in the proof itself: the physics axiom is irreducible, while the two math axioms are
-debt, discharged once the (Mathlib-scale) complex analysis of §7 lands. This is the
-purification in miniature — the headline reduced to *physics + standard mathematics*, with the
-machine confirming nothing else slipped in. Concretely, the audit artifact is:
-
-```lean
-#print axioms sw_su2_unique
--- 'sw_su2_unique' depends on axioms:
---   [propext, Classical.choice, Quot.sound,          -- logic
---    AX_thrice_punctured_uniformization,             -- classical math (Γ(2) covering)
---    AX_developing_map_rigidity,                      -- classical math (lift uniqueness)
---    SameSWMonodromy]                                 -- physics (the SW monodromy)
-```
-
-— the entire dependency of the result, in five lines, separated into logic, math debt, and the
-one physical input.
-
-We have since pushed this further. The "physics monodromy input" is itself the conclusion of a
-*period-level* layer (the periods of the Seiberg–Witten curve, their Picard–Fuchs equation and
-Gauss–Manin monodromy). We package exactly that layer as a Lean **structure** —
-`PeriodLayer`/`SWPeriodLayer` (Appendix B.3) — and prove the SU(2) **and** general SU(N) headline
-goals (uniqueness *and* existence) *modulo* it. Two points matter for the discipline. First, the
-layer is a *hypothesis*, not a global axiom, so the proved theorems remain standard-3: the
-period-level debt is explicit in each signature, exactly as the physics is. Second, the rank-1
-uniqueness now routes through a genuinely **axiom-free** lemma, `su2_deck_of_periodFrame` (an
-`SL(2,ℤ)` period frame builds the duality gluing, with the central-charge covariance proved from
-`det = 1`) — so "period frame ⇒ duality equivalence" is *proved*, and only the period frame
-itself is assumed. The structure was adversarially reviewed (an external model flagged a false
-"globally constant frame" claim across disconnected chart overlaps, and a U(N)-vs-SU(N) dimension
-slip; both are fixed — connected overlaps, trace-free curves).
+The point of the discipline is that the proof assistant *reports exactly what each result depends
+on*. For the general SU(N) headline that dependence is the background logical axioms plus the one
+period-geometry input — nothing else. For SU(2) we have gone finer still: the uniqueness theorem
+depends only on the physics, two classical complex-analysis facts (a modular covering of the
+thrice-punctured sphere, and a lift-uniqueness statement), and the logical axioms — no bespoke
+placeholder anywhere. This is the purification in miniature: the headline reduced to *physics +
+standard mathematics*, with the machine confirming nothing else slipped in. The precise statements,
+the actual machine printout of these dependencies, and the layered way the period input is
+organized are collected in Appendix B.
 
 ### 4.3 Two things formalizing forced into the open
 
@@ -417,6 +386,18 @@ axiom AX_theta3_ne_zero (τ : UpperHalfPlane) : theta3 (τ : ℂ) ≠ 0
 axiom localMonodromy : ∀ {r : ℕ}, ChargeLattice r → (ChargeLattice r → ChargeLattice r)
 axiom AX_picard_lefschetz_local {r : ℕ} (γ : ChargeLattice r) :
     localMonodromy γ = transvection γ
+```
+
+The machine's dependency printout for the rank-1 uniqueness theorem makes the separation literal —
+logic, classical-math debt, and the one physical input, in five lines:
+
+```lean
+#print axioms sw_su2_unique
+-- 'sw_su2_unique' depends on axioms:
+--   [propext, Classical.choice, Quot.sound,          -- logic
+--    AX_thrice_punctured_uniformization,             -- classical math (Γ(2) covering)
+--    AX_developing_map_rigidity,                      -- classical math (lift uniqueness)
+--    SameSWMonodromy]                                 -- physics (the SW monodromy)
 ```
 
 The SU(2) uniqueness theorem `sw_su2_unique` rests on exactly the two covering/lift axioms
