@@ -103,4 +103,20 @@ theorem swOmegaIntegrand_deriv_norm (Λ x u₀ : ℂ) :
   simp only [norm_mul, norm_neg, norm_inv, Complex.norm_cpow_real, Complex.norm_ofNat]
   ring
 
+/-- **G2 assembly block — segment continuity.** Along a real contour `[a,b]` that stays off the
+branch cut (`y² ∈ slitPlane` throughout), the `dx/y` integrand is continuous in the contour
+parameter `t` (composing the fibre continuity with `ℝ ↪ ℂ`). -/
+theorem swOmegaIntegrand_continuousOn_segment (Λ u : ℂ) (a b : ℝ)
+    (hmem : ∀ t ∈ Set.uIcc a b, swCurveValue Λ u (t : ℂ) ∈ Complex.slitPlane) :
+    ContinuousOn (fun t : ℝ => swOmegaIntegrand Λ u (t : ℂ)) (Set.uIcc a b) :=
+  fun t ht => ((swOmegaIntegrand_continuousAt_fibre Λ u (t : ℂ) (hmem t ht)).comp
+    Complex.continuous_ofReal.continuousAt).continuousWithinAt
+
+/-- **G2 assembly block — interval-integrability.** Hence the integrand is interval-integrable on a
+contour off the cut — the `hF_int` hypothesis of `hasDerivAt_integral_of_dominated_…`. -/
+theorem swOmegaIntegrand_intervalIntegrable (Λ u : ℂ) (a b : ℝ)
+    (hmem : ∀ t ∈ Set.uIcc a b, swCurveValue Λ u (t : ℂ) ∈ Complex.slitPlane) :
+    IntervalIntegrable (fun t : ℝ => swOmegaIntegrand Λ u (t : ℂ)) MeasureTheory.volume a b :=
+  (swOmegaIntegrand_continuousOn_segment Λ u a b hmem).intervalIntegrable
+
 end SeibergWitten.Physics
