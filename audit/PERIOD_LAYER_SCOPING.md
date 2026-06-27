@@ -64,6 +64,16 @@ P5 and P7 are literally the layer's two fields (`rigidity`, `realize`); P1–P4 
 prove them. The one piece with no Lean precedent is the **holomorphic variation** P1/P2 — periods
 moving holomorphically with a flat connection.
 
+*Probe result (`Physics/PeriodVariationProbe.lean`).* P1/P2 is **reachable**: Mathlib's
+`intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le` gives the complex derivative
+of a parameter integral, proved end-to-end (standard-3) for a model integrand `exp(u·t)` —
+`model_period_differentiable : Differentiable ℂ (fun u => ∫ t in 0..1, exp(u·t))`. The friction is
+entirely the *domination* hypothesis (a uniform integrable bound on `∂F/∂u`), discharged here from
+contour-compactness + continuity. The SW-specific work that remains plugs into the same lemma:
+the integrand `((x²−u)²−Λ⁴)^(−1/2)` holomorphic in `u` on the smooth locus (`cpow` off its branch
+cut), and domination across the integrable `√`-singularity at the branch points — standard
+analysis, no fundamental obstruction.
+
 ## The basic definitions
 
 | Def | Meaning | Status |
