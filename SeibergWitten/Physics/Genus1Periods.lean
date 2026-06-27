@@ -16,7 +16,8 @@ namespace SeibergWitten.Physics
 open Polynomial Complex
 
 /-- **G0 — the SU(2) fibre equation.** `y²` as a function of the modulus `u` and the fibre
-coordinate `x`: the Seiberg–Witten curve `y² = (x²−u)² − Λ⁴`. Same data as `swQuartic`, evaluated. -/
+coordinate `x`: the Seiberg–Witten curve `y² = (x²−u)² − Λ⁴` (same data as `swQuartic`,
+evaluated). -/
 noncomputable def swCurveValue (Λ u x : ℂ) : ℂ := (x ^ 2 - u) ^ 2 - Λ ^ 4
 
 /-- The fibre equation is the evaluation of the curve polynomial `swQuartic` (ties G0 to
@@ -126,6 +127,32 @@ theorem swOmegaIntegrand_intervalIntegrable (Λ u : ℂ) (a b : ℝ)
     IntervalIntegrable (fun t : ℝ => swOmegaIntegrand Λ u (t : ℂ)) MeasureTheory.volume a b :=
   (swOmegaIntegrand_continuousOn_segment Λ u a b hmem).intervalIntegrable
 
+/-- **G3 ingredient — the explicit second `u`-derivative of the integrand.**
+`∂²/∂u² (y²)^(−1/2) = 3(x²−u)²(y²)^(−5/2) − (y²)^(−3/2)` off the branch cut. (Here the function
+differentiated is the first-derivative integrand `(−1/2)(y²)^(−3/2)(−2(x²−u))`.) Feeds the
+period's second derivative and the Picard–Fuchs ODE identity. -/
+theorem swOmegaIntegrand_hasDeriv2_modulus (Λ x u₀ : ℂ)
+    (h : swCurveValue Λ u₀ x ∈ Complex.slitPlane) :
+    HasDerivAt
+      (fun u => (-(2 : ℂ)⁻¹) * (swCurveValue Λ u x) ^ ((-(2 : ℂ)⁻¹) - 1) * (-(2 * (x ^ 2 - u))))
+      (3 * (x ^ 2 - u₀) ^ 2 * (swCurveValue Λ u₀ x) ^ (-(5 : ℂ) / 2)
+        - (swCurveValue Λ u₀ x) ^ (-(3 : ℂ) / 2)) u₀ := by
+  have hsv := swCurveValue_hasDerivAt_modulus Λ x u₀
+  have hP : HasDerivAt (fun u => (swCurveValue Λ u x) ^ ((-(2 : ℂ)⁻¹) - 1))
+      (((-(2 : ℂ)⁻¹) - 1) * (swCurveValue Λ u₀ x) ^ (((-(2 : ℂ)⁻¹) - 1) - 1) *
+        (-(2 * (x ^ 2 - u₀)))) u₀ := hsv.cpow_const h
+  have hQ : HasDerivAt (fun u : ℂ => -(2 * (x ^ 2 - u))) 2 u₀ := by
+    have h1 : HasDerivAt (fun u : ℂ => x ^ 2 - u) (-1) u₀ := by
+      simpa using (hasDerivAt_id u₀).const_sub (x ^ 2)
+    convert (h1.const_mul (2 : ℂ)).neg using 1
+    norm_num
+  have key := (hP.const_mul (-(2 : ℂ)⁻¹)).mul hQ
+  rw [show (((-(2 : ℂ)⁻¹) - 1) - 1) = (-(5 : ℂ) / 2) by norm_num,
+      show ((-(2 : ℂ)⁻¹) - 1) = (-(3 : ℂ) / 2) by norm_num] at key
+  convert key using 1
+  · funext u; simp only [Pi.mul_apply]; ring
+  · ring
+
 /-- **G3 ingredient — the integrand is twice `u`-differentiable.** The first `u`-derivative
 integrand `(−1/2)(y²)^(−3/2)(−2(x²−u))` is itself differentiable in `u` off the branch cut — so
 the period's second `u`-derivative exists (the input to the Picard–Fuchs derivation). -/
@@ -178,7 +205,7 @@ stays off the branch cut on a neighbourhood `s` of `u₀` (`hmem`), with the `u`
 dominated by an integrable `bound` (`hbd`), the period `u ↦ ∫_a^b (dx/y)` has the expected complex
 derivative `∫_a^b ∂/∂u (dx/y)` — differentiation under the integral sign. All hypotheses are
 discharged by the per-`x` helpers above through Mathlib's
-`hasDerivAt_integral_of_dominated_loc_of_deriv_le` (the same engine as `model_period_differentiable`).
+`hasDerivAt_integral_of_dominated_loc_of_deriv_le` (same engine as `model_period_differentiable`).
 This is P1 for the genus-1 SW period along an off-cut contour; the remaining G2 piece is the
 integrable `√`-singularity when the contour ends at branch points. -/
 theorem swPeriodSeg_hasDerivAt (Λ : ℂ) (a b : ℝ) {u₀ : ℂ} {s : Set ℂ} (hs : s ∈ nhds u₀)
