@@ -157,6 +157,16 @@ theorem swOmegaDerivIntegrand_continuousOn_segment (Λ u : ℂ) (a b : ℝ)
   have hpoly : ContinuousAt (fun s : ℝ => (-(2 * ((s : ℂ) ^ 2 - u)))) t := by fun_prop
   exact ((continuousAt_const.mul hcpow).mul hpoly).continuousWithinAt
 
+/-- **G3 assembly block — derivative-integrand integrability.** The first `u`-derivative integrand
+is interval-integrable on an off-cut contour — the `hF_int` hypothesis for the *second*-derivative
+assembly (the period twice-differentiable, toward Picard–Fuchs). -/
+theorem swOmegaDerivIntegrand_intervalIntegrable (Λ u : ℂ) (a b : ℝ)
+    (hmem : ∀ t ∈ Set.uIcc a b, swCurveValue Λ u (t : ℂ) ∈ Complex.slitPlane) :
+    IntervalIntegrable (fun t : ℝ =>
+        (-(2 : ℂ)⁻¹) * (swCurveValue Λ u (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
+          (-(2 * ((t : ℂ) ^ 2 - u)))) MeasureTheory.volume a b :=
+  (swOmegaDerivIntegrand_continuousOn_segment Λ u a b hmem).intervalIntegrable
+
 /-- The genus-1 SW period over a real contour `[a,b]`: the holomorphic-differential period
 `∫_a^b dx/y` (`= ∂a/∂u` up to normalization). The named object the period layer's holomorphy,
 Picard–Fuchs (G3), and monodromy (G5) statements refer to. -/
