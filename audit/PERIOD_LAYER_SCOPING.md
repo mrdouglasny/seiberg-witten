@@ -163,3 +163,18 @@ layer is largely *family glue* on top of `jacobian-challenge`. At genus 1 especi
 3. **`realize` at genus 1** — verify H1–H6 on the elliptic period sheet.
 4. *(Long horizon)* the general-genus VHS: families Jacobians + `Siegel(r)` Gauss–Manin +
    higher-rank `deck_of_periodFrame`, discharging `SWPeriodLayer` for all `N`.
+
+## Where this gets proved (home decision)
+
+The period-variation material is **general Hodge theory, not SW-specific** — so it should not live
+in this repo. The split:
+
+- **Proofs → `jacobian-challenge`.** It already owns the per-fiber period theory the VHS layer
+  sits on, and `seiberg-witten` already depends on it (`Jacobians → ../jacobian-challenge`), so a
+  families-VHS layer there discharges `PeriodLayer` here through the existing dependency.
+- **Targets → a Tau Ceti roadmap.** The general "VHS / periods of a family of curves" targets are
+  drafted as a roadmap entry in [`docs/tauceti-vhs/`](../docs/tauceti-vhs/) (README + `Targets.lean`,
+  layers L0–L4 mirroring P1–P5), to propose to `FormalFrontier/TauCetiRoadmap` — connecting the
+  `ContourIntegration` (#35), `ModularForms` (#36), and `ConformalMapping` (#38) roadmaps.
+- **Consumption → this repo.** `seiberg-witten` keeps `PeriodLayer`/`SWPeriodLayer` as the
+  interface and imports the discharged result; nothing here changes.
