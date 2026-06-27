@@ -104,54 +104,64 @@ to the one-loop-plus-instanton expansion at weak coupling.
 
 ## 4. The formalization
 
-### 4.1 What is proved
+### 4.1 What is assumed
 
-On a hyperelliptic-curve / period / Jacobian library, the following are theorems —
-sorry-free, and (except where noted) depending only on the three standard logical axioms:
+The physical content is the six hypotheses **H0–H6**. Each is a named Lean **predicate or
+structure**, never a global axiom: a theorem that uses the physics carries their bundle
+`IsSWEffectiveTheory` as a *hypothesis*, so the assumptions are written into its type and never
+enter the trusted base — more transparent than an axiom. In physics terms, with the Lean carrier:
 
+- **H0 — the carrier.** An N=2 `U(1)^{N−1}` effective theory: a moduli base `CoulombBase` and a
+  chart `Sheet` carrying the periods `a, a_D` and coupling `τ`, living on the universal cover of
+  the moduli space minus its singular locus.
+- **H1 — special geometry.** A prepotential `F` with `a_D = ∂F/∂a` and `τ = ∂²F/∂a²`
+  (`Sheet.SpecialGeometry`).
+- **H2 — BPS singularities.** On the singular locus a BPS state becomes massless (`Z_n → 0`); the
+  spectrum is massive off it (`Sheet.SingularitiesAreBPS`).
+- **H3 — Picard–Lefschetz monodromy.** Monodromy around a singularity is the symplectic
+  transvection in the vanishing charge (`PicardLefschetzAtGenericStratum`).
+- **H4 — electric–magnetic duality.** Charts glue by `Sp(2r,ℤ)` charge automorphisms that preserve
+  the Dirac pairing and the central charge (`Deck`); sheets form a duality-glued atlas (`SWAtlas`).
+- **H5 — R-symmetry.** A discrete R-symmetry of exact order `2N` on the moduli, fixing the singular
+  locus (`RSymmetry`).
+- **H6 — weak-coupling asymptotics.** The prepotential matches the one-loop term (over roots) plus
+  the instanton expansion (`Sheet.MatchesAsymptotics`).
+
+Full Lean definitions are in Appendix A. One rank-1 monodromy input remains a named placeholder
+axiom (`SameSWMonodromy`, Appendix B); everything else physical is a hypothesis.
+
+### 4.2 What is proved
+
+From the hypotheses of §4.1 (with the mathematical inputs of Appendix B), the following are
+**sorry-free theorems**, and `#print axioms` reports exactly what each rests on:
+
+- **The headline — existence and uniqueness up to duality.** The Seiberg–Witten curve *realizes*
+  such a theory (`sw_curve_admits_effective_theory`), and the hypotheses fix it **uniquely up to
+  `Sp(2r,ℤ)` electric–magnetic duality** (`sw_effective_theory_unique_up_to_duality`; atlas-level
+  `sw_unique_up_to_duality`) — uniqueness being a period-map rigidity statement. Each depends on
+  the three logical axioms plus a *single* mathematical input, the period geometry `swPeriodLayer`;
+  for SU(2), `sw_su2_unique` is finer still (physics + two classical complex-analysis facts).
 - the SU(N) curve has **genus `N−1`**;
-- its period matrix `τ` is **symmetric with `Im τ ≻ 0`** — the positivity of the special-Kähler
-  metric, i.e. the physical no-ghost condition;
-- for SU(2), the curve is singular at **exactly `u = ±Λ²`** — the monopole and dyon points,
-  and no others (this is a discriminant computation, not lore);
-- the Picard–Lefschetz monodromy of a vanishing cycle is **symplectic** — the reason the
-  monodromy group sits in `Sp(2r,ℤ)`;
-- for the rank-1 base, the modular function `λ = θ₂⁴/θ₃⁴` (built from Mathlib's Jacobi theta
-  functions) is a proved **`Γ(2)`-Hauptmodul**: invariant under both generators of `Γ(2)`,
-  with the cusp symmetry `1 − λ = θ₄⁴/θ₃⁴`.
+- its period matrix `τ` is **symmetric with `Im τ ≻ 0`** — positivity of the special-Kähler metric,
+  the physical no-ghost condition;
+- for SU(2), the curve is singular at **exactly `u = ±Λ²`** — the monopole and dyon points, by a
+  discriminant computation, not lore;
+- the Picard–Lefschetz monodromy of a vanishing cycle is **symplectic** — why the monodromy group
+  sits in `Sp(2r,ℤ)`;
+- the rank-1 modular function `λ = θ₂⁴/θ₃⁴` (from Mathlib's Jacobi thetas) is a proved
+  **`Γ(2)`-Hauptmodul**, with the cusp symmetry `1 − λ = θ₄⁴/θ₃⁴`.
 
-(Declaration names and exact axiom footprints are in the repository; we keep them out of the
-prose here.)
+The headline's machine-checked dependency, in full — logic plus one named period-geometry input,
+nothing else:
 
-### 4.2 What is assumed
+```lean
+#print axioms sw_effective_theory_unique_up_to_duality
+-- depends on axioms:
+--   [propext, Classical.choice, Quot.sound,   -- logic
+--    swPeriodLayer]                            -- the one mathematical input (period geometry)
+```
 
-The physical content — the six hypotheses H0–H6 — enters as named **predicates and structures**,
-not as global axioms. The carrier is an N=2 `U(1)^{N−1}` effective theory; the hypotheses (special
-geometry, BPS singularities, the Picard–Lefschetz monodromy, electric–magnetic duality,
-R-symmetry, the weak-coupling asymptotics) are bundled into one predicate, `IsSWEffectiveTheory`
-(Appendix A). They are the irreducible physics — there is nothing to prove about them — but a
-result that uses them takes `IsSWEffectiveTheory` as a *hypothesis*, so its physical assumptions
-are visible in its statement and never enter the trusted base. That is even more transparent than
-an axiom: the dependence is written into the theorem's type.
-
-The headline claims are different in kind. That the Seiberg–Witten curve *realizes* such a theory
-(existence), and that the hypotheses fix it **uniquely up to `Sp(2r,ℤ)` electric–magnetic duality**
-(uniqueness), are not physical inputs but mathematical consequences — uniqueness, in particular, is
-a period-map rigidity statement. Both are now **proved theorems**, with no gaps. Beyond the physics
-hypotheses, each rests on a *single* named mathematical input: the **period geometry of the curve
-family** — how the periods of the Seiberg–Witten differential vary over the space of vacua, the
-classical *variation of Hodge structure* of the family. That one input aside, the proofs are
-complete.
-
-The point of the discipline is that the proof assistant *reports exactly what each result depends
-on*. For the general SU(N) headline that dependence is the background logical axioms plus the one
-period-geometry input — nothing else. For SU(2) we have gone finer still: the uniqueness theorem
-depends only on the physics, two classical complex-analysis facts (a modular covering of the
-thrice-punctured sphere, and a lift-uniqueness statement), and the logical axioms — no bespoke
-placeholder anywhere. This is the purification in miniature: the headline reduced to *physics +
-standard mathematics*, with the machine confirming nothing else slipped in. The precise statements,
-the actual machine printout of these dependencies, and the layered way the period input is
-organized are collected in Appendix B.
+The exact statements, the finer SU(2) footprint, and `swPeriodLayer` itself are in Appendix B.
 
 ### 4.3 Two things formalizing forced into the open
 
