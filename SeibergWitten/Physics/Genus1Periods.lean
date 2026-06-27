@@ -145,6 +145,12 @@ theorem swOmegaDerivIntegrand_continuousOn_segment (Λ u : ℂ) (a b : ℝ)
   have hpoly : ContinuousAt (fun s : ℝ => (-(2 * ((s : ℂ) ^ 2 - u)))) t := by fun_prop
   exact ((continuousAt_const.mul hcpow).mul hpoly).continuousWithinAt
 
+/-- The genus-1 SW period over a real contour `[a,b]`: the holomorphic-differential period
+`∫_a^b dx/y` (`= ∂a/∂u` up to normalization). The named object the period layer's holomorphy,
+Picard–Fuchs (G3), and monodromy (G5) statements refer to. -/
+noncomputable def swPeriodSeg (Λ : ℂ) (a b : ℝ) (u : ℂ) : ℂ :=
+  ∫ t in a..b, swOmegaIntegrand Λ u (t : ℂ)
+
 /-- **G2 — the period is holomorphic in the modulus (assembly).** Over a real contour `[a,b]` that
 stays off the branch cut on a neighbourhood `s` of `u₀` (`hmem`), with the `u`-derivative integrand
 dominated by an integrable `bound` (`hbd`), the period `u ↦ ∫_a^b (dx/y)` has the expected complex
@@ -159,9 +165,10 @@ theorem swPeriodSeg_hasDerivAt (Λ : ℂ) (a b : ℝ) {u₀ : ℂ} {s : Set ℂ}
     (hbd : ∀ t ∈ Set.uIoc a b, ∀ u ∈ s,
       ‖(-(2 : ℂ)⁻¹) * (swCurveValue Λ u (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
           (-(2 * ((t : ℂ) ^ 2 - u)))‖ ≤ bound t) :
-    HasDerivAt (fun u => ∫ t in a..b, swOmegaIntegrand Λ u (t : ℂ))
+    HasDerivAt (swPeriodSeg Λ a b)
       (∫ t in a..b, (-(2 : ℂ)⁻¹) * (swCurveValue Λ u₀ (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
           (-(2 * ((t : ℂ) ^ 2 - u₀)))) u₀ := by
+  unfold swPeriodSeg
   have hu₀ : u₀ ∈ s := mem_of_mem_nhds hs
   refine (intervalIntegral.hasDerivAt_integral_of_dominated_loc_of_deriv_le
     (F := fun (u : ℂ) (t : ℝ) => swOmegaIntegrand Λ u (t : ℂ))
@@ -185,7 +192,7 @@ theorem swPeriodSeg_differentiableAt (Λ : ℂ) (a b : ℝ) {u₀ : ℂ} {s : Se
     (hbd : ∀ t ∈ Set.uIoc a b, ∀ u ∈ s,
       ‖(-(2 : ℂ)⁻¹) * (swCurveValue Λ u (t : ℂ)) ^ ((-(2 : ℂ)⁻¹) - 1) *
           (-(2 * ((t : ℂ) ^ 2 - u)))‖ ≤ bound t) :
-    DifferentiableAt ℂ (fun u => ∫ t in a..b, swOmegaIntegrand Λ u (t : ℂ)) u₀ :=
+    DifferentiableAt ℂ (swPeriodSeg Λ a b) u₀ :=
   (swPeriodSeg_hasDerivAt Λ a b hs hmem bound hbound_int hbd).differentiableAt
 
 end SeibergWitten.Physics
