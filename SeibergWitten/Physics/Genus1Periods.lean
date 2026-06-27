@@ -30,6 +30,13 @@ theorem swCurveValue_eq_factored (Λ u x : ℂ) :
     swCurveValue Λ u x = (x ^ 2 - (u + Λ ^ 2)) * (x ^ 2 - (u - Λ ^ 2)) := by
   simp only [swCurveValue]; ring
 
+/-- **G0 — the branch locus.** `y² = 0` exactly at the branch points `x² = u ± Λ²`; off these
+points the fibre is smooth. The contour-off-cut hypotheses of the period lemmas (and the G5
+monodromy around `u = ±Λ²`) are about staying away from this locus. -/
+theorem swCurveValue_eq_zero_iff (Λ u x : ℂ) :
+    swCurveValue Λ u x = 0 ↔ x ^ 2 = u + Λ ^ 2 ∨ x ^ 2 = u - Λ ^ 2 := by
+  rw [swCurveValue_eq_factored, mul_eq_zero, sub_eq_zero, sub_eq_zero]
+
 /-- **G1 — the `dx/y` integrand.** The holomorphic-differential integrand `1/y = (y²)^(−1/2)`,
 whose period `∮ swOmegaIntegrand` is (up to normalization) `a'(u)`. -/
 noncomputable def swOmegaIntegrand (Λ u x : ℂ) : ℂ := (swCurveValue Λ u x) ^ (-(2 : ℂ)⁻¹)
