@@ -46,10 +46,12 @@ Catching that by reading is exactly what does not scale. What one wants instead 
 argument's assumptions explicit and machine-auditable, cleanly separating what is genuinely derived
 from what is taken on faith.
 
-Interactive theorem provers are built for that separation, though physicists rarely meet them. A
-proof assistant such as **Lean 4** is a language in which one writes definitions and proofs that a
-small, fixed **kernel** — a few thousand lines of code, audited once and then trusted — checks line
-by line. A statement the kernel accepts is correct *relative to its inputs*: the handful of logical
+Interactive theorem provers are built for exactly that separation. A technology from computer
+science — where they grew out of hardware and software verification — proof assistants have lately
+drawn intense interest in mathematics, with large parts of the modern corpus now formalized; the
+same tools apply directly to the problem here. A proof assistant such as **Lean 4** is a language in
+which one writes definitions and proofs that a small, fixed **kernel** — a few thousand lines of
+code, audited once and then trusted — checks line by line. A statement the kernel accepts is correct *relative to its inputs*: the handful of logical
 axioms built in, plus any further **axioms** the author explicitly declares. That whole list is the
 **trusted base** — everything one must believe in order to believe the result — and the prover can
 print it: for any theorem, the command `#print axioms` reports exactly which axioms it used, and
