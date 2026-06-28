@@ -32,12 +32,13 @@ and still have no proof from first principles; certainty in physics rests on a d
 than in mathematics.
 
 In quantum field theory the gap is at its widest. There the deepest results — the spectrum of a
-gauge theory, the phase structure of a model, an exact low-energy effective action — follow from
-reasoning about symmetry, holomorphy, dualities and consistency, and for the hardest of them a
-rigorous proof is not merely missing but out of reach: it would require first constructing the
-interacting quantum field theory nonperturbatively, a problem on the scale of the Yang–Mills
-mass-gap Millennium Prize. These results are as certain as anything in physics, and yet they are not
-theorems.
+gauge theory, its phase structure, an exact low-energy effective action — follow from reasoning
+about symmetry, holomorphy, dualities and consistency. The **Seiberg–Witten solution**, our subject
+below, is the paradigm: the exact low-energy physics of an N=2 gauge theory, fixed by holomorphy and
+electric–magnetic duality. For the hardest of these a rigorous proof is not merely missing but out
+of reach — it would require first constructing the interacting quantum field theory
+nonperturbatively, a problem on the scale of the Yang–Mills mass-gap Millennium Prize. These results
+are as certain as anything in physics, and yet they are not theorems.
 
 This gap has become pressing for a new reason: AI systems now generate physical derivations, and
 their characteristic error is not a wrong algebra step — a referee catches those — but a
