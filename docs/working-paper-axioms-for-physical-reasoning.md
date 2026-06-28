@@ -77,40 +77,33 @@ positivity of the special-Kähler metric, the period matrix), the physical hypot
 predicates, and the headline statements — existence, and uniqueness up to duality — proved from
 those hypotheses plus a single mathematical input.
 
-The rest of the paper proceeds as follows. §2 explains why a physics *result* is a different
-formalization target from a mathematical theorem, and §3 draws out the two kinds of formalization
-this entails. §4 states the Seiberg–Witten solution compactly. §5 is the formalization proper — what
-is assumed (the hypotheses, with their physical origins), what is proved, and two places where
-formalizing forced a hidden choice into the open. §6 describes how we check the axioms and §7 argues
-the discipline is the right standard for AI-generated physics. §8 lays out the remaining
-mathematical debt and where it will be discharged, and §9 the prospects for deriving the physical
-assumptions themselves from deeper principles. §10 places the work in context; §11 concludes. Two
-appendices give the Lean statements of the physical hypotheses (A) and the residual mathematical
-axioms (B).
+The rest of the paper proceeds as follows. §2 sets out the two kinds of formalization a physics
+result calls for and the bookkeeping discipline they impose. §3 states the Seiberg–Witten solution
+compactly. §4 is the formalization proper — what is assumed (the hypotheses, with their physical
+origins), what is proved, and two places where formalizing forced a hidden choice into the open. §5
+describes how we check the axioms and §6 argues the discipline is the right standard for
+AI-generated physics. §7 lays out the remaining mathematical debt and where it will be discharged,
+and §8 the prospects for deriving the physical assumptions themselves from deeper principles. §9
+places the work in context; §10 concludes. Two appendices give the Lean statements of the physical
+hypotheses (A) and the residual mathematical axioms (B).
 
-## 2. Physics is mostly not theorems
+## 2. Two kinds of formalization in physics
 
 A mathematician who formalizes a theorem has a proof to formalize; a physicist who formalizes a
-*result* usually has none. For Seiberg–Witten there is none to be had: no rigorous derivation says
-that the low-energy physics on the Coulomb branch of N=2 SU(N) gauge theory is governed by the curve
-`y² = P_N(x)² − Λ^{2N}`. In its place stands an *argument* — holomorphy from supersymmetry, the
-exact pattern of singularities, electric–magnetic duality, the weak-coupling asymptotics — that
-together single out that curve, held to be correct because three independent computations of the
-prepotential agree.
-
-We call this second category — the non-rigorous reasoning physicists nonetheless trust —
-**foundations for physical reasoning**, by analogy with foundations of mathematics. Formalizing such
-a result is not proving it but making it *auditable*: every physical input named, every mathematical
-consequence proved, the kernel both holding the line between them and able to flag a contradiction
-among the inputs. That is the discipline this paper applies; §3 makes the distinction it rests on
-precise.
-
-## 3. Two kinds of formalization in physics
+*result* usually has none. The two situations call for two different kinds of formalization:
 
 | | What it is | Examples |
 |---|---|---|
 | **Mathematical physics** | A rigorous statement exists; you prove it. | Stability of matter; constructive QFT; the lattice-gauge mass gap — **and the proved spine of this project**: the curve, its genus, special-Kähler positivity, the period matrix. |
 | **Foundations for physical reasoning** | Codifying the *non-rigorous* reasoning the community trusts, where no proof is within reach (a rigorous one would be Millennium-hard). | **The Seiberg–Witten *argument* itself.** |
+
+Seiberg–Witten is of the second kind: no rigorous derivation says that the low-energy physics on the
+Coulomb branch of N=2 SU(N) gauge theory is governed by the curve `y² = P_N(x)² − Λ^{2N}`. In its
+place stands an *argument* — holomorphy from supersymmetry, the exact pattern of singularities,
+electric–magnetic duality, the weak-coupling asymptotics — that together single out that curve, held
+to be correct because three independent computations of the prepotential agree. We call this second
+category — the non-rigorous reasoning physicists nonetheless trust — **foundations for physical
+reasoning**, by analogy with foundations of mathematics.
 
 This is not a value judgment but a bookkeeping discipline, and it is necessary because the
 kernel does not enforce it. A theorem can be proved, axiom-free, and still be the **wrong
@@ -121,7 +114,7 @@ every mathematical claim onto the proved side.
 
 For a reader who formalizes *mathematics*, the delta is threefold:
 
-- there is no proof to formalize — the result is unprovable within reach (§2), so the question
+- there is no proof to formalize — the result is unprovable within reach (§1), so the question
   is not "is the proof correct?" but "are the assumptions explicit and the derivations sound?";
 - the physical lore becomes **named hypotheses** — predicates a theorem takes in its signature
   — never smuggled into a definition or a convenient default;
@@ -131,7 +124,7 @@ For a reader who formalizes *mathematics*, the delta is threefold:
 Nothing here is special to physics-as-a-subject; it is what changes when the object you
 formalize is an *argument the community trusts* rather than *a theorem with a proof*.
 
-## 4. The Seiberg–Witten solution in one paragraph
+## 3. The Seiberg–Witten solution in one paragraph
 
 *For a reader outside physics: the SW solution maps the exact low-energy behaviour of a
 quantum system to the geometry of a specific family of algebraic curves. What matters for the
@@ -150,9 +143,9 @@ singular exactly where a BPS state goes massless, and nowhere else); electric–
 duality (`Sp(2r,ℤ)` monodromy); the `ℤ_{2N}` R-symmetry fixing the singularities; and matching
 to the one-loop-plus-instanton expansion at weak coupling.
 
-## 5. The formalization
+## 4. The formalization
 
-### 5.1 What is assumed
+### 4.1 What is assumed
 
 The physical content is six hypotheses **H0–H6**, each a named Lean **predicate or structure**
 (never a global axiom: a theorem that uses the physics carries their bundle `IsSWEffectiveTheory`
@@ -190,9 +183,9 @@ BPS state is light where fixes the monodromy. Full Lean definitions are in Appen
 discusses factoring these as one general N=2 special-geometry structure that `IsSWEffectiveTheory`
 specializes.
 
-### 5.2 What is proved
+### 4.2 What is proved
 
-From the hypotheses of §5.1 (with the mathematical inputs of Appendix B), the following are
+From the hypotheses of §4.1 (with the mathematical inputs of Appendix B), the following are
 **sorry-free theorems**, and `#print axioms` reports exactly what each rests on:
 
 - **The headline — existence and uniqueness up to duality.** The Seiberg–Witten curve *realizes*
@@ -223,7 +216,7 @@ nothing else:
 
 The exact statements, the finer SU(2) footprint, and `swPeriodLayer` itself are in Appendix B.
 
-### 5.3 Two things formalizing forced into the open
+### 4.3 Two things formalizing forced into the open
 
 **The type system can refuse a convenient falsehood.** Our first attempt made the periods
 `a, a_D` and the coupling `τ` single-valued functions of the moduli. External review flagged
@@ -242,7 +235,7 @@ accommodating the matter flavours and higher-rank theories where AD points actua
 phenomenon the theory should explain falls out as a consequence — a check the axioms pass
 rather than a cost they incur.
 
-## 6. Checking the axioms: validation by independent agreement
+## 5. Checking the axioms: validation by independent agreement
 
 Concentrating trust onto named axioms is worthwhile only if those axioms are then checked. We
 use three tools, cheapest first.
@@ -266,7 +259,7 @@ expansion (Nekrasov's partition function, itself later made rigorous), and the e
 of the curve. This independent agreement is the empirical content behind the axioms, and our
 protocol attaches it as a cross-check rather than asserting it.
 
-## 7. Why this is the right standard for AI-generated physics
+## 6. Why this is the right standard for AI-generated physics
 
 When an AI produces a physics result, the dangerous failure is rarely a wrong algebra step a
 referee would catch. It is an **unstated assumption** — a *hallucination*, in machine-learning
@@ -283,7 +276,7 @@ type system into a guardrail that makes this impossible to hide:
 Formalization does not make the physics true. It makes the reasoning **auditable** — which is
 exactly what a result no one can prove from first principles needs.
 
-## 8. What remains, and where it lives
+## 7. What remains, and where it lives
 
 The discipline also makes the remaining *mathematical* debt legible. For SU(2) the uniqueness
 headline is, as just described, already a theorem modulo named classical-math axioms; the debt
@@ -296,9 +289,9 @@ over the moduli space. The covering rests in turn on the **Riemann mapping theor
 formalized in Isabelle/HOL), which we have scoped as upstream contributions. The point is that
 "is this physics right?" becomes a precise, prioritized list of theorems to build.
 
-## 9. Prospects: deriving the physical assumptions
+## 8. Prospects: deriving the physical assumptions
 
-The hypotheses of §5.1 are themselves *consequences* of the microscopic definition of N=2
+The hypotheses of §4.1 are themselves *consequences* of the microscopic definition of N=2
 super-Yang–Mills, reached by physical arguments of varying rigor. Some of them are, on inspection,
 **theorems** — and formalizing those would push the assumed frontier one level deeper, deriving the
 parent N=2 structure from inputs more primitive than its own data. Three tiers.
@@ -332,7 +325,7 @@ formalizing them would move the frontier from "assume special geometry, the BPS 
 symplectic lattice" to "assume the supersymmetry algebra and angular-momentum quantization." Each
 such step shrinks what must be taken on trust.
 
-## 10. Related work
+## 9. Related work
 
 The assurance artifacts (correspondence index, fidelity review, numerical validation, axiom
 audit) follow the conventions of the author's own `formalization-assurance` project
@@ -341,7 +334,7 @@ mathematical contributions are framed for the Lean FRO's Tau Ceti library. The R
 Isabelle/HOL (Paulson); the Schwarz reflection principle and the SW solution appear
 unformalized before this work.
 
-## 11. Conclusion
+## 10. Conclusion
 
 A rigorous proof of the Seiberg–Witten solution lies beyond reach — it presupposes
 constructing the quantum field theory itself — yet the result is as certain as anything in
@@ -353,7 +346,7 @@ the right standard for validating AI-generated results in theoretical physics.
 
 ## Appendix A. The physics hypotheses (H0–H6) — predicates, not axioms
 
-After the strengthening (§5.1), the physical inputs are **contentful predicates and
+After the strengthening (§4.1), the physical inputs are **contentful predicates and
 structures**, not opaque axioms: they are *assumed as hypotheses* (bundled in
 `IsSWEffectiveTheory`) by the results that use them, so they never enter the trusted base. The
 carrier itself *is* the data of an N=2 `U(1)^{N-1}` EFT (H0): a base in gauge-invariant moduli,
