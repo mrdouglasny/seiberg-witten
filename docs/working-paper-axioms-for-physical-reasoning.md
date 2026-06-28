@@ -34,11 +34,9 @@ than in mathematics.
 In quantum field theory the gap is at its widest. There the deepest results — the spectrum of a
 gauge theory, its phase structure, an exact low-energy effective action — follow from reasoning
 about symmetry, holomorphy, dualities and consistency. The **Seiberg–Witten solution**, our subject
-below, is the paradigm: the exact low-energy physics of an N=2 gauge theory, fixed by holomorphy and
-electric–magnetic duality. For the hardest of these a rigorous proof is not merely missing but out
-of reach — it would require first constructing the interacting quantum field theory
-nonperturbatively, a problem on the scale of the Yang–Mills mass-gap Millennium Prize. These results
-are as certain as anything in physics, and yet they are not theorems.
+below, is the paradigm, and for it a rigorous proof is out of reach: it would require first
+constructing the interacting theory nonperturbatively, on the scale of the Yang–Mills mass-gap
+Millennium Prize. Such results are as certain as anything in physics, yet they are not theorems.
 
 This gap has become pressing for a new reason: AI systems now generate physical derivations, and
 their characteristic error is not a wrong algebra step — a referee catches those — but a
@@ -92,38 +90,20 @@ axioms (B).
 
 ## 2. Physics is mostly not theorems
 
-A mathematician who formalizes a theorem has a proof to formalize. A physicist who
-formalizes a *result* usually does not. The Seiberg–Witten (SW) solution is the textbook
-case. No rigorous proof says that the low-energy physics on the Coulomb branch of N=2 SU(N)
-gauge theory is governed by the curve `y² = P_N(x)² − Λ^{2N}`. One is *conceivable* — but it
-would first require constructing the interacting N=2 theory nonperturbatively, a problem at
-least as hard as the Yang–Mills mass-gap Millennium problem, and so out of reach for the
-foreseeable future. What we have instead is an *argument*: a small set of physical
-assumptions — holomorphy from supersymmetry, the exact pattern of singularities,
-electric–magnetic duality, the weak-coupling asymptotics — that together pick out that curve,
-believed because three independent computations of the same quantity agree.
-
-So "formalizing Seiberg–Witten" cannot mean "proving it" — not today, and not without first
-solving a Millennium-scale problem. That seems to put the result beyond formal methods. We
-argue the reverse: such a result is precisely where formalization helps most, *provided one
-is honest about what it does*.
-
-> State the physical assumptions as **explicit, named axioms**; prove every **mathematical
-> consequence** of them; and keep a machine-checked line between the two.
+A mathematician who formalizes a theorem has a proof to formalize; a physicist who formalizes a
+*result* usually has none. For Seiberg–Witten there is none to be had: no rigorous derivation says
+that the low-energy physics on the Coulomb branch of N=2 SU(N) gauge theory is governed by the curve
+`y² = P_N(x)² − Λ^{2N}`. In its place stands an *argument* — holomorphy from supersymmetry, the
+exact pattern of singularities, electric–magnetic duality, the weak-coupling asymptotics — that
+together single out that curve, held to be correct because three independent computations of the
+prepotential agree.
 
 We call this second category — the non-rigorous reasoning physicists nonetheless trust —
-**foundations for physical reasoning**, by analogy with foundations of mathematics. A
-formalization then does three things no informal write-up can: it makes the dependency
-structure machine-checkable, it concentrates the residual trust onto a few named axioms, and
-it lets the kernel detect a contradiction among them.
-
-This matters now because of *who*, or what, increasingly produces such arguments. As large
-language models begin to propose physical and mathematical derivations, their characteristic
-failure is not a wrong algebra step a referee would catch but a *hallucinated assumption* — an
-unphysical premise, or a dropped topological subtlety, presented as though derived. A
-machine-checked boundary between assumed and proved is precisely what keeps such a system
-honest; that is why we frame the discipline below as a standard for validating AI-generated
-physics, and return to it in §7.
+**foundations for physical reasoning**, by analogy with foundations of mathematics. Formalizing such
+a result is not proving it but making it *auditable*: every physical input named, every mathematical
+consequence proved, the kernel both holding the line between them and able to flag a contradiction
+among the inputs. That is the discipline this paper applies; §3 makes the distinction it rests on
+precise.
 
 ## 3. Two kinds of formalization in physics
 
