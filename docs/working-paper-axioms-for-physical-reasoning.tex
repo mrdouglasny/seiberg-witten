@@ -108,35 +108,20 @@ genus, positivity of the special-K\"ahler metric, the period matrix), the physic
 named predicates, and the headline statements---existence, and uniqueness up to duality---proved
 from those hypotheses plus a single mathematical input.
 
-The rest of the paper proceeds as follows. \S2 explains why a physics \emph{result} is a different
-formalization target from a mathematical theorem, and \S3 draws out the two kinds of formalization
-this entails. \S4 states the Seiberg--Witten solution compactly. \S5 is the formalization
-proper---what is assumed (the hypotheses, with their physical origins), what is proved, and two
-places where formalizing forced a hidden choice into the open. \S6 describes how we check the
-axioms and \S7 argues the discipline is the right standard for AI-generated physics. \S8 lays out
-the remaining mathematical debt and where it will be discharged, and \S9 the prospects for deriving
-the physical assumptions themselves from deeper principles. \S10 places the work in context; \S11
-concludes. Two appendices give the Lean statements of the physical hypotheses (A) and the residual
-mathematical axioms (B).
-
-\section{Physics is mostly not theorems}
-
-A mathematician who formalizes a theorem has a proof to formalize; a physicist who formalizes a
-\emph{result} usually has none. For Seiberg--Witten there is none to be had: no rigorous derivation
-says that the low-energy physics on the Coulomb branch of $\mathcal{N}=2$ $SU(N)$ gauge theory is
-governed by the curve $y^2 = P_N(x)^2 - \Lambda^{2N}$. In its place stands an
-\emph{argument}---holomorphy from supersymmetry, the exact pattern of singularities,
-electric--magnetic duality, the weak-coupling asymptotics---that together single out that curve,
-held to be correct because three independent computations of the prepotential agree.
-
-We call this second category---the non-rigorous reasoning physicists nonetheless
-trust---\textbf{foundations for physical reasoning}, by analogy with foundations of mathematics.
-Formalizing such a result is not proving it but making it \emph{auditable}: every physical input
-named, every mathematical consequence proved, the kernel both holding the line between them and able
-to flag a contradiction among the inputs. That is the discipline this paper applies; \S3 makes the
-distinction it rests on precise.
+The rest of the paper proceeds as follows. \S2 sets out the two kinds of formalization a physics
+result calls for and the bookkeeping discipline they impose. \S3 states the Seiberg--Witten solution
+compactly. \S4 is the formalization proper---what is assumed (the hypotheses, with their physical
+origins), what is proved, and two places where formalizing forced a hidden choice into the open.
+\S5 describes how we check the axioms and \S6 argues the discipline is the right standard for
+AI-generated physics. \S7 lays out the remaining mathematical debt and where it will be discharged,
+and \S8 the prospects for deriving the physical assumptions themselves from deeper principles. \S9
+places the work in context; \S10 concludes. Two appendices give the Lean statements of the physical
+hypotheses (A) and the residual mathematical axioms (B).
 
 \section{Two kinds of formalization in physics}
+
+A mathematician who formalizes a theorem has a proof to formalize; a physicist who formalizes a
+\emph{result} usually has none. The two situations call for two different kinds of formalization:
 
 \begin{center}
 \renewcommand{\arraystretch}{1.3}
@@ -154,7 +139,17 @@ community trusts, where no proof is within reach (a rigorous one would be Millen
 \end{tabular}
 \end{center}
 
-\noindent This is not a value judgment but a bookkeeping discipline, and it is necessary
+\noindent Seiberg--Witten is of the second kind: no rigorous derivation says that the low-energy
+physics on the Coulomb branch of $\mathcal{N}=2$ $SU(N)$ gauge theory is governed by the curve
+$y^2 = P_N(x)^2 - \Lambda^{2N}$. In its place stands an \emph{argument}---holomorphy from
+supersymmetry, the exact pattern of singularities, electric--magnetic duality, the weak-coupling
+asymptotics---that together single out that curve, held to be correct because three independent
+computations of the prepotential agree. We call this second category---the non-rigorous reasoning
+physicists nonetheless trust---\textbf{foundations for physical reasoning}, by analogy with
+foundations of mathematics.
+
+\medskip
+\noindent This split is not a value judgment but a bookkeeping discipline, and it is necessary
 because the kernel does not enforce it. A theorem can be proved, axiom-free, and still be the
 \textbf{wrong statement}---a dropped hypothesis, a flipped sign, a domain quietly narrowed. And
 a physical assumption written as an innocent-looking definition can smuggle a falsehood past
@@ -163,7 +158,7 @@ hypothesis, and every mathematical claim onto the proved side.
 
 For a reader who formalizes \emph{mathematics}, the delta is threefold:
 \begin{itemize}
-\item there is no proof to formalize---the result is unprovable within reach (\S2), so the
+\item there is no proof to formalize---the result is unprovable within reach (\S1), so the
 question is not ``is the proof correct?'' but ``are the assumptions explicit and the derivations
 sound?'';
 \item the physical lore becomes \textbf{named hypotheses}---predicates a theorem takes in its
@@ -241,7 +236,7 @@ Appendix A, which also discusses factoring these as one general N=2 special-geom
 
 \subsection{What is proved}
 
-From the hypotheses of \S5.1 (with the mathematical inputs of Appendix B), the following are
+From the hypotheses of \S4.1 (with the mathematical inputs of Appendix B), the following are
 \textbf{sorry-free theorems}, and \code{\#print axioms} reports exactly what each rests on:
 
 \begin{itemize}
@@ -357,7 +352,7 @@ physics right?'' becomes a precise, prioritized list of theorems to build.
 
 \section{Prospects: deriving the physical assumptions}
 
-The hypotheses of \S5.1 are themselves \emph{consequences} of the microscopic definition of N=2
+The hypotheses of \S4.1 are themselves \emph{consequences} of the microscopic definition of N=2
 super-Yang--Mills, reached by physical arguments of varying rigor. Some of them are, on inspection,
 \textbf{theorems}---and formalizing those would push the assumed frontier one level deeper, deriving
 the parent N=2 structure from inputs more primitive than its own data. Three tiers.
@@ -417,7 +412,7 @@ physics.
 
 \section{The physics hypotheses (H0--H6) --- predicates, not axioms}
 
-After the strengthening (\S5.1), the physical inputs are \textbf{contentful predicates and
+After the strengthening (\S4.1), the physical inputs are \textbf{contentful predicates and
 structures}, not opaque axioms: they are \emph{assumed as hypotheses} (bundled in
 \code{IsSWEffectiveTheory}) by the results that use them, so they never enter the trusted base.
 The carrier itself \emph{is} the data of an N=2 $U(1)^{N-1}$ EFT (H0). None of the following is
