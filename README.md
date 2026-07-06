@@ -49,9 +49,9 @@ discharge is future work.
 
 ## What is assumed
 
-- **Physics**: the named postulates **H0–H7** (predicates and structures in theorem
-  types — there is no physical `axiom` anywhere) and their stated curve/Kodaira
-  transcriptions, each validated per
+- **Physics**: the named postulates **H0–H7** below (predicates and structures in
+  theorem types — there is no physical `axiom` anywhere) and their stated
+  curve/Kodaira transcriptions, each validated per
   [`audit/FIDELITY_REVIEW.md`](audit/FIDELITY_REVIEW.md).
 - **Classical mathematics, as named axioms** (citable, numerically vetted): the Γ(2)
   covering/lift pair, Jacobi inversion, and two Jacobi-θ identities.
@@ -59,6 +59,23 @@ discharge is future work.
   declared future work.
 
 Full inventory: [`AXIOM_AUDIT.md`](AXIOM_AUDIT.md).
+
+### The postulates H0–H7
+
+| | Postulate | One-line content | Lean carrier |
+|---|---|---|---|
+| **H0** | The carrier | Coulomb-branch data: special coordinates `a, a_D`, coupling `τ`, and the Dirac-paired charge lattice, on the punctured moduli space | `PeriodBase` / `PeriodChart` |
+| **H1** | Special geometry | One holomorphic prepotential `F` with `a_D = ∂F/∂a`, `τ = ∂²F/∂a²`, and `Im τ ≻ 0` (unitarity) | `SpecialGeometry` |
+| **H2** | BPS singularities | A singularity of the effective theory is a charged BPS state going massless, `Z → 0` | `PeriodsDegenerateOnBoundary` |
+| **H3** | Monodromy | Around such a point the periods undergo the symplectic Picard–Lefschetz transvection in the light state's charge (one-loop log + Witten effect) | `PicardLefschetzAtGenericStratum` |
+| **H4** | EM duality | Charts glue by `Sp(2r,ℤ)` preserving the Dirac pairing and the central charge | `SymplecticReframing` / `PeriodAtlas` |
+| **H5** | R-symmetry | The anomaly-surviving discrete `U(1)_R` acts on the moduli with order dividing `2N` and permutes the singular locus | `HasFiniteOrderAutomorphism` |
+| **H6** | Weak-coupling asymptotics | The prepotential is one-loop exact up to a `Λ^{2N}`-weighted instanton series of prescribed scaling weights | `HasPrescribedAsymptotics` |
+| **H7** | Spurionic `U(1)_R` covariance of the Λ-family | Rescaling `Λ` is an RG transformation, `F(tΛ)(t·a) = t²F(Λ)(a)`; `Λ → ζΛ` with `ζ^{2N} = 1` (the θ-angle shift) changes `F` only by one integer EM frame shift `½aᵀBa`, constant across the family | `SpurionCovariantFamily` |
+
+H0–H6 constrain the theory at fixed `Λ` (bundled as `IsPolarizedPeriodChart`, with H4
+at the atlas level); H7 ties the `Λ`-family together. Physical justification: paper
+§4.2 and Appendix A; definitions: `SeibergWitten/Physics/Hypotheses.lean`.
 
 ## Verify it yourself
 

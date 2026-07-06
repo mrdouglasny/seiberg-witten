@@ -27,8 +27,7 @@ project assumptions. Everything else a theorem uses is listed in the golden trac
 | The SW curve realizes an N=2 U(1)^{N-1} effective theory satisfying H0–H6 | `sw_curve_admits_effective_theory` | `periodRigidityAxiom` |
 | H0–H6 fix that theory **uniquely up to Sp(2(N−1),ℤ) EM duality** | `sw_effective_theory_unique_up_to_duality`, atlas-level `sw_unique_up_to_duality` | `periodRigidityAxiom` |
 | Rank-1 (SU(2)) uniqueness, finer footprint | `sw_su2_unique` | `AX_thrice_punctured_uniformization`, `AX_developing_map_rigidity` (classical math; the physics — `SameSWMonodromy` — is a *defined* hypothesis, no longer an axiom) |
-| The SU(N) curve has genus N−1 | `genus_swCurve` | — (axiom-free) |
-| Special-Kähler positivity: τ = τᵀ, Im τ ≻ 0 | `sw_metric_posDef`, `sw_coupling_mem_siegel*` | `AX_PeriodCycleBasis` (inherited, see below) |
+| The SU(N) curve has genus N−1; special-Kähler positivity τ = τᵀ, Im τ ≻ 0 | `genus_swCurve`, `sw_metric_posDef`, `sw_coupling_mem_siegel*` — in `HigherGenus/`, **outside the certified build** (needs `jacobian-challenge`) | `AX_PeriodCycleBasis` (inherited there, see below) |
 | SU(2) curve singular **exactly** at u = ±Λ² (monopole/dyon) | `su2_singular_locus` | — (axiom-free) |
 | **`matterPeriodRigidityAxiom` discharged**: the first constructed `PeriodChart` (tangent ball at the AD point; exact two-point singular locus via the quartic-discriminant bridge; unique cusp; both unit charges' central charges vanish) — with the DISCLOSURE that the witness is non-SQCD, making the predicate's under-specification formal | `matterPeriodRigidity_nf1_ad`, `matter_argyresDouglasLocus_nonempty` | — (**axiom-free**, was + matterPeriodRigidityAxiom) |
 | **The cusp data derived from H-level inputs**: atlas gluing (H4) + parabolic cusp lifts with non-extension (H2/H3, H6-qual) ⇒ `SWModulusData`; parabolicity now a *proved* faithfulness check (`swM*_trace` — the v1 dyon slip is B7) | `swModulusData_of_atlas_and_lifts`, `cusp_dichotomy` | dichotomy axiom-free; rest θ-pair (`validate_cuspdata.py` 19/19) |
@@ -36,7 +35,6 @@ project assumptions. Everything else a theorem uses is listed in the golden trac
 | **Exactly one monopole–dyon pair** (`n = 1`, not assumed): counting (`12l−(m+6)`; alone gives only `n ≡ 1 mod 6` — K3 loophole witnessed) + homogeneity (`deg g₂ ≤ 2` from holomorphy + dimensions + ℤ₈ anomaly) pinch the count | `singularity_count_pinch`, `sw_exactly_two_singularities'`, `sw_singular_values` | — (axiom-free; `validate_singcount.py` 33/33) |
 | Picard–Lefschetz monodromy is symplectic (why Sp(2r,ℤ)) | `transvection_isSymplectic` | — (axiom-free) |
 | N_f=1 SQCD has an Argyres–Douglas cusp at (u,m)=(¾Λ², −¾Λ); pure SU(2) has none | `swCurveMatter_nf1_ad`, `not_isCuspOf_nf0` | — (axiom-free, pure algebra) |
-| The AD locus (mutually non-local massless states) is nonempty with matter | `matter_argyresDouglasLocus_nonempty` | `matterPeriodRigidityAxiom` |
 | One-loop beta function b₀ = 4 − N_f (existential form — see caveat in AXIOM_AUDIT) | `betaFunction_weakCoupling` | — (**axiom-free**; the log-running input was discharged 2026-07-05 by an explicit witness, exposing that the statement never tied `F` to the curve) |
 | **SU(2) coupling exists** (explicit elliptic construction, open nonempty chart) | `su2_coupling_exists` | `AX_elliptic_inversion` (classical: Jacobi inversion) |
 | **SU(2) coupling unique up to Γ(2)** — every developing map = `swTau` up to a Möbius frame | `su2_coupling_canonical` | `AX_elliptic_inversion` + the covering pair — classical only |
@@ -48,19 +46,21 @@ project assumptions. Everything else a theorem uses is listed in the golden trac
 | **Matter (N_f > 0) coupling rigidity**: two `j`-developing couplings agree on the chart up to `Γ(2)` × an anharmonic word | `matter_coupling_rigidity` | θ pair + covering pair — **no matter-specific axiom** |
 | The N_f=1 AD point as the invariant statement `g₂ = g₃ = 0` | `matter_nf1_ad_invariants` | — (axiom-free, two independent proofs) |
 
-The physical hypotheses H0–H6 do **not** appear in these lists because they are not
-global axioms: they are predicates carried in each theorem's statement (bundled as
-`IsPolarizedPeriodChart`), so they are visible in the theorem's type, not hidden in
-the trusted base. Their Lean definitions are in
+The physical hypotheses H0–H7 do **not** appear in these lists because they are not
+global axioms: they are predicates and structures carried in each theorem's statement
+(the fixed-Λ content bundled as `IsPolarizedPeriodChart`, H4 in the atlas gluing, H7
+as the family-level `SpurionCovariantFamily`), so they are visible in the theorem's
+type, not hidden in the trusted base. A one-line-per-hypothesis table is in the
+top-level [`README.md`](../README.md); their Lean definitions are in
 `SeibergWitten/Physics/Hypotheses.lean`; their physical justification is §4.2 and
 Appendix A of the paper.
 
 ## Verify it yourself — three commands
 
-1. **The proofs are real** (kernel check; needs a sibling `jacobian-challenge`
-   checkout — see [`../BUILD.md`](../BUILD.md)):
+1. **The proofs are real** (kernel check; self-contained on pinned Mathlib —
+   see [`../BUILD.md`](../BUILD.md)):
    ```bash
-   lake build SeibergWitten
+   lake build
    ```
 2. **The axiom inventory is exactly as stated** (regenerates the `#print axioms`
    trace and diffs it against the golden file):
@@ -68,9 +68,9 @@ Appendix A of the paper.
    bash audit/gen_axiom_report.sh --check
    ```
 3. **The computable content is true** (independent mpmath/numpy oracle, no shared
-   provenance with the Lean; 44/44 checks at 40-digit precision):
+   provenance with the Lean; nine suites, 278 checks at 30–40-digit precision):
    ```bash
-   cd audit/numerical && python3 validate_lambda.py   # needs mpmath, numpy
+   cd audit/numerical && for f in validate_*.py; do python3 "$f"; done   # needs mpmath, numpy
    ```
 4. **The faithfulness digest quotes the real code** (every Lean statement quoted in
    `FAITHFULNESS.md` is diffed verbatim against the source tree):
@@ -83,7 +83,7 @@ Appendix A of the paper.
 - [`FAITHFULNESS.md`](FAITHFULNESS.md) — **start here**: informal claim placed
   directly next to the verbatim Lean statement (machine-checked against the source
   by `check_faithfulness.py`), with the specific place misformalization could hide
-  called out per entry. Covers all three layers: the physics hypotheses H0–H6
+  called out per entry. Covers all three layers: the physics hypotheses H0–H7
   (Part I), the mathematical axioms (Part II — where the statement *is* the entire
   content), and the proved theorems E1–E11 (Part III, cross-referenced to the
   paper's numbering). The informal ↔ formal comparison is the one judgment only a
@@ -96,7 +96,7 @@ Appendix A of the paper.
   numerical oracle does and does not rule out.
 - [`../AXIOM_AUDIT.md`](../AXIOM_AUDIT.md) — every axiom with its rating, source,
   and discharge plan; the H5 (R-symmetry order) correction history.
-- `docs/paper1.tex` — the physics case for H0–H6 and the math–physics separation.
+- `docs/paper1.tex` — the physics case for H0–H7 and the math–physics separation.
 
 ## Known gaps — read before objecting
 
@@ -127,9 +127,10 @@ Stated here so the reviewer does not have to discover them:
 - `SameSWMonodromy` (which monopole/dyon monodromies occur) was demoted from an
   axiom to a definition (2026-07-04): both couplings develop the curve's pinned
   modulus `swCrossRatio`. No physics axiom remains on the rank-1 footprint.
-- `AX_PeriodCycleBasis` is inherited from the `jacobian-challenge` dependency (a
-  symplectic cycle basis for hyperelliptic curves); the trusted base spans that
-  repository too.
+- The certified build is Mathlib-only. The unbuilt higher-genus layer
+  (`HigherGenus/`) inherits `AX_PeriodCycleBasis` (a symplectic cycle basis for
+  hyperelliptic curves) from its `jacobian-challenge` dependency; the genus and
+  positivity rows above are proved there and carry that scope.
 
 ## What to poke at — walk the difficult-points register
 
