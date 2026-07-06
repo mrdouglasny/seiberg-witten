@@ -1,103 +1,110 @@
 # seiberg-witten
 
-Formalizing the **Seiberg–Witten solution of N=2 SU(N) super Yang–Mills** in Lean 4.
-The main library is **self-contained on pinned Mathlib**; the higher-genus
-Riemann-surface layer (built against
-[`jacobian-challenge`](https://github.com/mrdouglasny/jacobian-challenge)) lives in
-`HigherGenus/`, outside the build — see its README.
+The **Seiberg–Witten solution of N=2 SU(2) super-Yang–Mills**, formalized in **Lean 4**.
 
-The low-energy data of the theory *is* the period geometry of a family of algebraic
-curves, so it sits directly on top of that machinery:
+No rigorous proof of this result exists — it presupposes constructing the interacting
+4d quantum field theory. What a proof assistant *can* do is treat the physics argument
+rigorously: state the physical inputs as **explicit, named postulates** (H0–H7) and
+dictionary transcriptions carried in theorem types — never as axioms — and machine-check
+that the Seiberg–Witten solution follows. The trusted base is then Lean's three logical
+axioms plus a short, named list of classical mathematics, tracked *per theorem* by a
+golden `#print axioms` certificate. The companion paper is
+[`docs/paper1.tex`](docs/paper1.tex).
 
-| SW physics (KLYT / Argyres–Faraggi / Lerche) | Our Lean foundation |
-|---|---|
-| SW curve `y² = P_N(x)² − Λ^{2N}` (hyperelliptic, genus `N−1`) | `jacobian-challenge` hyperelliptic family |
-| holomorphic differentials `ωₖ = x^{N−1−k}dx/y = ∂λ_SW/∂uₖ` | `HolomorphicOneForm` |
-| special coords `aᵢ, a_{D,i} = ∮ λ_SW` | period map over `H₁` |
-| effective coupling `τ_{ij} = ∂a_{D,i}/∂a_j = ∂²F/∂aᵢ∂aⱼ` | the curve's period matrix |
-| special-Kähler consistency `τ = τᵀ`, `Im τ ≻ 0` | Riemann bilinear relations (R1/R2) |
+The library is **self-contained on pinned Mathlib** and `sorry`-free.
 
-## Plan (milestones)
+## The claim
 
-Full per-phase plan (target theorems, what each reduces to in jacobian-challenge,
-effort, risks) is in [`PLAN.md` (archived, local `history/`)](PLAN.md). Summary:
+For SU(2)/genus one, the compiled development proves the listed Seiberg–Witten
+consequences without `sorry` and without hidden physics axioms; physics enters through
+explicit H0–H7 predicates, structures, definitions, and stated dictionary
+transcriptions. The remaining trusted inputs beyond Lean's standard three are
+explicitly named classical-mathematics axioms, tracked per theorem by
+[`audit/axiom-report.txt`](audit/axiom-report.txt). The higher-rank SU(N) headline is a
+proved skeleton modulo the coarse period-geometry axiom `periodRigidityAxiom`, whose
+discharge is future work.
 
-- **Phase 0 — curve + genus.** ✅ The SU(N) curve `y²=P_N²−Λ^{2N}` as a hyperelliptic
-  instance; **`genus = N−1`** proved (`SeibergWitten/Curve.lean`, axiom-clean, via
-  jacobian-challenge's `genus_HyperellipticEven_eq`).
-- **Phase 1 — special geometry (headline).** Holomorphic basis `ωₖ`, period matrix
-  `τ`; prove **`τ = τᵀ` (R1) and `Im τ ≻ 0` (R2) ⇒ the special-Kähler metric is
-  positive** on the smooth Coulomb branch. *SU(2) first* (genus 1 — reachable
-  **axiom-free** from jacobian-challenge's unconditional elliptic period witness),
-  then SU(N).
-- **Phase 2 — special coordinates + prepotential.** Meromorphic `λ_SW` (residues =
-  masses), periods `a, a_D`, `a_D = ∂F/∂a`, `τ = ∂²F/∂a²`. Needs the
-  meromorphic-period (mass) layer.
-- **Phase 3 — singular locus + Argyres–Douglas + Picard–Fuchs.** The discriminant
-  stratification; AD loci as higher-order curve degenerations; Picard–Fuchs ODEs for
-  the periods (links `math-commons/picard-lefschetz` for weak-coupling/instanton
-  asymptotics).
-- **Phase 4 (stretch) — monodromy `Sp(2(N−1),ℤ)`, BPS spectrum, periodic Toda.**
+## What is proved (highlights)
 
-## Dependencies
+- **Uniqueness up to Γ(2) duality** (`SU2.sw_su2_unique`, `sw_su2_unique_coulomb`):
+  footprint = standard-3 + the Γ(2) covering/lift pair — nothing else. The full chain
+  is formal: qualitative cusp data (`SWModulusData`) ⟹ the developing formula
+  `λ(τ(u)) = 2Λ²/(u+Λ²)` *including its normalization*
+  (`swModulusData_eq_crossRatio`, **axiom-free**) ⟹ uniqueness; and the cusp data
+  itself follows from an H4-style atlas plus parabolic cusp lifts with non-extension
+  (`swModulusData_of_atlas_and_lifts`).
+- **The explicit coupling** (`su2_coupling_exists`, special coordinates, `da_D/da = τ`,
+  the one-loop running): classical Jacobi inversion (`AX_elliptic_inversion`) as the
+  one extra input.
+- **Why exactly one monopole–dyon pair** (`singularity_count_pinch`): the Euler/mod-12
+  counting alone allows `n ≡ 1 (mod 6)` — the K3 loophole is *witnessed* — and the
+  R-spurion covariance (H7, through its curve transcription) pinches `n = 1`.
+  Axiom-free.
+- **SU(2) SQCD (matter)**: the coupling's uniqueness on the same classical basis
+  (`matter_coupling_rigidity`); the Argyres–Douglas locus nonempty **axiom-free**
+  (`matter_argyresDouglasLocus_nonempty`), via the development's first constructed
+  period chart and an exact discriminant factorization.
+- **The θ/λ layer**: `λ = θ₂⁴/θ₃⁴` proved Γ(2)-invariant, the S/T laws, `λ` omitting
+  `{0,1}`, `λ → 0` at the cusp — on two citable Jacobi-θ identities.
 
-- **Now:** `jacobian-challenge` (hyperelliptic curves, `HolomorphicOneForm`, period
-  lattice, `ComplexTorus`/Jacobian, intersection form, Riemann bilinear).
-- **Later (Phase 2–3):** `picard-lefschetz` (`AsymptoticMethods`) — contour
-  deformation underpinning periods, Laplace/WKB/Mellin–Barnes for period asymptotics,
-  and the SUSY-localization (Nekrasov) route to the *same* prepotential as a deep
-  cross-check. *Not yet a dependency — added when Phase 2/3 needs it.*
-- The topological monodromy / vanishing-cycle Picard–Lefschetz *formula* (Phase 4) is
-  **not** in `picard-lefschetz` (which is the asymptotics flavor); it would be new
-  machinery on jacobian-challenge's H₁ + intersection-form layer.
+## What is assumed
 
-## Assurance
+- **Physics**: the named postulates **H0–H7** (predicates and structures in theorem
+  types — there is no physical `axiom` anywhere) and their stated curve/Kodaira
+  transcriptions, each validated per
+  [`audit/FIDELITY_REVIEW.md`](audit/FIDELITY_REVIEW.md).
+- **Classical mathematics, as named axioms** (citable, numerically vetted): the Γ(2)
+  covering/lift pair, Jacobi inversion, and two Jacobi-θ identities.
+- **Higher rank only**: `periodRigidityAxiom` (Gauss–Manin period geometry) — the
+  declared future work.
 
-**Reviewing this project? Start at [`audit/REVIEWER.md`](audit/REVIEWER.md)** — the
-claims, what each rests on, and the three commands that verify it independently.
+Full inventory: [`AXIOM_AUDIT.md`](AXIOM_AUDIT.md).
 
-A **forward-chaining** corpus project — it follows
-[`math-commons/formalization-assurance`](https://github.com/math-commons/formalization-assurance)
-in forward mode: a `CORRESPONDENCE_INDEX` mapping each KLYT/Argyres–Faraggi/Lerche
-equation to its Lean form, `FIDELITY_REVIEW` with **numeric cross-checks** (periods
-and `τ` are computable — diff against an independent reference), and a
-`formalization.yaml` card. Axiom audit stays ≈ standard-3 (it inherits only
-jacobian-challenge's, and Phase 0 is axiom-clean).
+## Verify it yourself
 
-## Status
+```bash
+lake build                                # pinned Mathlib; no other dependency
+bash audit/gen_axiom_report.sh --check    # the golden #print axioms certificate
+python3 audit/check_faithfulness.py       # paper-facing quotes match the source
+for f in audit/numerical/validate_*.py; do python3 "$f"; done   # 9 oracle suites, 278 checks
+```
 
-v0.1 — **Phases 0 + 1a landed**: genus `N−1` (axiom-clean); and the SW coupling
-`τ ∈ SiegelUpperHalfSpace (N−1)` ⇒ `τ = τᵀ` and `Im τ ≻ 0` (special-Kähler metric
-positivity), modulo the off-critical-path `AX_PeriodCycleBasis`. Plus the SU(2)
-(original SW) genus-1 specialization. Build wires `jacobian-challenge` as a Lake
-path dependency; see `BUILD.md`. Next: Phase 1b (axiom-free SU(2)) and Phase 2
-(special coordinates / prepotential).
+Reviewing the project? **Start at [`audit/REVIEWER.md`](audit/REVIEWER.md)** — the
+claims, what each rests on, and the evidence per claim. The method follows
+[`math-commons/formalization-assurance`](https://github.com/math-commons/formalization-assurance):
+faithfulness digests with machine-verified quotes, fidelity review with independent
+numeric cross-checks, difficult points recorded, adversarial statement review before
+adoption.
 
-**Physics-foundations layer** (`SeibergWitten/Physics/`) — the project's foundations track: the SW
-physical hypotheses H0–H7 as contentful predicates and structures (the fixed-Λ content bundled as
-`IsPolarizedPeriodChart`; H4 in the atlas gluing; H7 the family-level `SpurionCovariantFamily`).
-**SU(2)/genus one is the fully proved route**: uniqueness (`SU2.sw_su2_unique`) reports
-**standard-3 + the `Γ(2)` covering/lift pair only** — `SameSWMonodromy` is a *definition* (demoted
-from an axiom 2026-07-04), and **no physical axiom exists anywhere**; the explicit coupling layer
-adds the classical `AX_elliptic_inversion` (Jacobi inversion), the λ/θ layer the θ pair. The
-higher-rank headline — uniqueness up to `Sp(2(N−1),ℤ)` duality
-(`sw_effective_theory_unique_up_to_duality`, atlas-level `sw_unique_up_to_duality`) and existence
-(`sw_curve_admits_effective_theory`), in `Physics/PeriodLayer.lean` — is a **proved skeleton modulo
-one consolidated math axiom `periodRigidityAxiom`** (the period-level Picard–Fuchs / Gauss–Manin
-geometry, discharge = future work). No `sorry` in the main compiled `SeibergWitten`/`RiemannPeriods`
-libraries — after relocating development scratch to the local `history/` archive, no `sorry`
-remains in any tracked Lean source. Full axiom list: `AXIOM_AUDIT.md`; the golden `#print axioms`
-certificate is `audit/axiom-report.txt` (regenerate/check: `bash audit/gen_axiom_report.sh
-[--check]`); the write-up: `docs/paper1.tex`.
+## Layout
 
-**Discharging `periodRigidityAxiom`** (`audit/PERIOD_LAYER_DISCHARGE.md`) — in
-progress, routed through jacobian-challenge's classical-period axioms (`AX_RiemannBilinear`,
-`AX_PeriodCycleBasis`) rather than the placeholder. The genus-1 **analytic engine is built**, adding
-**no new axioms**: `swPeriodMap`/`swVariation` (period map `u↦τ(u)∈Siegel`, the weight-1 VHS object;
-standard-3 + `AX_PeriodCycleBasis`), and the SW special coordinate `a=∮λ_SW` with holomorphy, the
-integration-by-parts identity, and the special-geometry relation `∂a/∂u=½∮dx/y` (R2a/R2b, all
-**standard-3**, in `Physics/Genus1Periods.lean`). Remaining (multi-week): R2c closed-cycle periods →
-`PeriodChart.SpecialGeometry` (H1) → H2/H3/H6 → rigidity → assemble `def periodRigidityAxiom`.
+```
+SeibergWitten/          the library (physics layer: Physics/)
+RiemannPeriods/         weight-1 VHS bootstrap (Mathlib-only)
+HigherGenus/            higher-genus Riemann-surface layer — NOT built (see below)
+audit/                  certificate, checkers, oracles, V&V documents
+docs/paper1.tex         the companion paper
+```
+
+## Higher genus and `jacobian-challenge`
+
+The general-SU(N) story (genus `N−1` proved, Riemann-bilinear positivity
+`Im τ ≻ 0`) lives in [`HigherGenus/`](HigherGenus/), which builds against the external
+Riemann-surface / period / Jacobian library
+[`jacobian-challenge`](https://github.com/mrdouglasny/jacobian-challenge) and is kept
+**outside the certified build** — the main library and every footprint in the paper
+are Mathlib-only. `HigherGenus/README.md` has the re-enable recipe; discharging
+`periodRigidityAxiom` through that layer is the roadmap in
+[`audit/PERIOD_LAYER_DISCHARGE.md`](audit/PERIOD_LAYER_DISCHARGE.md).
+
+## Acknowledgments
+
+The higher-genus layer builds on `jacobian-challenge`, and this project owes much to
+its contributors — **Kevin Buzzard**, **Rado Kirov** (whose Dolbeault/Riemann-surface
+results it vendors), and the
+[other contributors](https://github.com/mrdouglasny/jacobian-challenge/graphs/contributors).
+See the paper's acknowledgments for the full list of colleagues whose reviews and
+discussions shaped the project.
 
 ## License
 
