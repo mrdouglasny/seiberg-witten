@@ -99,9 +99,11 @@ are Mathlib-only. `HigherGenus/README.md` has the re-enable recipe; discharging
 
 ## Acknowledgments
 
-The higher-genus layer builds on `jacobian-challenge`, and this project owes much to
-its contributors — **Kevin Buzzard**, **Rado Kirov** (whose Dolbeault/Riemann-surface
-results it vendors), and the
+The certified library depends only on Mathlib; it is the **higher-genus skeleton**
+(`HigherGenus/`, outside the build) that builds against
+[`jacobian-challenge`](https://github.com/mrdouglasny/jacobian-challenge), which in
+turn vendors **Rado Kirov**'s Dolbeault/Riemann-surface development. This project owes
+much to that library and its contributors — **Kevin Buzzard**, **Rado Kirov**, and the
 [other contributors](https://github.com/mrdouglasny/jacobian-challenge/graphs/contributors).
 See the paper's acknowledgments for the full list of colleagues whose reviews and
 discussions shaped the project.
