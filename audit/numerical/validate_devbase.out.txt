@@ -1,0 +1,19 @@
+A. the cross-ratio satisfies SWModulusData (sampled)
+  [PASS] A1 omits 0 on samples
+  [PASS] A2 omits 1 on samples
+  [PASS] A3 J -> 1 at the monopole point
+  [PASS] A4 1/J -> 0 at the dyon point
+  [PASS] A5 J -> 0 at weak coupling
+B. must-fail: the p = 2 candidate passes cusps but fails omit-1
+  [PASS] B1 p=2: J -> 1 at monopole
+  [PASS] B2 p=2: 1/J -> 0 at dyon
+  [PASS] B3 p=2: J -> 0 at weak coupling
+  [PASS] B4 p=2 FAILS omit-1 at u = -3L^2 (in the smooth locus!)
+C. root arithmetic of the pinch
+  [PASS] C1 p=2 solutions are {L^2, -3L^2}, distinct
+  [PASS] C2 -L^2 is never a solution (0^p != c)
+D. three-point Mobius rigidity: the coefficient 2 is derived
+  [PASS] D1 c = 2L^2
+  [PASS] D2 the resulting map has the right three values
+
+13/13 checks passed

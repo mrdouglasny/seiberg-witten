@@ -1,0 +1,27 @@
+name = "SeibergWitten"
+version = "0.1.0"
+defaultTargets = ["SeibergWitten"]
+
+[leanOptions]
+pp.unicode.fun = true
+autoImplicit = false
+relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+weak.linter.style.header = false
+maxSynthPendingDepth = 3
+
+# Mathlib, pinned (was pulled transitively via the former jacobian-challenge path
+# dependency; the higher-genus layer that used that library lives, unbuilt, in HigherGenus/).
+[[require]]
+name = "mathlib"
+git = "https://github.com/leanprover-community/mathlib4"
+rev = "c5ea00351c28e24afc9f0f84379aa41082b1188f"
+
+[[lean_lib]]
+name = "SeibergWitten"
+
+# Bootstrap of the weight-1 VHS / period-geometry layer (SW-agnostic, Mathlib-only) whose job is to
+# validate / eventually discharge the period axioms (`swPeriodLayer`); see
+# `audit/RIEMANN_PERIODS_SCOPE.md`. A future standalone `riemann-periods` repo extraction.
+[[lean_lib]]
+name = "RiemannPeriods"

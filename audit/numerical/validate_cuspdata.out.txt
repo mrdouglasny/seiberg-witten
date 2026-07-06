@@ -1,0 +1,25 @@
+A. matrix arithmetic (incl. PARABOLICITY - the check that caught the v1 bug)
+  [PASS] A1 det M_weak = 1
+  [PASS] A2 M_weak == I mod 2
+  [PASS] A1 det M_mono = 1
+  [PASS] A2 M_mono == I mod 2
+  [PASS] A1 det M_dyon = 1
+  [PASS] A2 M_dyon == I mod 2
+  [PASS] A3 M_mono * M_dyon = M_weak
+  [PASS] A4 M_weak parabolic (|trace| = 2)
+  [PASS] A4 M_mono parabolic (|trace| = 2)
+  [PASS] A4 M_dyon parabolic (|trace| = 2)
+  [PASS] A5 M_mono fixes tau = 0
+  [PASS] A6 M_dyon fixes tau = 1
+B. lambda-invariance at random H points
+  [PASS] B1 lambda(M_weak tau) = lambda(tau)  max err 6.42e-42
+  [PASS] B1 lambda(M_mono tau) = lambda(tau)  max err 8.22e-41
+  [PASS] B1 lambda(M_dyon tau) = lambda(tau)  max err 2.93e-41
+C. width-2 convention
+  [PASS] C1 lambda(tau) ~ 16 e^{i pi tau}
+D. im positivity of images
+  [PASS] D1 Im(M_weak tau) > 0
+  [PASS] D1 Im(M_mono tau) > 0
+  [PASS] D1 Im(M_dyon tau) > 0
+
+19/19 checks passed

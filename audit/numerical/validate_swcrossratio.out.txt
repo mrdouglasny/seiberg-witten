@@ -1,0 +1,22 @@
+=== sanity: u = 3, L = 1 is the self-dual point (m = 1/2, tau = i) ===
+  [PASS] tau(3) = i  tau=(0.0 + 1.0j)
+=== the pin: mhat(u) = lambda(tau_curve(u)) vs the six anharmonic candidates ===
+  [PASS] u=(5.0 + 0.0j) L=1.0 -> 2L^2/(u+L^2)  res=4.93e-32
+  [PASS] u=(10.0 + 0.0j) L=1.0 -> 2L^2/(u+L^2)  res=1.48e-31
+  [PASS] u=(2.2 + 0.0j) L=1.0 -> 2L^2/(u+L^2)  res=0.0
+  [PASS] u=(7.0 + 0.0j) L=1.7 -> 2L^2/(u+L^2)  res=0.0
+  [PASS] u=(3.0 + 2.0j) L=1.0 -> 2L^2/(u+L^2)  res=2.57e-31
+  [PASS] u=(-1.0 + 4.0j) L=1.0 -> 2L^2/(u+L^2)  res=7.67e-31
+  [PASS] u=(0.5 + 2.5j) L=1.0 -> 2L^2/(u+L^2)  res=3.59e-31
+  [PASS] UNIQUE winner across all samples: 2L^2/(u+L^2)  tally={'2L^2/(u+L^2)': 7}
+=== cross-check vs the C1 bridge: tau_curve(u) matches i K(1-m)/K(m) at m = m0(u) ===
+  [PASS] tau bridge  u=(5.0 + 0.0j)  res=0.0
+  [PASS] tau bridge  u=(10.0 + 0.0j)  res=1.97e-31
+  [PASS] tau bridge  u=(2.2 + 0.0j)  res=9.86e-32
+  [PASS] tau bridge  u=(7.0 + 0.0j)  res=0.0
+  [PASS] tau bridge  u=(3.0 + 2.0j)  res=1.99e-31
+=== normalization uniqueness: 2*tau and tau/2 do NOT match any candidate ===
+  [PASS] 2*tau matches nothing  closest=0.323
+  [PASS] tau/2 matches nothing  closest=0.262
+
+=== ALL PASS : 16/16 checks, dps=30 ===

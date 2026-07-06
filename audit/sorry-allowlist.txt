@@ -1,0 +1,3 @@
+# audit/sorry-allowlist.txt — .lean files permitted to contain `sorry`.
+# One repo-relative path per line. The project is currently sorry-free, so this list is empty;
+# every .lean file must be sorry-free or the assurance gate fails.

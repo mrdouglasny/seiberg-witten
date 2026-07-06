@@ -1,0 +1,104 @@
+=== D0: proposed Lean defs = classical K, E (vs mpmath.ellipk/ellipe) ===
+  [PASS] K_def(m)=ellipk  m=(0.3 + 0.4j)  res=0.0
+  [PASS] E_def(m)=ellipe  m=(0.3 + 0.4j)  res=0.0
+  [PASS] K_def(m)=ellipk  m=(0.7 - 0.2j)  res=0.0
+  [PASS] E_def(m)=ellipe  m=(0.7 - 0.2j)  res=0.0
+  [PASS] K_def(m)=ellipk  m=(0.5 + 0.0j)  res=0.0
+  [PASS] E_def(m)=ellipe  m=(0.5 + 0.0j)  res=0.0
+  [PASS] K_def(m)=ellipk  m=(-0.3 + 0.5j)  res=0.0
+  [PASS] E_def(m)=ellipe  m=(-0.3 + 0.5j)  res=0.0
+  [PASS] K_def(m)=ellipk  m=(-1.2 - 0.7j)  res=0.0
+  [PASS] E_def(m)=ellipe  m=(-1.2 - 0.7j)  res=0.0
+  [PASS] K_def(m)=ellipk  m=(1.5 + 0.8j)  res=0.0
+  [PASS] E_def(m)=ellipe  m=(1.5 + 0.8j)  res=0.0
+  [PASS] K_def(m)=ellipk  m=(2.0 - 3.0j)  res=0.0
+  [PASS] E_def(m)=ellipe  m=(2.0 - 3.0j)  res=0.0
+  [PASS] K_def(m)=ellipk  m=(0.99 + 0.001j)  res=0.0
+  [PASS] E_def(m)=ellipe  m=(0.99 + 0.001j)  res=0.0
+  [PASS] K_def(m)=ellipk  m=(0.01 + 0.0j)  res=0.0
+  [PASS] E_def(m)=ellipe  m=(0.01 + 0.0j)  res=0.0
+=== C1: Jacobi inversion — tau* = i K(1-m)/K(m) inverts lambda; theta bridge ===
+  [PASS] Im tau* > 0      m=(0.3 + 0.4j)  Im=1.0656
+  [PASS] lambda(tau*)=m   m=(0.3 + 0.4j)  res=1.28e-41
+  [PASS] K=(pi/2)theta3^2 m=(0.3 + 0.4j)  res=4.63e-41
+  [PASS] Im tau* > 0      m=(0.7 - 0.2j)  Im=0.83171
+  [PASS] lambda(tau*)=m   m=(0.7 - 0.2j)  res=3.46e-41
+  [PASS] K=(pi/2)theta3^2 m=(0.7 - 0.2j)  res=2.37e-41
+  [PASS] Im tau* > 0      m=(0.5 + 0.0j)  Im=1.0
+  [PASS] lambda(tau*)=m   m=(0.5 + 0.0j)  res=5.74e-42
+  [PASS] K=(pi/2)theta3^2 m=(0.5 + 0.0j)  res=2.3e-41
+  [PASS] Im tau* > 0      m=(-0.3 + 0.5j)  Im=1.1066
+  [PASS] lambda(tau*)=m   m=(-0.3 + 0.5j)  res=2.87e-41
+  [PASS] K=(pi/2)theta3^2 m=(-0.3 + 0.5j)  res=2.87e-42
+  [PASS] Im tau* > 0      m=(-1.2 - 0.7j)  Im=0.92007
+  [PASS] lambda(tau*)=m   m=(-1.2 - 0.7j)  res=4.14e-41
+  [PASS] K=(pi/2)theta3^2 m=(-1.2 - 0.7j)  res=2.3e-41
+  [PASS] Im tau* > 0      m=(1.5 + 0.8j)  Im=0.63398
+  [PASS] lambda(tau*)=m   m=(1.5 + 0.8j)  res=2.3e-41
+  [PASS] K=(pi/2)theta3^2 m=(1.5 + 0.8j)  res=0.0
+  [PASS] Im tau* > 0      m=(2.0 - 3.0j)  Im=0.62588
+  [PASS] lambda(tau*)=m   m=(2.0 - 3.0j)  res=2.94e-40
+  [PASS] K=(pi/2)theta3^2 m=(2.0 - 3.0j)  res=2.57e-41
+  [PASS] Im tau* > 0      m=(0.99 + 0.001j)  Im=0.42632
+  [PASS] lambda(tau*)=m   m=(0.99 + 0.001j)  res=4.59e-41
+  [PASS] K=(pi/2)theta3^2 m=(0.99 + 0.001j)  res=4.59e-41
+  [PASS] Im tau* > 0      m=(0.01 + 0.0j)  Im=2.3468
+  [PASS] lambda(tau*)=m   m=(0.01 + 0.0j)  res=5.38e-42
+  [PASS] K=(pi/2)theta3^2 m=(0.01 + 0.0j)  res=0.0
+=== C2: Legendre relation  E K' + E' K - K K' = pi/2 ===
+  [PASS] Legendre         m=(0.3 + 0.4j)  res=2.37e-41
+  [PASS] Legendre         m=(0.7 - 0.2j)  res=2.45e-41
+  [PASS] Legendre         m=(0.5 + 0.0j)  res=2.3e-41
+  [PASS] Legendre         m=(-0.3 + 0.5j)  res=2.3e-41
+  [PASS] Legendre         m=(-1.2 - 0.7j)  res=3.25e-41
+  [PASS] Legendre         m=(1.5 + 0.8j)  res=2.57e-41
+  [PASS] Legendre         m=(2.0 - 3.0j)  res=2.57e-41
+  [PASS] Legendre         m=(0.99 + 0.001j)  res=2.3e-41
+  [PASS] Legendre         m=(0.01 + 0.0j)  res=2.3e-41
+=== C3: K(1-m) + (1/2) log m -> 2 log 2  as m -> 0 (rate ~ m log m) ===
+  [PASS] C3 residual      m~1e-4 (real)  res=0.000125
+  [PASS] C3 residual      m~1e-4 (cplx)  res=0.000125
+  [PASS] C3 residual      m~1e-8 (real)  res=2.4e-8
+  [PASS] C3 residual      m~1e-8 (cplx)  res=2.4e-8
+  [PASS] C3 residual      m~1e-12 (real)  res=3.55e-12
+  [PASS] C3 residual      m~1e-12 (cplx)  res=3.55e-12
+  [PASS] C3 residual      m~1e-16 (real)  res=4.7e-16
+  [PASS] C3 residual      m~1e-16 (cplx)  res=4.7e-16
+=== C1v2: K(m) != 0 (explicit nonvanishing clause) — grid sample ===
+  [PASS] min |K| on 39-pt grid  min|K|=0.47144
+=== C3v2: E(m) -> pi/2 and E(1-m) -> 1 as m -> 0 (H2's missing limits) ===
+  [PASS] E(m)->pi/2       m~1e-4 (real)  res=3.93e-5
+  [PASS] E(1-m)->1        m~1e-4 (real)  res=0.000275
+  [PASS] E(m)->pi/2       m~1e-4 (cplx)  res=3.93e-5
+  [PASS] E(1-m)->1        m~1e-4 (cplx)  res=0.000275
+  [PASS] E(m)->pi/2       m~1e-8 (real)  res=3.93e-9
+  [PASS] E(1-m)->1        m~1e-8 (real)  res=5.05e-8
+  [PASS] E(m)->pi/2       m~1e-8 (cplx)  res=3.93e-9
+  [PASS] E(1-m)->1        m~1e-8 (cplx)  res=5.05e-8
+  [PASS] E(m)->pi/2       m~1e-12 (real)  res=3.93e-13
+  [PASS] E(1-m)->1        m~1e-12 (real)  res=7.35e-12
+  [PASS] E(m)->pi/2       m~1e-12 (cplx)  res=3.93e-13
+  [PASS] E(1-m)->1        m~1e-12 (cplx)  res=7.35e-12
+=== C3v3: K(m) -> pi/2 as m -> 0 (added for the monopole-vanishing theorem) ===
+  [PASS] K(m)->pi/2       m~1e-4 (real)  res=3.93e-5
+  [PASS] K(m)->pi/2       m~1e-4 (cplx)  res=3.93e-5
+  [PASS] K(m)->pi/2       m~1e-8 (real)  res=3.93e-9
+  [PASS] K(m)->pi/2       m~1e-8 (cplx)  res=3.93e-9
+  [PASS] K(m)->pi/2       m~1e-12 (real)  res=3.93e-13
+  [PASS] K(m)->pi/2       m~1e-12 (cplx)  res=3.93e-13
+=== C4: cusp labeling — tau + (i/pi) log(m/16) single-valued at m=0 (T^2) ===
+  [PASS] tau jump at m=0 -> +2   delta=0.3  jump=(1.8090142 + 0.0j)
+  [PASS] h single-valued at m=0  delta=0.3  |dh|=9.41e-8
+  [PASS] tau jump at m=0 -> +2   delta=0.1  jump=(1.9363381 + 0.0j)
+  [PASS] h single-valued at m=0  delta=0.1  |dh|=3.18e-8
+  [PASS] tau jump at m=0 -> +2   delta=0.01  jump=(1.9936338 + 0.0j)
+  [PASS] h single-valued at m=0  delta=0.01  |dh|=3.18e-9
+=== C4: cusp at m=1 — the jump is the conjugate parabolic ST^2S^-1 ===
+  [PASS] m=1 jump is ST2S^-1     delta=0.3  res=0.00661 (orient A=g(B))
+  [PASS] m=1 jump is ST2S^-1     delta=0.1  res=0.0022 (orient A=g(B))
+  [PASS] m=1 jump is ST2S^-1     delta=0.01  res=0.00022 (orient A=g(B))
+=== C4 analyticity of the remainder h (rebuts review-round-2 objection) ===
+  [PASS] d2/m^2 bounded (analytic), stable to 1e-4  ratios=['0.12935916', '0.12931385', '0.1293134']
+  [PASS] |h1| = 1/(2pi) (nome-series prediction)  |h1|=0.159154945 vs 0.1591549431
+
+=== ALL PASS : 92/92 checks, dps=40 ===

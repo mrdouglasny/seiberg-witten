@@ -1,0 +1,203 @@
+# formalization.yaml (v0.3) — https://github.com/mathlib-initiative/formalization.yaml
+# seiberg-witten — forward-chaining formalization of the SW solution of N=2 SU(N) SYM
+
+version: "v0.3"
+
+project:
+  name: "Seiberg–Witten solution of N=2 SU(N) super Yang–Mills"
+  authors:
+    - "Michael R. Douglas"
+    # Code is AI-authored; see automation.
+  license: "Apache-2.0"
+
+sources:
+  - title: "Electric-magnetic duality, monopole condensation, … (SW)"
+    authors: ["N. Seiberg", "E. Witten"]
+    id: "Nucl. Phys. B426 (1994) 19; hep-th/9407087"
+    type: "paper"
+  - title: "Simple singularities and N=2 supersymmetric Yang-Mills theory (KLYT)"
+    authors: ["A. Klemm", "W. Lerche", "S. Yankielowicz", "S. Theisen"]
+    id: "Phys. Lett. B344 (1995) 169; hep-th/9411048"
+    type: "paper"
+  - title: "Vacuum structure and spectrum of N=2 SUSY gauge theory (Argyres–Faraggi)"
+    authors: ["P. C. Argyres", "A. E. Faraggi"]
+    id: "Phys. Rev. Lett. 74 (1995) 3931; hep-th/9411057"
+    type: "paper"
+  - title: "Introduction to Seiberg-Witten theory and its stringy origin (Lerche)"
+    authors: ["W. Lerche"]
+    id: "hep-th/9611190"
+    type: "review"
+  - title: "jacobian-challenge (Riemann-surface / period / Jacobian machinery)"
+    authors: ["Michael R. Douglas"]
+    id: "https://github.com/mrdouglasny/jacobian-challenge"
+    type: "formalization"
+    # Path dependency; supplies hyperelliptic curves, HolomorphicOneForm, period
+    # lattice, ComplexTorus/Jacobian, intersection form, Riemann bilinear relations.
+
+status:
+  scope: >
+    Formalize the Seiberg–Witten solution of pure N=2 SU(N) SYM as period geometry
+    of the SW curve y²=P_N²−Λ^{2N}: the curve and its genus (Phase 0, done); the
+    period matrix / special-Kähler positivity τ=τᵀ, Im τ≻0 (Phase 1); special
+    coordinates and the prepotential (Phase 2); singular locus / Argyres–Douglas
+    loci / Picard–Fuchs (Phase 3). Built on jacobian-challenge.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms:
+    - propext
+    - Classical.choice
+    - Quot.sound
+    # Inherited from jacobian-challenge:
+    - Jacobians.Axioms.AX_PeriodCycleBasis
+    - Jacobians.Axioms.AX_RiemannBilinear
+    # The project's OWN axioms (physics-foundations layer; full table in AXIOM_AUDIT.md).
+    # Phase 0 + the SU(2) genus + the genus-1 period engine are standard-3. The headline
+    # (uniqueness/existence) rests only on periodRigidityAxiom; SU(2) uniqueness on the
+    # Γ(2)-covering/θ axioms + SameSWMonodromy; the EFT beta-function check on
+    # periodRatio_logDeriv_asymptotic (off the headline footprint).
+    - periodRigidityAxiom
+    - matterPeriodRigidityAxiom
+    - SameSWMonodromy
+    - AX_developing_map_rigidity
+    - AX_thrice_punctured_uniformization
+    - localMonodromy
+    - AX_picard_lefschetz_local
+    - AX_jacobi_quartic
+    - AX_theta3_ne_zero
+    - periodRatio_logDeriv_asymptotic
+  main_results:
+    - declaration: "SeibergWitten.genus_swCurve"
+      file: "SeibergWitten/Curve.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      literature_dependencies:
+        - statement: "The SU(N) SW curve y²=P_N²−Λ^{2N} is hyperelliptic of genus N−1."
+          source: "KLYT, hep-th/9411048; Argyres–Faraggi, hep-th/9411057"
+    - declaration: "SeibergWitten.genus_swCurve_su2"
+      file: "SeibergWitten/Curve.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      literature_dependencies:
+        - statement: "The SU(2) SW curve y²=(x²−u)²−Λ⁴ has genus 1."
+          source: "Seiberg–Witten, hep-th/9407087"
+    - declaration: "SeibergWitten.sw_coupling_mem_siegel_rank"
+      file: "SeibergWitten/SpecialGeometry.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound, Jacobians.Axioms.AX_PeriodCycleBasis]
+      literature_dependencies:
+        - statement: >
+            The SW effective coupling τ is the period matrix of the SW curve and lies
+            in the Siegel upper half space: τ = τᵀ and Im τ ≻ 0 (Riemann bilinear
+            relations / special geometry).
+          source: "SW hep-th/9407087; Lerche hep-th/9611190 §2"
+    - declaration: "SeibergWitten.sw_metric_posDef"
+      file: "SeibergWitten/SpecialGeometry.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound, Jacobians.Axioms.AX_PeriodCycleBasis]
+      literature_dependencies:
+        - statement: "Im τ ≻ 0: the special-Kähler metric on the Coulomb branch is positive-definite."
+          source: "SW hep-th/9407087; Lerche hep-th/9611190 §2"
+    - declaration: "SeibergWitten.SU2.su2_singular_locus"
+      file: "SeibergWitten/Physics/SU2Singularities.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      numeric: "pass@numpy (audit/numerical/validate_lambda.py)"
+      literature_dependencies:
+        - statement: "The SU(2) curve is singular exactly at u = ±Λ² (monopole/dyon, no others)."
+          source: "SW hep-th/9407087 §3–4; Bilal hep-th/9601007"
+    - declaration: "SeibergWitten.Physics.transvection_isSymplectic"
+      file: "SeibergWitten/Physics/Monodromy.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound]
+      literature_dependencies:
+        - statement: "Picard–Lefschetz transvections preserve the intersection form (∈ Sp(2r,ℤ))."
+          source: "SW hep-th/9407087 §3; Picard–Lefschetz theory"
+    - declaration: "SeibergWitten.Physics.modularLambda_S / modularLambda_ST2S / modularLambda_add_two"
+      file: "SeibergWitten/Physics/ThetaLambda.lean"
+      sorry_count: 0
+      axioms: [propext, Classical.choice, Quot.sound, AX_jacobi_quartic, AX_theta3_ne_zero]
+      numeric: "pass@mpmath (audit/numerical/validate_lambda.py, 44/44, dps=40)"
+      literature_dependencies:
+        - statement: >
+            The modular λ = θ₂⁴/θ₃⁴ has proved transformation laws / partial Γ(2)-invariance:
+            λ(τ+2)=λ(τ) directly, and λ(-1/τ)=1−λ(τ) / ST²S⁻¹ modulo the θ-identity axioms.
+            The full Γ(2) covering remains AX_thrice_punctured_uniformization (not proved).
+          source: "Diamond–Shurman §1; classical modular/theta theory"
+
+# Physics-foundations layer (Physics/Hypotheses.lean) deliberately introduces named
+# axioms codifying the non-rigorous physical lore (holomorphy, singularity structure,
+# EM duality, R-symmetry, asymptotic matching). These are the project's point, NOT debt;
+# see AXIOM_AUDIT.md and docs/foundations-for-physical-reasoning.md. The classical theta
+# axioms (AX_jacobi_quartic, AX_theta3_ne_zero) are numerically vetted (pass@mpmath) and
+# would be discharged by the Jacobi triple product (see audit/PROOF_STATUS.md).
+
+automation:
+  methods:
+    - method: "agent"
+      models: ["claude-opus-4-8"]
+      framework: "Claude Code (Anthropic CLI)"
+      prompting_notes: >
+        Forward-chaining onto jacobian-challenge. Phase 0 instantiates the
+        hyperelliptic genus theorem on the SW family (genus N−1), axiom-clean.
+  notes: "No human-written Lean; all proofs AI-authored under human steering."
+
+fidelity:
+  divergences: >
+    Forward-chaining corpus project. The SW curve is realized as
+    jacobian-challenge's HyperellipticData with f = P_N² − Λ^{2N}; the squarefree
+    (smoothness) hypothesis selects the regular Coulomb-branch locus. Per-equation
+    source↔Lean correspondence is in audit/CORRESPONDENCE_INDEX.md; per-entry
+    faithfulness verdicts + the numeric tier are in audit/FIDELITY_REVIEW.md.
+  numeric_validation: >
+    Independent mpmath/numpy oracle audit/numerical/validate_lambda.py (output
+    validate_lambda.out.txt): 44/44 pass at dps=40, residuals ≲1e-40. Vets
+    AX_jacobi_quartic (θ₃⁴=θ₂⁴+θ₄⁴), AX_theta3_ne_zero, the λ transformation laws
+    (T², S, ST²S⁻¹), the λ(i)=½ normalization anchor, and su2_singular_locus. Caught
+    (and fixed) a branch bug in the oracle itself — the method demonstrating its value.
+
+review:
+  status: "agent-reviewed"
+  notes: >
+    All declarations #print axioms-verified. Numerical fidelity oracle online and
+    passing (λ layer + singularity locus, 44/44); period/τ numeric checks await Phase 2.
+    Physics-foundations axioms reviewed by Gemini (gemini-3.1-pro-preview, 2026-06-24)
+    for typing/non-vacuity. No human-mathematician review yet.
+
+alignment:
+  namespace: "SeibergWitten"
+  statements:
+    - source: "KLYT/Argyres–Faraggi: SW curve genus"
+      lean: "SeibergWitten.genus_swCurve"
+      module: "SeibergWitten/Curve.lean"
+      status: "proved"
+      note: "genus(y²=P_N²−Λ^{2N}) = N−1; standard-3"
+    - source: "SW: SU(2) curve genus"
+      lean: "SeibergWitten.genus_swCurve_su2"
+      module: "SeibergWitten/Curve.lean"
+      status: "proved"
+      note: "genus(y²=(x²−u)²−Λ⁴) = 1; standard-3"
+    - source: "SW/Lerche §2: special geometry + metric positivity"
+      lean: "SeibergWitten.sw_coupling_mem_siegel_rank / sw_metric_posDef"
+      module: "SeibergWitten/SpecialGeometry.lean"
+      status: "proved"
+      note: "τ ∈ Siegel (τ=τᵀ, Im τ≻0); standard-3 + AX_PeriodCycleBasis (off critical path)"
+    - source: "SW §3–4: singularity count (no extra singularities)"
+      lean: "SeibergWitten.SU2.su2_singular_locus"
+      module: "SeibergWitten/Physics/SU2Singularities.lean"
+      status: "proved"
+      note: "curve singular ⟺ u=±Λ²; standard-3; numeric pass@numpy"
+    - source: "SW §3: Picard–Lefschetz monodromy ∈ Sp(2r,ℤ)"
+      lean: "SeibergWitten.Physics.transvection_isSymplectic"
+      module: "SeibergWitten/Physics/Monodromy.lean"
+      status: "proved"
+      note: "transvection v↦v+⟨v,γ⟩γ preserves the intersection form; standard-3"
+    - source: "classical: modular λ is a Γ(2)-Hauptmodul (rigidity uniformization)"
+      lean: "SeibergWitten.Physics.modularLambda_{S,ST2S,add_two}"
+      module: "SeibergWitten/Physics/ThetaLambda.lean"
+      status: "proved"
+      note: "λ=θ₂⁴/θ₃⁴; T²- and S-laws; +AX_jacobi_quartic,AX_theta3_ne_zero (numerically vetted)"
+    - source: "g=1 Sp-action on Siegel ≅ ℍ"
+      lean: "SeibergWitten.Physics.siegelOneEquiv + MulAction SL(2,ℤ) (Siegel 1)"
+      module: "SeibergWitten/Physics/SiegelSL2.lean"
+      status: "proved"
+      note: "Sp(2,ℤ)=SL(2,ℤ) action transported from Mathlib's ℍ action; standard-3"

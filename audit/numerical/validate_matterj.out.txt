@@ -1,0 +1,34 @@
+=== A: anharmonic invariance of jλ over root orderings ===
+  [PASS] jλ ordering-free  Nf=0 u=(3.0 + 1.0j)  spread=6.54e-34
+  [PASS] jλ ordering-free  Nf=1 u=(2.0 + 1.0j)  spread=2.73e-35
+  [PASS] jλ ordering-free  Nf=1 u=(1.5 + 2.0j)  spread=1.93e-35
+=== B: jλ(cross-ratio) = j(g₂,g₃) — coefficient vs root side ===
+  [PASS] j coeff=root      Nf=0 u=(3.0 + 1.0j)  res=7.34e-34
+  [PASS] j coeff=root      Nf=1 u=(2.0 + 1.0j)  res=7.67e-35
+  [PASS] j coeff=root      Nf=1 u=(1.5 + 2.0j)  res=4.07e-35
+=== C: pure-case reduction (with the Landen factor 2) ===
+  [PASS] pure j = jλ(Landen m) u=(3.0 + 1.0j)  res=1.06e-33
+  [PASS] factor-2 witness      u=(3.0 + 1.0j)  naive-res=3.7e+5 (must NOT vanish)
+  [PASS] pure j = jλ(Landen m) u=(-0.5 + 2.2j)  res=1.04e-34
+  [PASS] factor-2 witness      u=(-0.5 + 2.2j)  naive-res=1.31e+5 (must NOT vanish)
+  [PASS] pure j = jλ(Landen m) u=(5.0 + 0.0j)  res=1.53e-31
+  [PASS] factor-2 witness      u=(5.0 + 0.0j)  naive-res=2.43e+6 (must NOT vanish)
+=== D: τ-side  jλ(λ(τ_curve)) = j(g₂,g₃), τ_curve = iK'/K at a root κ ===
+  [PASS] j(τ_curve)=j      Nf=0 u=(3.0 + 1.0j)  res=1.03e-33
+  [PASS] j(τ_curve)=j      Nf=1 u=(2.0 + 1.0j)  res=1.09e-34
+  [PASS] j(τ_curve)=j      Nf=1 u=(1.5 + 2.0j)  res=9.88e-35
+=== E: N_f=1 AD point  (u,m) = (¾Λ², −¾Λ):  g₂ = g₃ = 0 ===
+  [PASS] g2 = 0 at AD  |g2|=0.0
+  [PASS] g3 = 0 at AD  |g3|=0.0
+  [PASS] g2 linear rate    du=1e-4  |g2|=0.0002
+  [PASS] g3 linear rate    du=1e-4  |g3|=2.5e-5
+=== F: MC3 chart hypotheses are satisfiable (non-vacuity probe) ===
+  [PASS] AnharmonicRegular  u=(2.0 + 1.0j)  min dist to exceptional set = 0.07204
+  [PASS] AnharmonicRegular  u=(1.5 + 2.0j)  min dist to exceptional set = 0.08516
+  [PASS] regular on path    s=0  min dist = 0.07204
+  [PASS] regular on path    s=1  min dist = 0.06801
+  [PASS] regular on path    s=2  min dist = 0.06432
+  [PASS] regular on path    s=3  min dist = 0.06093
+  [PASS] regular on path    s=4  min dist = 0.05781
+
+=== ALL PASS : 26/26 checks, dps=40 ===

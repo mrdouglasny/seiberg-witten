@@ -1,0 +1,20 @@
+=== PIN-A/B: closed forms vs contour quadrature of x^2 dx/y ===
+  [PASS] |rA| = 1/2   u=(5.0 + 0.0j)  rA=(0.0 + 0.5j)
+  [PASS] rB  = 1/2    u=(5.0 + 0.0j)  rB=(0.5 + 0.0j)
+  [PASS] |rA| = 1/2   u=(9.0 + 0.0j)  rA=(0.0 + 0.5j)
+  [PASS] rB  = 1/2    u=(9.0 + 0.0j)  rB=(0.5 + 0.0j)
+  [PASS] |rA| = 1/2   u=(3.0 + 2.0j)  rA=(1.2174137e-32 - 0.5j)
+  [PASS] rB  = 1/2    u=(3.0 + 2.0j)  rB=(0.5 - 6.4750862e-32j)
+=== H1 (numeric): d a_D / d a = swTau ===
+  [PASS] dAD/dA = tau  u=(5.0 + 0.0j)  res=1.64e-18
+  [PASS] dAD/dA = tau  u=(9.0 + 0.0j)  res=2.9e-18
+  [PASS] dAD/dA = tau  u=(3.0 + 2.0j)  res=2.95e-19
+  [PASS] dAD/dA = tau  u=(2.2 + 0.0j)  res=9.51e-21
+=== H2 (numeric): a_D -> 0 at the monopole, linear rate ===
+  [PASS] |a_D(1+1e-4)| small  |aD|=2.5e-5
+  [PASS] |a_D(1+1e-6)| small  |aD|=2.5e-7
+  [PASS] |a_D(1+1e-8)| small  |aD|=2.5e-9
+=== NORM: weak coupling a ~ sqrt(u/2) ===
+  [PASS] a/sqrt(u) -> 1/sqrt2  ratio=0.70710678
+
+=== ALL PASS : 14/14 checks, dps=30 ===

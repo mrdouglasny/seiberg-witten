@@ -1,0 +1,233 @@
+'SeibergWitten.Physics.sw_effective_theory_unique_up_to_duality' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ periodRigidityAxiom]
+'SeibergWitten.Physics.sw_unique_up_to_duality' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ periodRigidityAxiom]
+'SeibergWitten.Physics.sw_curve_admits_effective_theory' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ periodRigidityAxiom]
+'SeibergWitten.Physics.SU2.sw_su2_unique' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_thrice_punctured_uniformization,
+ AX_developing_map_rigidity]
+'SeibergWitten.Physics.betaFunction_weakCoupling' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.periodRatio_logDeriv_asymptotic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.matter_argyresDouglasLocus_nonempty' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.swCurveMatter_nf1_ad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.not_isCuspOf_nf0' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.swLambda_deriv_eq_half_period' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.dualityFrame_of_periodFrame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.hasFiniteOrderAutomorphism_of_neg_invariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'RiemannPeriods.tau_im_pos' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.ellipticKm_differentiableOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.ellipticEm_differentiableOn' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.tau_ratio_differentiableOn' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_elliptic_inversion]
+'SeibergWitten.Physics.SU2.su2_coupling_exists' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_elliptic_inversion]
+'SeibergWitten.Physics.SU2.su2_coupling_canonical' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_elliptic_inversion,
+ AX_thrice_punctured_uniformization,
+ AX_developing_map_rigidity]
+'SeibergWitten.Physics.SU2.swAD_tendsto_zero_monopole' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.ellipticKm_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.ellipticEm_tendsto_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.ellipticEm_one' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.ellipticEm_one_sub_tendsto' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.ellipticEm_hasDerivAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.ellipticKm_hasDerivAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.legendreRelation_hasDerivAt_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.legendreL_eq_half' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.legendre_relation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.swA_hasDerivAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.swAD_hasDerivAt' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.swAD_deriv_eq_swTau_mul_swA_deriv' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_elliptic_inversion]
+'SeibergWitten.Physics.SU2.swA_weakCoupling' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.ellipticKm_one_sub_ofReal' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.integral_rpow_neg_half_sq_add' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.cusp_diff_integrand_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.cusp_diff_integral_tendsto' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.cusp_eps_integral' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.cusp_limit_integral_eval' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.cusp_asymptotic_real' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.elliptic_cusp_limit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.theta3_neg_inv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.theta2_neg_inv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.modularLambda_add_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.oneMinusLambda' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.modularLambda_S' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.modularLambda_ST2S' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.modularLambda_add_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.matter_coupling_rigidity' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero,
+ AX_thrice_punctured_uniformization,
+ AX_developing_map_rigidity]
+'SeibergWitten.Physics.matter_frame_alignment' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero,
+ AX_thrice_punctured_uniformization,
+ AX_developing_map_rigidity]
+'SeibergWitten.Physics.anharmonicWord_lambda' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.anharmonic_pairwise_ne' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.eqOn_branch_of_preconnected' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.jLambda_eq_anharmonic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.jLambda_one_sub' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.jLambda_inv' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.matter_nf1_ad_invariants' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.quarticG2_of_triple_root' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.multipliable_tripleProductTerm' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.tripleProduct_quasi_periodic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.jacobiTripleProduct_ne_zero' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.differentiable_jacobiTripleProduct_exp' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'SeibergWitten.Physics.tau_ratio_hasDerivAt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_elliptic_inversion]
+'SeibergWitten.Physics.SU2.swTau_hasDerivAt' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_elliptic_inversion]
+'SeibergWitten.Physics.SU2.swTau_logDeriv_weakCoupling' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_elliptic_inversion]
+'SeibergWitten.Physics.SingularityCount.count_mod_twelve' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SingularityCount.singularity_count_pinch' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'SeibergWitten.Physics.SingularityCount.sw_exactly_two_singularities'' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'SeibergWitten.Physics.SingularityCount.sw_singular_values' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.entire_polynomial_of_growth' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.swModulusData_eq_crossRatio' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.swModulusData_swCrossRatio' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.sw_su2_unique_of_modulusData' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_thrice_punctured_uniformization,
+ AX_developing_map_rigidity]
+'SeibergWitten.Physics.modularLambdaFn_ne_one' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.modularLambdaFn_ne_zero' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.swM_factorization' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.swMMono_mem_Gamma2' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.modularLambda_swMMono' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.modularLambda_swMDyon' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.moebiusOn_mul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.modularLambda_swMonodromyGroup' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.differentiableAt_modularLambdaFn' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.atlasModulus_eq' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.swModulusData_of_atlas' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.tendsto_modularLambdaFn_comap_im_atTop' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.cusp_dichotomy' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.cusp_dichotomy_lambda' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.swMDyon_trace' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.SU2.IsGenuineCuspLift.lambda_tendsto' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.swModulusData_of_atlas_and_lifts' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_jacobi_quartic,
+ AX_theta3_ne_zero]
+'SeibergWitten.Physics.SU2.sw_su2_unique_coulomb' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound,
+ AX_thrice_punctured_uniformization,
+ AX_developing_map_rigidity]
+'SeibergWitten.Physics.SingularityCount.anomalyGraded_of_rSpurionCovariant' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'SeibergWitten.Physics.SingularityCount.rSpurionCovariant_swG2'' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'SeibergWitten.Physics.instanton_remainder_covariant' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.oneLoopPrepotential_smul' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.spurionCovariantFamily_classical' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.matterPeriodRigidity_nf1_ad' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.monic_quartic_squarefree_iff_disc' depends on axioms: [propext, Classical.choice, Quot.sound]
+'SeibergWitten.Physics.matter_ad_cusp_unique' depends on axioms: [propext, Classical.choice, Quot.sound]

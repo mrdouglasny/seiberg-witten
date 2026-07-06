@@ -1,0 +1,9 @@
+[A] exact integer q-series, Q=q^(1/4), order M=200
+[A] theta3^4 - theta4^4 - theta2^4 == 0  up to order 200:  True
+[A] theta3^4 q-coefficients (q^0..q^10): [1, 8, 24, 32, 24, 48, 96, 64, 24, 104, 144]   (should be 1,8,24,32,24,48,96,64,24,104,144 = r_4(n))
+[B] numerics backend: stdlib cmath, 400 terms
+[B] |theta3^4 - theta2^4 - theta4^4| over 6 points, max = 2.706e-14
+[B] min |theta3| over 41x40 grid, x in [-1,1], Im t in [0.05,2.5] = 0.000001
+[B] theta3 non-vanishing on grid: True
+
+SUMMARY: quartic exact-series identity verified to order 200: True

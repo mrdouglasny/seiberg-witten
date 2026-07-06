@@ -1,0 +1,15 @@
+/.lake/
+/lake-packages/
+*.olean
+*.ilean
+*.trace
+.DS_Store
+docs/*.aux
+docs/*.log
+docs/*.out
+docs/*.bbl
+docs/*.blg
+docs/*.toc
+docs/*.bak
+*.bak
+history/
