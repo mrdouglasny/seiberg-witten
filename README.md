@@ -129,3 +129,9 @@ discussions shaped the project.
 
 Copyright 2026 Michael R. Douglas. Released under the
 [Apache License 2.0](LICENSE) (the Lean/Mathlib ecosystem convention).
+
+---
+
+**Comparator-verified** (Lean FRO [comparator](https://github.com/leanprover/comparator), commit `75bb75b`, 2026-07-07, via `lean4export@v4.30.0`; macOS fake-landrun): all no-`sorry`, kernel-replayed, axioms exactly as printed.
+- *Axiom-clean* (standard-3 only): `matter_argyresDouglasLocus_nonempty`, `betaFunction_weakCoupling`, and the SU(2)-from-postulate pair `SU2.sw_su2_unique_of_periodLayer` / `sw_su2_exists_of_periodLayer`.
+- *Concrete SU(2) headline family* (standard-3 + the classical inputs `AX_thrice_punctured_uniformization`, `AX_developing_map_rigidity`, `AX_elliptic_inversion`): `SU2.sw_su2_unique`, `su2_coupling_exists`, `su2_coupling_canonical`, `swAD_tendsto_zero_monopole` (H2), `swA_weakCoupling` (H6), `swAD_deriv_eq_swTau_mul_swA_deriv`, `swTau_logDeriv_weakCoupling`.
