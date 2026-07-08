@@ -2,7 +2,7 @@
 
 *Last updated 2026-06-30.*
 
-**Naming (math-primary).** The period axioms and their carriers are stated in mathematical vocabulary — `periodRigidityAxiom : PeriodRigidity`, with `PeriodBase`/`PeriodChart`/`SymplecticReframing`/`IsPolarizedPeriodChart`; the physics names (`swPeriodLayer`, `CoulombBase`, `Sheet`, `Deck`, `IsSWEffectiveTheory`, …) are machine-linked `abbrev` aliases in `SeibergWitten/Physics/Dictionary.lean`. `#print axioms` reports the math names.
+**Naming (math-primary).** The period axioms and their carriers are stated in mathematical vocabulary — `periodRigidityAxiom : PeriodRigidity`, with `PeriodBase`/`PeriodChart`/`SymplecticReframing`/`IsPolarizedPeriodChart`; the physics names (`swPeriodLayer`, `CoulombBase`, `Sheet`, `Deck`, `IsSWEffectiveTheory`, …) are machine-linked `abbrev` aliases in `SeibergWitten/Physics/Dictionary.lean`. `#print axioms` reports the math names. Why math names are primary even for the *physical* postulates (names track content; the dictionary tracks justification; the H5 and matter-chart case studies) is recorded in [`docs/naming-convention.md`](docs/naming-convention.md).
 
 **Verification (kernel facts, generate-don't-author).** The golden `#print axioms` trace is [`audit/axiom-report.txt`](audit/axiom-report.txt), emitted by the driver [`audit/axiom_report.lean`](audit/axiom_report.lean) over every headline / matter / beta / spine result. Regenerate or check drift with `bash audit/gen_axiom_report.sh [--check]`; the counts in this file are read from it, never hand-authored.
 
