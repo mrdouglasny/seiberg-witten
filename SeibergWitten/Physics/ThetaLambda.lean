@@ -47,7 +47,7 @@ namespace SeibergWitten.Physics
 The three nulls below are DLMF §20.2 at `z = 0`, with nome `q = exp(πiτ)`. Note the one
 convention difference from the DLMF: its `z` is π-scaled relative to Mathlib's
 (`jacobiTheta₂ z τ = ∑ₙ exp(2πinz + πin²τ)` has period `1` in `z`, where DLMF 20.2.3 has
-period `2π`), so DLMF's `z` is `π` times Mathlib's. That is immaterial here because only
+period `π`), so DLMF's `z` is `π` times Mathlib's. That is immaterial here because only
 the nullwerte are used, and the two conventions agree at `z = 0`. It would matter for any
 `z`-dependent identity lifted from §20.2. -/
 
