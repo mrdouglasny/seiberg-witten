@@ -1599,8 +1599,28 @@ first attempt). The three singular points map `u = Λ² ↦ 1` (monopole), `u = 
 to the `u`-plane slit along the locus where `m` is real `≤ 0` or `≥ 1`, matching the
 simply-connected-chart carrier (H0). -/
 
-/-- **The SW modulus** `m(u) = 2Λ²/(u + Λ²)`: the elliptic parameter of the SU(2) curve
-`y² = (x²−u)² − Λ⁴`, pinned by the period computation above. -/
+/-- **The SW modulus** `m(u) = 2Λ²/(u + Λ²)`: the elliptic parameter of the SU(2)
+Seiberg–Witten curve `y² = (x²−u)² − Λ⁴`.
+
+**Source.** The curve and its period geometry are Seiberg and Witten, *Electric-magnetic
+duality, monopole condensation, and confinement in N=2 supersymmetric Yang–Mills theory*,
+Nucl. Phys. B426 (1994) 19 (arXiv:hep-th/9407087). The rank-one elliptic form used here —
+`τ = i·K(1−m)/K(m)` with `λ = θ₂⁴/θ₃⁴` — follows the pedagogical treatments of Bilal
+(arXiv:hep-th/9601007) and Lerche (arXiv:hep-th/9611190).
+
+**Not taken on trust.** `audit/numerical/validate_swcrossratio.py` recomputes
+`λ(τ_curve(u))` from branch-tracked contour quadrature of the curve's own periods — no
+reduction to `K`/`E`, so the answer is not presupposed — and matches it against all six
+anharmonic Möbius candidates: unique winner at every sample, 16/16, residuals `≲ 1e-31`.
+
+**Cycle normalization is load-bearing.** The naive cross-ratio of the quartic's four
+branch points `±√(u ± Λ²)` is *not* `m`. It is the 2-isogenous value, giving `2τ`, and it
+sends the monopole and the dyon *both* to `1` instead of separating them. The
+normalization is pinned by the self-dual anchor `τ(u = 3, Λ = 1) = i`, and the validation
+explicitly rejects `2τ` and `τ/2`.
+
+The three singular points map `u = Λ² ↦ 1` (monopole, proved: `swCrossRatio_monopole`),
+`u = −Λ² ↦ ∞` (dyon), `u = ∞ ↦ 0` (weak coupling). -/
 noncomputable def swCrossRatio (Λ u : ℂ) : ℂ := 2 * Λ ^ 2 / (u + Λ ^ 2)
 
 /-- At the monopole point `u = Λ²` the modulus is exactly the cusp value `m = 1`. -/
