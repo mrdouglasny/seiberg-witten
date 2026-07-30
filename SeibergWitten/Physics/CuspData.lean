@@ -220,6 +220,22 @@ theorem im_moebiusOn_pos (γ : Matrix.SpecialLinearGroup (Fin 2) ℤ) {z : ℂ}
 theorem moebiusOn_one (z : ℂ) : moebiusOn 1 z = z := by
   simp [moebiusOn]
 
+/-- **Bridge to Mathlib.** On the upper half-plane, `moebiusOn` *is* Mathlib's `SL(2,ℤ)`
+action on `ℍ` (`UpperHalfPlane.SLAction`, obtained from the `GL(2,ℝ)` Möbius action along
+`SpecialLinearGroup.mapGL`).
+
+`moebiusOn` exists as a separate definition because it is total on `ℂ` — the λ-frame
+computations evaluate the coupling at and near the cusps, where staying inside the `ℍ`
+subtype would mean threading coercions through every statement. This lemma is what keeps
+that convenience from also being an independent definition to be trusted: where the two
+overlap, they agree, so `moebiusOn_one`, `moebiusOn_mul` and `im_moebiusOn_pos` are the
+`MulAction` laws rather than parallel facts about a private notion. -/
+theorem moebiusOn_eq_coe_smul (γ : Matrix.SpecialLinearGroup (Fin 2) ℤ)
+    (z : UpperHalfPlane) :
+    moebiusOn γ (z : ℂ) = ((γ • z : UpperHalfPlane) : ℂ) := by
+  rw [UpperHalfPlane.coe_specialLinearGroup_apply]
+  simp [moebiusOn]
+
 private lemma moebius_comp_algebra {a₁ b₁ c₁ d₁ a₂ b₂ c₂ d₂ z : ℂ}
     (h₂ : c₂ * z + d₂ ≠ 0)
     (h₁ : c₁ * ((a₂ * z + b₂) / (c₂ * z + d₂)) + d₁ ≠ 0) :
