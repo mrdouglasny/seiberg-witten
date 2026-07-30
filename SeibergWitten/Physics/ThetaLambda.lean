@@ -42,18 +42,37 @@ open Complex
 
 namespace SeibergWitten.Physics
 
-/-- The `θ₃` null: `θ₃(τ) = ∑ₙ exp(πin²τ) = jacobiTheta₂ 0 τ`. -/
+/-! ### The theta nullwerte
+
+The three nulls below are DLMF §20.2 at `z = 0`, with nome `q = exp(πiτ)`. Note the one
+convention difference from the DLMF: its `z` is π-scaled relative to Mathlib's
+(`jacobiTheta₂ z τ = ∑ₙ exp(2πinz + πin²τ)` has period `1` in `z`, where DLMF 20.2.3 has
+period `2π`), so DLMF's `z` is `π` times Mathlib's. That is immaterial here because only
+the nullwerte are used, and the two conventions agree at `z = 0`. It would matter for any
+`z`-dependent identity lifted from §20.2. -/
+
+/-- The `θ₃` null: `θ₃(τ) = ∑ₙ exp(πin²τ) = jacobiTheta₂ 0 τ`.
+
+DLMF 20.2.3 at `z = 0`: `θ₃(0|τ) = 1 + 2∑_{n≥1} qⁿ²`, `q = exp(πiτ)`. -/
 noncomputable def theta3 (τ : ℂ) : ℂ := jacobiTheta₂ 0 τ
 
-/-- The `θ₄` null: `θ₄(τ) = ∑ₙ (−1)ⁿ exp(πin²τ) = jacobiTheta₂ (1/2) τ`. -/
+/-- The `θ₄` null: `θ₄(τ) = ∑ₙ (−1)ⁿ exp(πin²τ) = jacobiTheta₂ (1/2) τ`.
+
+DLMF 20.2.4 at `z = 0`: `θ₄(0|τ) = 1 + 2∑_{n≥1} (−1)ⁿ qⁿ²`, `q = exp(πiτ)`. -/
 noncomputable def theta4 (τ : ℂ) : ℂ := jacobiTheta₂ (1 / 2) τ
 
-/-- The `θ₂` null: `θ₂(τ) = ∑ₙ exp(πi(n+1/2)²τ) = exp(πiτ/4)·jacobiTheta₂ (τ/2) τ`. -/
+/-- The `θ₂` null: `θ₂(τ) = ∑ₙ exp(πi(n+1/2)²τ) = exp(πiτ/4)·jacobiTheta₂ (τ/2) τ`.
+
+DLMF 20.2.2 at `z = 0`: `θ₂(0|τ) = 2∑_{n≥0} q^((n+½)²)`, `q = exp(πiτ)`. The `exp(πiτ/4)`
+prefactor is not a normalization: it completes the square, turning `jacobiTheta₂ (τ/2) τ =
+∑ₙ exp(πiτ(n²+n))` into `∑ₙ exp(πiτ(n+½)²)`. -/
 noncomputable def theta2 (τ : ℂ) : ℂ :=
   Complex.exp ((Real.pi : ℂ) * Complex.I * τ / 4) * jacobiTheta₂ (τ / 2) τ
 
 /-- **The modular lambda function** `λ = θ₂⁴/θ₃⁴`, defined concretely from Mathlib's
-`jacobiTheta₂`. The Hauptmodul for `Γ(2)` uniformizing `ℂ∖{0,1}`. -/
+`jacobiTheta₂`. The Hauptmodul for `Γ(2)` uniformizing `ℂ∖{0,1}`.
+
+DLMF 20.9.1 gives the modulus `k = θ₂²(0|τ)/θ₃²(0|τ)`; this is `λ = k²`. -/
 noncomputable def modularLambdaFn (τ : ℂ) : ℂ := theta2 τ ^ 4 / theta3 τ ^ 4
 
 /-- `θ₃` is Mathlib's one-variable Jacobi theta function. -/
